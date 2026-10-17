@@ -1,0 +1,15 @@
+{
+  "node": "n8n-nodes-prooftask",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Development"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://github.com/cognitive-emergence/prooftask-integrations/tree/main/n8n-nodes-prooftask"
+      }
+    ]
+  }
+}

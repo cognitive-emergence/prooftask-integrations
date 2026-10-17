@@ -1,0 +1,24 @@
+name: Publish Prooftask n8n node
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: n8n-nodes-prooftask
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm install --global npm@11.19.0
+      - run: npm ci --ignore-scripts
+      - name: Lint, build and publish with provenance through the official n8n CLI
+        run: npm run release

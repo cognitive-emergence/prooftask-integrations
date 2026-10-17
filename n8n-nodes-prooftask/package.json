@@ -1,0 +1,49 @@
+{
+  "name": "n8n-nodes-prooftask",
+  "version": "0.1.0",
+  "description": "Find public delivery acceptance templates and read exact versions in n8n workflows and AI agents",
+  "license": "MIT",
+  "homepage": "https://prooftask.com/developers",
+  "keywords": [
+    "n8n-community-node-package"
+  ],
+  "author": {
+    "name": "Prooftask",
+    "email": "support@prooftask.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cognitive-emergence/prooftask-integrations.git",
+    "directory": "n8n-nodes-prooftask"
+  },
+  "scripts": {
+    "build": "n8n-node build",
+    "build:watch": "tsc --watch",
+    "dev": "n8n-node dev",
+    "lint": "n8n-node lint",
+    "lint:fix": "n8n-node lint --fix",
+    "release": "n8n-node release",
+    "prepublishOnly": "n8n-node prerelease"
+  },
+  "files": [
+    "dist/nodes"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [],
+    "nodes": [
+      "dist/nodes/Prooftask/Prooftask.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "0.52.5",
+    "eslint": "9.32.0",
+    "prettier": "3.6.2",
+    "release-it": "^21.1.0",
+    "typescript": "5.9.2"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
+}
