@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "prooftask": {
+      "type": "http",
+      "url": "https://prooftask-public-mcp-production.up.railway.app/mcp"
+    }
+  }
+}

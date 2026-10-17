@@ -20,9 +20,9 @@ jobs:
           import json
           v=json.load(open('server.json'))
           assert v['name']=='io.github.cognitive-emergence/prooftask'
-          assert v['version']=='0.1.1'
+          assert v['version']=='0.1.2'
           assert v['packages']==[{'registryType':'npm','identifier':'prooftask-mcp','version':'0.1.1','transport':{'type':'stdio'}}]
-          assert 'remotes' not in v
+          assert v['remotes']==[{'type':'streamable-http','url':'https://prooftask-public-mcp-production.up.railway.app/mcp'}]
           PY
       - name: Install the reviewed official publisher
         run: |

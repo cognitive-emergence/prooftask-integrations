@@ -2,8 +2,26 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.cognitive-emergence/prooftask",
   "title": "Prooftask",
-  "description": "Delivery agreements, client acceptance and verifiable delivery records through a scoped Agent API.",
-  "repository": {"url": "https://github.com/cognitive-emergence/prooftask-integrations", "source": "github"},
-  "version": "0.1.1",
-  "packages": [{"registryType": "npm", "identifier": "prooftask-mcp", "version": "0.1.1", "transport": {"type": "stdio"}}]
+  "description": "Public template discovery over hosted MCP; scoped delivery workflows through the local adapter.",
+  "repository": {
+    "url": "https://github.com/cognitive-emergence/prooftask-integrations",
+    "source": "github"
+  },
+  "version": "0.1.2",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "prooftask-mcp",
+      "version": "0.1.1",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://prooftask-public-mcp-production.up.railway.app/mcp"
+    }
+  ]
 }

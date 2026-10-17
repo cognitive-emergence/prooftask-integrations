@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-17T16:54:11.275Z",
+  "endpoint": "https://prooftask-public-mcp-production.up.railway.app/mcp",
+  "commitSha": "9f9201a025bc9381bcc1d8d9ed1e833a5441cb65",
+  "deploymentId": "34fe222e-0059-4f90-ab05-0e1df3c250d1",
+  "railwayStatus": "SUCCESS",
+  "officialSdkClient": {
+    "initialization": "PASS",
+    "publicCapabilities": "PASS",
+    "anonymousSearch": "PASS",
+    "pinnedDigest": "PASS",
+    "privateTool": "BLOCKED"
+  },
+  "toolCount": 3,
+  "credentialsLoaded": false,
+  "businessWrites": 0,
+  "scope": "PUBLIC_DISCOVERY_ONLY"
+}
