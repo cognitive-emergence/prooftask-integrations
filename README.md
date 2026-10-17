@@ -44,7 +44,7 @@ Preparation, submission, acceptance, record issuance and payment are distinct. T
 - [Agent workflow guide](https://prooftask.com/developers/agent-workflows.md)
 - [Trust and verification boundaries](https://prooftask.com/trust)
 
-The MCP adapter is local stdio. Prooftask does not advertise a hosted MCP endpoint. A package directory in this repository is not an npm or registry listing. See [channel status](channels/STATUS.md) for verified distribution status.
+The MCP adapter is local stdio. Prooftask does not advertise a hosted MCP endpoint. The adapter is published as [prooftask-mcp@0.1.0](https://www.npmjs.com/package/prooftask-mcp). Official MCP Registry publication remains pending organization authentication. See [channel status](channels/STATUS.md) for verified distribution status.
 
 ## Validation and maintenance
 
