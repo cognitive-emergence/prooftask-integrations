@@ -1,0 +1,35 @@
+# Proposed manual-only workflow. Copy to .github/workflows only after owner review.
+name: Publish reviewed MCP registry metadata
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Get and validate the reviewed metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/contents/mcp/server.json.example?ref=$GITHUB_SHA" --jq .content | base64 --decode > server.json
+          python3 - <<'PY'
+          import json
+          v=json.load(open('server.json'))
+          assert v['name']=='io.github.cognitive-emergence/prooftask'
+          assert v['version']=='0.1.0'
+          assert v['packages']==[{'registryType':'npm','identifier':'prooftask-mcp','version':'0.1.0','transport':{'type':'stdio'}}]
+          assert 'remotes' not in v
+          PY
+      - name: Install the reviewed official publisher
+        run: |
+          curl --fail --location --max-time 60 https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz --output publisher.tar.gz
+          echo 'a06c9096dcb9727c13555b6be26c7effa707b01f06a4c561ba7a3635443cf2cc  publisher.tar.gz' | sha256sum --check
+          tar --no-same-owner -xzf publisher.tar.gz mcp-publisher
+      - name: Authenticate using the repository identity
+        run: ./mcp-publisher login github-oidc
+      - name: Publish the reviewed server metadata
+        run: ./mcp-publisher publish server.json
