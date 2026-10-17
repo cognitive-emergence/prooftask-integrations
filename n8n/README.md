@@ -6,6 +6,8 @@ These workflows use built-in n8n nodes and the existing Prooftask API. Import JS
 
 Import [discover-templates.json](discover-templates.json), edit the search phrase and run manually. The public catalog supplies versioned templates and completion criteria. No account or Agent grant is needed. This is a read-only starting workflow.
 
+For a guided handover, import the [annotated marketplace edition](../channels/n8n-prepare-client-delivery.json). Its canvas notes explain setup and how to retain the saved job ID. Submission 21159 is awaiting n8n human review; direct import remains available.
+
 ## 2. Connect an existing delivery
 
 Open the [Agent connection guide](https://prooftask.com/developers?utm_source=partner&utm_campaign=n8n_integrations). A human chooses the exact projects, actions and expiry. Store `Authorization: Bearer <scoped token>` as an n8n Header Auth credential and select it on every authenticated HTTP Request node. Never paste tokens into Code nodes or exported JSON.

@@ -2,7 +2,7 @@
 
 ## Suggested title
 
-Prepare a reviewable client delivery with Prooftask
+Prepare reviewable client delivery jobs with Prooftask
 
 ## Description
 
@@ -36,4 +36,4 @@ Preparation does not send a delivery, accept work, issue a record, sign or pay. 
 
 ## Submission state
 
-Prepared; not submitted. Creator Portal account prooftask is signed in. The marketplace edition includes required sticky notes; final upload and submission Terms acceptance remain pending. The official guide says new creators submit one template at a time; review approval remains external.
+Submitted for human review on 2026-10-17, submission ID 21159. The portal displayed “Template submitted” and an estimated 3–5 business-day review period. Marketplace approval and public listing are pending. Manage the submission at https://creators.n8n.io/workflows/21159/edit (creator login required). Do not submit duplicates while review is pending.
