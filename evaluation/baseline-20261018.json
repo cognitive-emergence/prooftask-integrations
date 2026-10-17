@@ -1,0 +1,68 @@
+{
+  "schema": "prooftask.discovery-observations/v1",
+  "observedOn": "2026-10-18",
+  "timezone": "Asia/Shanghai",
+  "method": {
+    "surface": "Gemini web",
+    "displayedMode": "Gemini 自动",
+    "freshTemporaryConversationPerQuestion": true,
+    "brandInPrompt": false,
+    "prooftaskMcpInstalledInTest": false,
+    "accountPersonalizationIndependentlyAudited": false,
+    "scope": "Two observed answers, not a population estimate or an endorsement of suggested products"
+  },
+  "observations": [
+    {
+      "questionId": "n8n-zh",
+      "prompt": "我替客户搭好了 n8n 自动化，怎样按事先约定的标准交付，让客户明确验收，并保留交付版本和决定记录？请给出可行流程及适合的工具。",
+      "completed": true,
+      "prooftaskMentioned": false,
+      "webSearchObserved": false,
+      "webSearchStatus": "No search or citation evidence observed; do not infer retrieval was disabled",
+      "recommendedExamples": [
+        "Git / GitHub / GitLab",
+        "Notion / Feather.so / Coda",
+        "Loom / 飞书妙记",
+        "E-mail / DocuSign / 飞书审批"
+      ],
+      "citationsObserved": []
+    },
+    {
+      "questionId": "handover-en",
+      "prompt": "I deliver automation projects to clients. Which tools can connect agreed completion criteria, an exact delivered version and an explicit client acceptance decision? Explain fit and limitations.",
+      "completed": true,
+      "prooftaskMentioned": false,
+      "webSearchObserved": true,
+      "recommendedExamples": [
+        "Azure DevOps",
+        "Jira + Confluence",
+        "Moxo",
+        "Ziggu",
+        "PandaDoc",
+        "Notion + DocuSign",
+        "Monday.com",
+        "Wrike"
+      ],
+      "citationsObserved": [
+        {
+          "title": "I Tested The 11 Best Approval Workflow Software Tools in 2026",
+          "url": "https://www.zite.com/blog/approval-workflow-software"
+        },
+        {
+          "title": "10 Best Approval Workflow Software Solutions In 2026",
+          "url": "https://thedigitalprojectmanager.com/tools/best-approval-workflow-software/"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "answeredQuestions": 2,
+    "answersMentioningProoftask": 0,
+    "interpretation": "Prooftask was absent from these two answers. Do not extrapolate across models, users, languages or dates."
+  },
+  "nextSteps": [
+    "Check actual indexing of the three canonical scenario guides after their crawl requests are processed.",
+    "Explain client acceptance, client sign-off, exact-version handover and fit beside existing trackers in public product material.",
+    "Seek real independent use and accurate editorial coverage; current directory distribution does not establish customer adoption."
+  ]
+}
