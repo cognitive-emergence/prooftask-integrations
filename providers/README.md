@@ -2,6 +2,10 @@
 
 For automation consultants, CRM implementers and AI customer-support delivery teams.
 
+## Material you can reuse
+
+Use the [client delivery checklist](DELIVERY_CHECKLIST.md) in your project documentation. Review [when Prooftask fits](WHEN_TO_USE.md) before choosing it. For an approved real public case, use the [case-study outline](CASE_STUDY_TEMPLATE.md).
+
 ## First delivery
 
 1. Choose a [delivery template](https://prooftask.com/specifications?utm_source=partner&utm_campaign=provider_integrations) for the actual work.

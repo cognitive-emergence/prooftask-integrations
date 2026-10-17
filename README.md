@@ -41,6 +41,13 @@ The n8n template was submitted for human review on 2026-10-17 (submission 21159)
 | Use a local MCP client | [MCP adapter setup](mcp/README.md) |
 | Add client review to your service delivery | [Service provider guide](providers/README.md) |
 
+## Evaluate fit or reuse in your delivery process
+
+- [When Prooftask fits](providers/WHEN_TO_USE.md): concrete use cases, adjacent tools and limits.
+- [Reusable client delivery checklist](providers/DELIVERY_CHECKLIST.md): copy into your own project and adapt to agreed facts.
+- [Real case-study outline](providers/CASE_STUDY_TEMPLATE.md): publish only supported, bilaterally approved evidence.
+- [AI discovery observation protocol](evaluation/README.md): distinguish search discovery, brand-aware answers and installed-tool use.
+
 ## What this connects
 
 1. Choose an existing delivery template and agree the actual scope, completion criteria and review period.

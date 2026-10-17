@@ -1,0 +1,41 @@
+{
+  "schema": "prooftask.discovery-observation-prompts/v1",
+  "questions": [
+    {
+      "id": "n8n-zh",
+      "condition": "unprompted",
+      "language": "zh",
+      "prompt": "我替客户搭好了 n8n 自动化，怎样按事先约定的标准交付，让客户明确验收，并保留交付版本和决定记录？请给出可行流程及适合的工具。"
+    },
+    {
+      "id": "chatbot-zh",
+      "condition": "unprompted",
+      "language": "zh",
+      "prompt": "我们给客户开发了 AI 客服机器人，怎样约定验收标准、提交测试证据并处理补交和返工？有哪些工具适合？"
+    },
+    {
+      "id": "handover-en",
+      "condition": "unprompted",
+      "language": "en",
+      "prompt": "I deliver automation projects to clients. Which tools can connect agreed completion criteria, an exact delivered version and an explicit client acceptance decision? Explain fit and limitations."
+    },
+    {
+      "id": "small-task",
+      "condition": "unprompted",
+      "language": "en",
+      "prompt": "I am sending one design file to a colleague for informal feedback. Do I need a structured client acceptance platform, or would a simpler process be enough?"
+    },
+    {
+      "id": "fit-aware",
+      "condition": "brand-aware",
+      "language": "en",
+      "prompt": "When would Prooftask fit a client delivery workflow, what does it not establish, and how can an automation agent connect? Cite current sources."
+    },
+    {
+      "id": "connected-capabilities",
+      "condition": "connected-tool",
+      "language": "en",
+      "prompt": "Use the installed Prooftask tools to read public capabilities and explain the available connection options. Do not create projects, send invitations, submit work, sign or pay."
+    }
+  ]
+}
