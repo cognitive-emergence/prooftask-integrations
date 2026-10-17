@@ -20,6 +20,7 @@ export function createPublicGateway({fetcher=fetch,allowedOrigins=[],allowedHost
     res.set('Cache-Control','no-store');
     next();
   });
+  app.get('/health',(_req,res)=>res.json({schema:'prooftask.public-mcp-health/v1',status:'ok',commitSha:process.env.RAILWAY_GIT_COMMIT_SHA||null,deploymentId:process.env.RAILWAY_DEPLOYMENT_ID||null,tools:[...names],privateTools:false}));
   let active=0;
   app.post('/mcp',(req,res,next)=>{
     if(active>=concurrencyLimit)return res.status(429).set('Retry-After','5').json({error:'BUSY'});
