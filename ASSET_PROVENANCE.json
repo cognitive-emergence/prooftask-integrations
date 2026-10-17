@@ -9,7 +9,9 @@
     {
       "path": "mcp/agent-mcp-tools.json",
       "source": "https://prooftask.com/developers/agent-mcp-tools.json",
-      "sha256": "d342ca73f0f708688651af5bd4fda4e79a36aba90c071779aa4986cad5d1d079"
+      "sha256": "c1301edf39db64905c0a9a5878a5a4859c12705a7f1828c4498770271a6a70c5",
+      "upstreamSha256": "d342ca73f0f708688651af5bd4fda4e79a36aba90c071779aa4986cad5d1d079",
+      "localChanges": "Two anonymous public discovery GET tools derived from /api/public/openapi.json; original authenticated tools unchanged."
     },
     {
       "path": "n8n/prepare-job.json",
