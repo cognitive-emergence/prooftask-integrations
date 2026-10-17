@@ -4,6 +4,6 @@
   "title": "Prooftask",
   "description": "Delivery agreements, client acceptance and verifiable delivery records through a scoped Agent API.",
   "repository": {"url": "https://github.com/cognitive-emergence/prooftask-integrations", "source": "github"},
-  "version": "0.1.0",
-  "packages": [{"registryType": "npm", "identifier": "prooftask-mcp", "version": "0.1.0", "transport": {"type": "stdio"}}]
+  "version": "0.1.1",
+  "packages": [{"registryType": "npm", "identifier": "prooftask-mcp", "version": "0.1.1", "transport": {"type": "stdio"}}]
 }

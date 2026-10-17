@@ -20,8 +20,8 @@ jobs:
           import json
           v=json.load(open('server.json'))
           assert v['name']=='io.github.cognitive-emergence/prooftask'
-          assert v['version']=='0.1.0'
-          assert v['packages']==[{'registryType':'npm','identifier':'prooftask-mcp','version':'0.1.0','transport':{'type':'stdio'}}]
+          assert v['version']=='0.1.1'
+          assert v['packages']==[{'registryType':'npm','identifier':'prooftask-mcp','version':'0.1.1','transport':{'type':'stdio'}}]
           assert 'remotes' not in v
           PY
       - name: Install the reviewed official publisher
