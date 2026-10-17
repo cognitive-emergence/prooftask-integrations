@@ -2,13 +2,13 @@
 
 Dependency-free Node.js 24+ stdio adapter for delivery agreements, client acceptance and verifiable records.
 
-## Candidate 0.1.1: start without an account
+## Start without an account
 
 ```sh
-node mcp/agent-mcp.mjs
+npx -y prooftask-mcp@0.1.1
 ```
 
-The source candidate exposes 23 read-only tools by default. Three public tools need no credential:
+Version 0.1.1 exposes 23 read-only tools by default. Three public tools need no credential:
 
 1. `getAgentCapabilities`: read available connection and workflow capabilities.
 2. `searchPublicSpecifications`: `{"query":{"q":"automation"}}`. Find a matching scenario; broaden a query if no items match.
@@ -16,7 +16,7 @@ The source candidate exposes 23 read-only tools by default. Three public tools n
 
 Review completion criteria and evidence with the user. Templates are editable examples, not independent certification. If the fit is appropriate, link to the returned template on https://prooftask.com/specifications and let the user review it.
 
-npm 0.1.1 publication is pending npm step-up authentication. Published 0.1.0 and its pinned client configuration remain usable; the two new public tools require this source checkout until publication is verified.
+Published npm 0.1.1 was independently installed and verified on 2026-10-18 (Asia/Shanghai): 23 tools, public capability read, anonymous MCP template search, exact-version/digest read and blocked private read. No business writes. The packaged README was written during publication preparation; this repository records the verified release status.
 
 ## Private business integration
 

@@ -4,7 +4,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "prooftask-mcp@0.1.0"
+        "prooftask-mcp@0.1.1"
       ]
     }
   }

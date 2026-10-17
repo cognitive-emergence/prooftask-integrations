@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-10-17T16:36:55.478Z",
+  "distribution": "prooftask-mcp@0.1.1",
+  "cleanInstall": true,
+  "listedTools": 23,
+  "publicCapabilities": "PASS",
+  "publicMcpTemplateSearch": "PASS",
+  "pinnedVersionAndDigest": "PASS",
+  "privateReadWithoutCredential": "BLOCKED",
+  "credentialsLoaded": false,
+  "businessWrites": 0,
+  "remoteGateway": {
+    "officialSdkClientLocalHttp": "PASS",
+    "deployed": false
+  },
+  "limits": "Anonymous read checks only; no authenticated customer workflow evidence"
+}

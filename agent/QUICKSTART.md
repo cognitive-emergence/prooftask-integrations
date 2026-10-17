@@ -10,7 +10,7 @@ Copy the `prooftask` entry from [mcp-client.json](../mcp/mcp-client.json) into y
 
 Expected: the tool returns JSON with HTTP 200. A listed tool alone is not a successful server call. If `npx` is unavailable in the GUI client's PATH, use the absolute Node path and the checked-out adapter path as shown in the MCP README.
 
-The source candidate for 0.1.1 exposes 23 read-only tools by default. Call `searchPublicSpecifications` with `{"query":{"q":"automation"}}`, then `getPublicSpecification` with the returned slug and exact version. npm publication of 0.1.1 is pending step-up authentication; run the source checkout for these tools. These two tools need no credential; compare the returned digest before reuse. `listUsableTemplates` remains authenticated. The HTTP example below is also available.
+Published version 0.1.1 exposes 23 read-only tools by default. Call `searchPublicSpecifications` with `{"query":{"q":"automation"}}`, then `getPublicSpecification` with the returned slug and exact version. These two tools need no credential; compare the returned digest before reuse. `listUsableTemplates` remains authenticated. The HTTP example below is also available.
 
 ## Code Agent: anonymous template search
 
