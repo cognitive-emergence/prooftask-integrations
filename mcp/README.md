@@ -33,4 +33,4 @@ node agent/public-mcp-check.mjs
 
 The second command makes anonymous production reads: search, exact version/digest read and a blocked private read. It loads no credential and makes no business write.
 
-This is a local stdio adapter. A hosted MCP endpoint and standard remote authorization are not available yet. The official MCP Registry still points to version 0.1.0 until a separate verified metadata update. The website's downloadable catalog may differ from the npm distribution during release.
+This is a local stdio adapter. A hosted MCP endpoint and standard remote authorization are not available yet. The official MCP Registry lists version 0.1.1 as active/latest (verified 2026-10-18 Asia/Shanghai). The website's downloadable catalog may differ from the npm distribution during release.

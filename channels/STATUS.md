@@ -16,3 +16,10 @@ Updated 2026-10-17. Publication and marketplace approval are separate milestones
 - [Successful manual OIDC publish run](https://github.com/cognitive-emergence/prooftask-integrations/actions/runs/39044145410), source commit 2b680a9456d1e6b3e46b59aca355036a4ddeea9d.
 - [Official Registry API record](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.cognitive-emergence%2Fprooftask): name, version, npm identifier and stdio transport match the reviewed manifest. Published at 2026-10-17T15:14:20.359108Z.
 - Manual workflow uses repository OIDC, contents:read and id-token:write, a five-minute limit and no stored publisher credentials. It does not deploy the Prooftask product.
+
+## Verified anonymous discovery release — 2026-10-18 Asia/Shanghai
+
+- npm `prooftask-mcp@0.1.1` was independently installed; 23 default read-only tools, public capabilities and anonymous MCP search/exact-version digest reads passed. Private reads without credentials remain blocked. No business writes.
+- Official MCP Registry `io.github.cognitive-emergence/prooftask` version `0.1.1` is active/latest, published at `2026-10-17T16:39:21.943977Z`. Manual publication: https://github.com/cognitive-emergence/prooftask-integrations/actions/runs/39050346781 . Existing permissions, publisher checksum and five-minute job limit were preserved; only the reviewed version target changed.
+- `remote/` contains a public-only Streamable HTTP gateway candidate tested with the official SDK client. It is not deployed and does not expose private operations. Standard private remote authorization and real external-product journey validation remain pending.
+- Website catalog synchronization is tracked in https://github.com/cognitive-emergence/prooftask/pull/536; its merge and exact production verification are separate from npm/Registry release.
