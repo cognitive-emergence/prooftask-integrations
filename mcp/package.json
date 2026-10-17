@@ -1,0 +1,14 @@
+{
+  "name": "prooftask-mcp",
+  "version": "0.1.0",
+  "description": "Local MCP adapter for Prooftask delivery agreements, client acceptance and verifiable records",
+  "type": "module",
+  "bin": {"prooftask-mcp": "agent-mcp.mjs"},
+  "files": ["agent-mcp.mjs", "agent-mcp-tools.json", "README.md"],
+  "engines": {"node": ">=24"},
+  "repository": {"type": "git", "url": "https://github.com/cognitive-emergence/prooftask-integrations.git", "directory": "mcp"},
+  "homepage": "https://prooftask.com/developers",
+  "keywords": ["mcp", "model-context-protocol", "prooftask", "delivery", "acceptance"],
+  "mcpName": "io.github.cognitive-emergence/prooftask",
+  "publishConfig": {"access": "public"}
+}

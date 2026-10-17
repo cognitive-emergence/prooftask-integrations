@@ -1,0 +1,30 @@
+{
+  "retrievedOn": "2026-10-17",
+  "assets": [
+    {
+      "path": "mcp/agent-mcp.mjs",
+      "source": "https://prooftask.com/developers/agent-mcp.mjs",
+      "sha256": "f879b141858d531a6cd181b443224881106d7817ffd0eb615b58ba59a1def818"
+    },
+    {
+      "path": "mcp/agent-mcp-tools.json",
+      "source": "https://prooftask.com/developers/agent-mcp-tools.json",
+      "sha256": "d342ca73f0f708688651af5bd4fda4e79a36aba90c071779aa4986cad5d1d079"
+    },
+    {
+      "path": "n8n/prepare-job.json",
+      "source": "https://prooftask.com/developers/n8n/prepare-job.json",
+      "sha256": "113cd83b63b5cbb3f5e59d20f157e301a497d1f42fee39608130f761550f5680"
+    },
+    {
+      "path": "n8n/send-job.json",
+      "source": "https://prooftask.com/developers/n8n/send-job.json",
+      "sha256": "1e7afdf8240d00453ac958f677dd0b100e0e243cc0edf5ff14c43de89875b550"
+    },
+    {
+      "path": "n8n/events.json",
+      "source": "https://prooftask.com/developers/n8n/events.json",
+      "sha256": "b43a476f3920361862551b542d936c0f45722e5fbf88a6957130286eb7b0e990"
+    }
+  ]
+}

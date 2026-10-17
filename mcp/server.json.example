@@ -1,0 +1,9 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.cognitive-emergence/prooftask",
+  "title": "Prooftask",
+  "description": "Delivery agreements, client acceptance and verifiable delivery records through a scoped Agent API.",
+  "repository": {"url": "https://github.com/cognitive-emergence/prooftask-integrations", "source": "github"},
+  "version": "0.1.0",
+  "packages": [{"registryType": "npm", "identifier": "prooftask-mcp", "version": "0.1.0", "transport": {"type": "stdio"}}]
+}
