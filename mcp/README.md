@@ -29,4 +29,6 @@ Writes require both explicit local opt-in (`PROOFTASK_MCP_ALLOW_WRITES=1`) and c
 
 ## Distribution status
 
-The package manifest and registry metadata are prepared for publication. They are not evidence that an npm package or official MCP Registry listing exists. Until publication is independently verified, use the local checkout command above.
+Published [prooftask-mcp@0.1.0](https://www.npmjs.com/package/prooftask-mcp) is independently installable. Its installed stdio handshake exposes 21 read-only tools by default. Run it with Node.js 24+ using `npx -y prooftask-mcp@0.1.0`.
+
+The [official MCP Registry record](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.cognitive-emergence%2Fprooftask) lists `io.github.cognitive-emergence/prooftask` version `0.1.0` as active/latest. [Publication evidence](../channels/STATUS.md).
