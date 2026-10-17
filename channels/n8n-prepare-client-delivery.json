@@ -1,0 +1,156 @@
+{
+  "name": "Prepare a reviewable client delivery with Prooftask",
+  "nodes": [
+    {
+      "id": "pt-continuity-0",
+      "name": "Run deliberately",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "pt-continuity-1",
+      "name": "Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        0
+      ],
+      "parameters": {
+        "jsCode": "return [{json:{\"requestId\":\"PERSIST_ONE_UUID_V4_PER_INTENDED_DELIVERY\",\"projectId\":\"EXACT_PROJECT_ID\",\"workflowReference\":\"crm:job-001\",\"summary\":\"The mapped delivery is ready for review.\",\"materials\":[{\"criterionId\":\"AGREED_CRITERION_ID\",\"summary\":\"Description of the actual original materials.\",\"references\":[\"https://example.com/original\"],\"files\":[]}]}}];"
+      },
+      "notes": "Map the existing job ID and actual materials here. Preserve requestId when retrying preparation.",
+      "notesInFlow": true
+    },
+    {
+      "id": "pt-continuity-2",
+      "name": "Validate one job",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        0
+      ],
+      "parameters": {
+        "jsCode": "if($input.all().length!==1)throw new Error('ONE_JOB_REQUIRED');const v=$input.first().json;if(!/^[a-f0-9-]{36}$/.test(v.requestId)||!/^delivery_[a-f0-9-]{36}$/.test(v.projectId))throw new Error('EXACT_IDS_REQUIRED');return [{json:v}];"
+      }
+    },
+    {
+      "id": "pt-continuity-3",
+      "name": "Prepare and persist request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        780,
+        0
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "allowUnauthorizedCerts": false,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false,
+              "maxRedirects": 0
+            }
+          },
+          "response": {
+            "response": {
+              "responseFormat": "json",
+              "neverError": false
+            }
+          },
+          "timeout": 20000
+        },
+        "method": "POST",
+        "url": "https://prooftask.com/api/agents/v1/jobs",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}"
+      },
+      "notes": "Select a Header Auth credential: Authorization = Bearer <scoped agent token>. Do not put tokens in workflow inputs or exports.",
+      "notesInFlow": true
+    },
+    {
+      "id": "pt-guide-intro",
+      "name": "Start here: prepare a client delivery",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -450
+      ],
+      "parameters": {
+        "content": "## Prepare a reviewable client delivery\nFor automation consultants handing completed work to a client. This workflow creates a saved Prooftask delivery job. It stops before sending. Client acceptance happens separately.\n\n### Before you run\n1. Use an existing Prooftask project with agreed criteria.\n2. Authorize a scoped Agent connection at https://prooftask.com/developers?utm_source=partner&utm_campaign=n8n_creator\n3. On the HTTP node, select Header Auth with Authorization: Bearer <your scoped token>. Never paste secrets into this workflow.\n4. Replace every example in Input with actual project, criterion, materials and workflow references. Use one UUID v4 requestId per intended delivery and preserve it for retries.",
+        "height": 400,
+        "width": 640
+      }
+    },
+    {
+      "id": "pt-guide-result",
+      "name": "Keep the saved job for deliberate submission",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        650,
+        -410
+      ],
+      "parameters": {
+        "content": "## Keep the returned job ID\nPersist the returned job ID in your existing task system. Review the exact materials before using the separate send-job workflow.\n\nThis template does not send a delivery, accept work, sign or pay. Preparation still writes a saved job, so run only for an authorized real project.\n\nProoftask account, project and Agent grant required; service pricing applies separately. No credentials or pinned customer data are included.\n\nSetup and companion workflows: https://github.com/cognitive-emergence/prooftask-integrations/tree/main/n8n",
+        "height": 360,
+        "width": 540
+      }
+    }
+  ],
+  "connections": {
+    "Run deliberately": {
+      "main": [
+        [
+          {
+            "node": "Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Input": {
+      "main": [
+        [
+          {
+            "node": "Validate one job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate one job": {
+      "main": [
+        [
+          {
+            "node": "Prepare and persist request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "none",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "tags": []
+}

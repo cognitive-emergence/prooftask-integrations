@@ -16,7 +16,7 @@ Automation consultants and service teams that need an explicit client acceptance
 
 ### Setup
 
-1. Import n8n/prepare-job.json.
+1. Import channels/n8n-prepare-client-delivery.json (the marketplace edition adds canvas setup notes).
 2. Connect the exact Prooftask project through the Agent connection flow.
 3. Select an n8n Header Auth credential on the HTTP Request node.
 4. Replace the example project ID, stable UUID request ID, workflow reference and materials with actual values mapped to agreed criteria.
@@ -36,4 +36,4 @@ Preparation does not send a delivery, accept work, issue a record, sign or pay. 
 
 ## Submission state
 
-Prepared; not submitted. Creator Portal sign-in is required. The official guide says new creators submit one template at a time; review approval remains external.
+Prepared; not submitted. Creator Portal account prooftask is signed in. The marketplace edition includes required sticky notes; final upload and submission Terms acceptance remain pending. The official guide says new creators submit one template at a time; review approval remains external.
