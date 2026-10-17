@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "prooftask": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "prooftask-mcp@0.1.0"
+      ]
+    }
+  }
+}

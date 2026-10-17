@@ -4,6 +4,10 @@ Connect **delivery handover and client acceptance** to your existing n8n workflo
 
 [Prooftask](https://prooftask.com/?utm_source=partner&utm_campaign=github_integrations) · [API documentation](https://prooftask.com/developers?utm_source=partner&utm_campaign=github_integrations) · [Delivery templates](https://prooftask.com/specifications?utm_source=partner&utm_campaign=github_integrations)
 
+## Get your first successful Agent call
+
+Use the [Agent quickstart](agent/QUICKSTART.md) for copyable MCP configuration, anonymous template search, a public-only connection check, and private-read setup. After cloning, run `node agent/first-call.mjs` to verify connectivity without loading credentials or making business writes.
+
 ## Start without an account
 
 Requires Node.js 24 or later. No dependencies or credentials are needed to search public delivery templates:

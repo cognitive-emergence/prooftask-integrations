@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "prooftask": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "prooftask-mcp@0.1.0"
+      ],
+      "env": {
+        "PROOFTASK_AGENT_TOKEN_FILE": "/absolute/path/to/private/agent-credential.json"
+      }
+    }
+  }
+}

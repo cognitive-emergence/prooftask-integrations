@@ -2,6 +2,12 @@
 
 A dependency-free Node.js 24+ stdio adapter over Prooftask's existing Agent API. The server reads the adjacent tool catalog and exposes read-only tools by default.
 
+## Quick start with the published package
+
+Copy [mcp-client.json](mcp-client.json) into your client's MCP configuration, preserving other servers. It runs the pinned npm package with `npx` and requires Node.js 24+. First call `getAgentCapabilities` without a credential. Follow the [first successful call guide](../agent/QUICKSTART.md) for public search, a runnable connection check, private reads and recovery.
+
+The package's `listUsableTemplates` tool requires authorization; anonymous template discovery uses the public API example in the quickstart.
+
 ## Run from this repository
 
 ```sh
