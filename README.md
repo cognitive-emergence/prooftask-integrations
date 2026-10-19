@@ -25,7 +25,7 @@ Or import [n8n/discover-templates.json](n8n/discover-templates.json) into n8n an
 | Your task | Shortest next step |
 | --- | --- |
 | Decide what a client should check | Search public templates above; no account required |
-| Connect an MCP client | Install the [published adapter](mcp/README.md) with `npx -y prooftask-mcp@0.1.0` (Node.js 24+) |
+| Connect an MCP client | Install the [published adapter](mcp/README.md) with `npx -y prooftask-mcp@0.1.1` (Node.js 24+) |
 | Hand over an existing automation | Import the [annotated n8n workflow](channels/n8n-prepare-client-delivery.json), then follow its canvas notes |
 | Prepare a client delivery job | Use an existing authorized project and [n8n setup](n8n/README.md); preparation saves a job before any send |
 | Evaluate adoption for your service team | Read the [provider guide](providers/README.md) |
@@ -67,7 +67,7 @@ Preparation, submission, acceptance, record issuance and payment are distinct. T
 - [Agent workflow guide](https://prooftask.com/developers/agent-workflows.md)
 - [Trust and verification boundaries](https://prooftask.com/trust)
 
-The MCP adapter is local stdio. Prooftask does not advertise a hosted MCP endpoint. The adapter is published as [prooftask-mcp@0.1.0](https://www.npmjs.com/package/prooftask-mcp). The [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.cognitive-emergence%2Fprooftask) lists version 0.1.0 as active. See [channel status](channels/STATUS.md) for verified distribution status.
+Public template discovery is available over [hosted Streamable HTTP](remote/README.md) without a credential. The npm adapter uses local stdio for separately authorized private workflows. The adapter is published as [prooftask-mcp@0.1.1](https://www.npmjs.com/package/prooftask-mcp). The [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.cognitive-emergence%2Fprooftask) publishes the independently versioned server metadata; see the registry for its current status. See [channel status](channels/STATUS.md) for verified distribution status.
 
 ## Validation and maintenance
 

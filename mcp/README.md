@@ -33,4 +33,16 @@ node agent/public-mcp-check.mjs
 
 The second command makes anonymous production reads: search, exact version/digest read and a blocked private read. It loads no credential and makes no business write.
 
-This is a local stdio adapter. A hosted MCP endpoint and standard remote authorization are not available yet. The official MCP Registry lists version 0.1.1 as active/latest (verified 2026-10-18 Asia/Shanghai). The website's downloadable catalog may differ from the npm distribution during release.
+## Hosted public discovery
+
+Clients supporting Streamable HTTP can connect without installing the adapter:
+
+```json
+{"mcpServers":{"prooftask-public":{"url":"https://prooftask-public-mcp-production.up.railway.app/mcp"}}}
+```
+
+This endpoint exposes only `getAgentCapabilities`, `searchPublicSpecifications` and `getPublicSpecification`. It needs no credential and cannot access private projects or perform business writes. See the [remote service guide](../remote/README.md).
+
+The npm adapter remains local stdio. Private project access requires the separate scoped Agent connection described above; the public endpoint does not provide hosted private access or remote authorization.
+
+The existing npm 0.1.1 package can contain an older README. This corrected repository guide does not retroactively replace immutable package contents. The official MCP Registry uses an independently versioned server record; check its current entry for metadata versions. The website's downloadable catalog may differ from the npm distribution during release.
