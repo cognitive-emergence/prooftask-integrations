@@ -7,8 +7,9 @@ import { discover } from '../agent/discover.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const read = path => readFileSync(root + path, 'utf8');
 const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
-for (const name of readdirSync(root + 'n8n').filter(name => name.endsWith('.json'))) {
-  const workflow = JSON.parse(read('n8n/' + name));
+const workflowPaths = [...readdirSync(root + 'n8n').filter(name => name.endsWith('.json')).map(name => 'n8n/' + name), 'channels/n8n-prepare-client-delivery.json'];
+for (const path of workflowPaths) {
+  const workflow = JSON.parse(read(path));
   assert.equal(workflow.active, false);
   assert.deepEqual(workflow.pinData, {});
   assert.equal(workflow.settings.saveDataSuccessExecution, 'none');
@@ -18,7 +19,7 @@ for (const name of readdirSync(root + 'n8n').filter(name => name.endsWith('.json
     assert.equal(node.credentials, undefined);
     if (node.type === 'n8n-nodes-base.code') new AsyncFunction(node.parameters.jsCode);
   }
-  for (const connection of Object.values(workflow.connections)) for (const outputs of connection.main) for (const edge of outputs) assert.ok(names.has(edge.node));
+  for (const connection of Object.values(workflow.connections)) for (const outputs of connection.main) for (const edge of outputs || []) assert.ok(names.has(edge.node));
 }
 const messages = [
   {jsonrpc:'2.0',id:1,method:'initialize',params:{protocolVersion:'2025-11-25',capabilities:{},clientInfo:{name:'distribution-check',version:'0.1'}}},
@@ -40,4 +41,4 @@ if (globalThis.process.argv.includes('--live')) {
   assert.ok(response && typeof response==='object');
   console.log('Live anonymous discovery returned JSON. No business write was made.');
 }
-console.log(`Checked 4 inactive n8n workflows, public asset hashes and MCP stdio initialization with ${tools.length} read-only tools.`);
+console.log(`Checked ${workflowPaths.length} inactive n8n workflows, public asset hashes and MCP stdio initialization with ${tools.length} read-only tools.`);

@@ -1,0 +1,78 @@
+import { writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { selectQueue, inspectDelivery, checkProject, confirmSnapshot, assessJob, notificationText } from './n8n-delivery-queue.mjs';
+
+export function deliveryQueueWorkflow() {
+  const nodes = [], connections = {};
+  function add(name, type, version, position, parameters, extra = {}) {
+    nodes.push({ id: 'pt-queue-' + nodes.length, name, type: 'n8n-nodes-base.' + type, typeVersion: version, position, parameters, ...extra });
+  }
+  const code = (name, position, fn, body) => add(name, 'code', 2, position, { jsCode: 'const run = ' + fn.toString() + ';\n' + body });
+  const edge = (from, to, output = 0) => { const main = (connections[from] ||= { main: [] }).main; (main[output] ||= []).push({ node: to, type: 'main', index: 0 }); };
+  const pair = 'pairedItem: {item:0}';
+  const config = "$('Configuration').first().json";
+  const projectRow = "$('Check agreed criteria').item.json";
+  const sheet = { resource: 'sheet', authentication: 'oAuth2', documentId: { __rl: true, value: `={{ ${config}.spreadsheetId }}`, mode: 'id' }, sheetName: { __rl: true, value: `={{ ${config}.sheetId }}`, mode: 'id' } };
+  function update(name, position, fields) {
+    add(name, 'googleSheets', 4.7, position, { ...sheet, operation: 'update', columns: { mappingMode: 'defineBelow', value: Object.fromEntries(fields.map(k => [k, `={{ $json.${k} }}`])), matchingColumns: ['task_id'], schema: fields.map(k => ({ id: k, displayName: k, type: 'string', required: false, defaultMatch: k === 'task_id', canBeUsedToMatch: k === 'task_id' })), attemptToConvertTypes: false, convertFieldsToString: false }, options: { cellFormat: 'RAW', handlingExtraData: 'ignoreIt' } }, { notes: 'Select the same Google Sheets credential. Update an existing unique task_id; do not append new rows.', notesInFlow: true });
+  }
+  function condition(name, position, left, right, operation = 'equals') {
+    add(name, 'if', 2.2, position, { conditions: { options: { caseSensitive: true, leftValue: '', typeValidation: 'strict', version: 2 }, conditions: [{ id: name.replaceAll(' ', '-'), leftValue: left, rightValue: right, operator: { type: 'string', operation } }], combinator: 'and' }, options: {} });
+  }
+  function request(name, position, method, url, jsonBody) {
+    add(name, 'httpRequest', 4.2, position, { authentication: 'genericCredentialType', genericAuthType: 'httpHeaderAuth', method, url,
+      ...(jsonBody ? { sendBody: true, contentType: 'json', specifyBody: 'json', jsonBody } : {}),
+      options: { timeout: 20000, allowUnauthorizedCerts: false, redirect: { redirect: { followRedirects: false, maxRedirects: 0 } }, response: { response: { fullResponse: true, neverError: true, responseFormat: 'json' } } } },
+      { onError: 'continueRegularOutput', retryOnFail: true, maxTries: 2, waitBetweenTries: 1000, notes: 'Select Header Auth: Authorization = Bearer <project-scoped Agent token>. Errors are handled explicitly; never paste credentials into inputs.', notesInFlow: true });
+  }
+  add('Run delivery handover', 'manualTrigger', 1, [0, 220], {});
+  add('Configuration', 'code', 2, [220, 220], { jsCode: "// Only non-secret configuration. Configure credentials on their respective nodes.\nconst configuration = {spreadsheetId:'REPLACE_SPREADSHEET_ID',sheetId:'0',slackChannelId:'REPLACE_SLACK_CHANNEL_ID'};\nif (!/^[a-zA-Z0-9_-]{20,}$/.test(configuration.spreadsheetId) || configuration.spreadsheetId.startsWith('REPLACE') || !/^\\d+$/.test(configuration.sheetId) || !/^[CG][A-Z0-9]+$/.test(configuration.slackChannelId)) throw new Error('Set spreadsheetId, numeric sheetId and the authorized Slack channel ID in Configuration.');\nreturn [{json:configuration}];" });
+  add('Read delivery queue', 'googleSheets', 4.7, [440, 220], { ...sheet, operation: 'read', options: {} });
+  code('Select queued deliveries', [660, 220], selectQueue, 'return run($input.all());');
+  add('One delivery at a time', 'splitInBatches', 3, [880, 220], { batchSize: 1, options: {} });
+  add('Candidate request ID', 'crypto', 2, [1100, 320], { action: 'generate', encodingType: 'uuid', dataPropertyName: 'candidate_request_id' });
+  code('Inspect delivery', [1320, 320], inspectDelivery, `return [{json:run($input.first().json),${pair}}];`);
+  condition('Input is complete', [1540, 320], '={{ $json.kind }}', 'invalid', 'notEquals');
+  request('Read agreed project', [1760, 220], 'GET', "={{ 'https://prooftask.com/api/agents/v1/projects/' + encodeURIComponent($json.project_id) }}");
+  code('Check agreed criteria', [1980, 220], checkProject, `return [{json:run($('Inspect delivery').item.json,$input.first().json),${pair}}];`);
+  condition('Project permits handover', [2200, 220], '={{ $json.kind }}', 'invalid', 'notEquals');
+  condition('Saved job exists', [2420, 120], '={{ $json.kind }}', 'resume');
+  request('Read saved job', [2640, -60], 'GET', "={{ 'https://prooftask.com/api/agents/v1/jobs/' + $json.job_id }}");
+  code('Assess saved job', [2860, -60], assessJob, `return [{json:run(${projectRow},$input.first().json,'resume',new Date().toISOString()),${pair}}];`);
+  update('Persist retry identity', [2640, 340], ['task_id', 'request_id', 'request_json', 'handover_state', 'handover_note']);
+  add('Read persisted request', 'googleSheets', 4.7, [2860, 340], { ...sheet, operation: 'read', filtersUI: { values: [{ lookupColumn: 'task_id', lookupValue: '={{ $json.task_id }}' }] }, options: {} });
+  code('Confirm persisted request', [3080, 340], confirmSnapshot, `return [{json:run(${projectRow},$input.all()),${pair}}];`);
+  request('Prepare saved delivery', [3300, 340], 'POST', 'https://prooftask.com/api/agents/v1/jobs', '={{ $json.request_json }}');
+  code('Assess preparation', [3520, 340], assessJob, `return [{json:run(${projectRow},$input.first().json,'prepare',new Date().toISOString()),${pair}}];`);
+  update('Write handover result', [3740, 120], ['task_id', 'job_id', 'prepared_at', 'handover_state', 'handover_note']);
+  // The sheet only receives operational fields; notification metadata is restored from the current paired result.
+  add('Restore review context', 'code', 2, [3960, 120], { jsCode: `const source = ${projectRow}; const saved=$input.first().json;\nif(saved.task_id!==source.task_id)throw new Error('Sheet write returned a different task.');\nreturn [{json:{...saved,request_id:source.request_id,notified_job_id:source.notified_job_id,human_url:source.human_url||''},${pair}}];` });
+  condition('Ready for owner reminder', [4180, 120], "={{ $json.handover_state === 'PREPARED' && $json.notified_job_id !== $json.job_id ? 'YES' : 'NO' }}", 'YES');
+  code('Build owner reminder', [4400, 20], notificationText, `return [{json:{...$input.first().json,text:run($input.first().json,${config})},${pair}}];`);
+  add('Notify responsible team', 'slack', 2.3, [4620, 20], { authentication: 'accessToken', resource: 'message', operation: 'post', select: 'channel', channelId: { __rl: true, value: `={{ ${config}.slackChannelId }}`, mode: 'id' }, messageType: 'text', text: '={{ $json.text }}', otherOptions: { includeLinkToWorkflow: false, mrkdwn: false, link_names: false, unfurl_links: false, unfurl_media: false } }, { notes: 'Select a Slack credential authorized for this channel. Only task/job IDs and review links are sent, never original material contents. A failed reminder stops here; a rerun resumes the saved job.', notesInFlow: true });
+  add('Remember successful reminder', 'code', 2, [4840, 20], { jsCode: `const reminder=$('Build owner reminder').item.json; const response=$input.first().json; if(!response.ts || response.error || response.ok===false)throw new Error('Slack did not confirm the reminder. Preserve the saved job and reconcile notification delivery.');return [{json:{task_id:reminder.task_id,notified_job_id:reminder.job_id,handover_note:'Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.'},${pair}}];` });
+  update('Mark reminder delivered', [5060, 20], ['task_id', 'notified_job_id', 'handover_note']);
+  update('Write actionable feedback', [2420, 640], ['task_id', 'handover_state', 'handover_note']);
+  add('Queue run complete', 'noOp', 1, [1100, 60], {});
+
+  edge('Run delivery handover','Configuration'); edge('Configuration','Read delivery queue'); edge('Read delivery queue','Select queued deliveries'); edge('Select queued deliveries','One delivery at a time');
+  edge('One delivery at a time','Queue run complete',0); edge('One delivery at a time','Candidate request ID',1); edge('Candidate request ID','Inspect delivery'); edge('Inspect delivery','Input is complete');
+  edge('Input is complete','Read agreed project',0); edge('Input is complete','Write actionable feedback',1); edge('Read agreed project','Check agreed criteria'); edge('Check agreed criteria','Project permits handover');
+  edge('Project permits handover','Saved job exists',0); edge('Project permits handover','Write actionable feedback',1); edge('Saved job exists','Read saved job',0); edge('Read saved job','Assess saved job'); edge('Assess saved job','Write handover result');
+  edge('Saved job exists','Persist retry identity',1); edge('Persist retry identity','Read persisted request'); edge('Read persisted request','Confirm persisted request'); edge('Confirm persisted request','Prepare saved delivery'); edge('Prepare saved delivery','Assess preparation'); edge('Assess preparation','Write handover result');
+  edge('Write handover result','Restore review context'); edge('Restore review context','Ready for owner reminder'); edge('Ready for owner reminder','Build owner reminder',0); edge('Ready for owner reminder','One delivery at a time',1);
+  edge('Build owner reminder','Notify responsible team'); edge('Notify responsible team','Remember successful reminder'); edge('Remember successful reminder','Mark reminder delivered'); edge('Mark reminder delivered','One delivery at a time'); edge('Write actionable feedback','One delivery at a time');
+  const note = (name, position, width, height, content, color = 5) => add(name, 'stickyNote', 1, position, { width, height, content, color });
+  note('Start here — setup and scope', [-60,-560], 860, 690, '## Google Sheets delivery queue → Prooftask → Slack\nFor automation consultants handing completed client work to a responsible reviewer. Reads rows marked YES, checks required material mappings against the current agreement, saves a retry-safe job, writes its ID back and reminds the team. It stops before submission.\n\n### Setup (n8n 2.39.8)\n1. Create a Google Sheet using the sample CSV in the linked setup guide. One unique task_id per intended delivery revision.\n2. Set spreadsheetId, numeric sheetId and slackChannelId in Configuration.\n3. Select the SAME Google Sheets OAuth2 credential on every Google Sheets node (read/write access).\n4. Select a Prooftask Header Auth credential on all three HTTP nodes: Authorization = Bearer <project-scoped Agent token>. The owner must grant the existing project and SUBMIT_MATERIALS action.\n5. Select a Slack credential with chat:write and add its bot to the chosen review channel.\n6. Enter actual project/criterion IDs and original links in the sheet; set ready_for_review=YES. Run manually, one execution at a time.\n\nRequires existing agreed Prooftask projects, a Prooftask account/Agent grant, Google Sheets and Slack. Respective service pricing applies. No community node installation is needed.');
+  note('Queue input and validation', [820,-560], 850, 530, '## Prepare real materials, not sample payloads\nInput columns: task_id, ready_for_review, project_id, summary, materials_json. Operational columns: request_id, request_json, job_id, handover_state, handover_note, prepared_at, notified_job_id.\n\nUse the sample CSV and setup guide below. materials_json is an array with criterionId, summary, references and files, one entry per current agreed criterion. Material links are not fetched or judged.\n\nInvalid rows receive actionable NEEDS_INPUT/NEEDS_OWNER feedback. Other rows can continue. Duplicate task IDs stop the run before any writes. YES means prepare a job for internal review; it never authorizes submission or acceptance.\n\nSetup + fictional sample CSV:\nhttps://github.com/cognitive-emergence/prooftask-integrations/blob/main/n8n/DELIVERY_QUEUE.md');
+  note('Existing authorization and current agreement', [1720,-560], 760, 500, '## Keep the original business process\nThe scoped Agent reads the existing authorized project. Current agreed criteria must match material IDs exactly. A missing permission, human pause or changed agreement produces owner feedback. No agreement, invitation or new business authority is created.\n\nThe preparation endpoint saves the exact envelope server-side. The sheet retains its opaque job ID and retry identity. A saved job is not a submitted delivery, accepted result, signature or payment.\n\nNever run overlapping manual executions against the same queue. Keep sheet access limited to the delivery team and protect its original-material references.');
+  note('Durable retry and recovery', [2540,800], 1050, 500, '## Persist BEFORE calling Prooftask\nThe exact request_id and request_json are written and read back before the first preparation attempt. A timeout is retried with the same identity and identical body. Edited inputs under the saved identity are blocked; use a new task row for a deliberate new revision.\n\nIf preparation succeeds but sheet writeback fails, rerun from the queue: the same saved request returns the same server job. If the reminder fails, the saved job is read instead of preparing a new delivery. Already-submitted jobs are marked separately.\n\nDo not clear request_id/request_json to escape an error. AUTH errors require the owner; replacement Agent grants cannot silently inherit saved jobs. HTTP success never means buyer acceptance.');
+  note('Human review and customization', [3700,-560], 1390, 520, '## End at a useful human handoff\nThe queue records PREPARED and an authorized team channel receives the saved job/project references. Review the exact materials, then use the existing separate send-job workflow with confirmed:true. Only the authorized buyer can record acceptance.\n\nThe Slack reminder contains no material contents. Link previews and Slack mentions are disabled. Once notified_job_id is saved, normal reruns skip the row. An uncertain Slack response or failed reminder-marker write can produce a duplicate reminder; job creation remains replay-safe.\n\n### Customize\nMap your own upstream task fields into the documented queue columns, or replace the final Slack node with an equivalent internal notification. Preserve exact IDs, scoped credentials, durable request snapshots and explicit decision boundaries. All HTTP destinations stay fixed HTTPS, with redirects disabled.\n\nOperational data remains in your Google Sheet and Prooftask. Configure access/retention in both services. n8n execution-data saving is disabled; that does not replace your administration controls.');
+  return { name: 'Prepare client delivery reviews from Google Sheets with Prooftask and Slack', nodes, connections, active: false, pinData: {}, settings: { executionOrder: 'v1', saveDataSuccessExecution: 'none', saveDataErrorExecution: 'none', saveManualExecutions: false }, tags: [] };
+}
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const path = new URL('../channels/n8n-prepare-client-delivery.json', import.meta.url);
+  writeFileSync(path, JSON.stringify(deliveryQueueWorkflow(), null, 2) + '\n');
+  console.log('Built annotated Google Sheets delivery handover template.');
+}
