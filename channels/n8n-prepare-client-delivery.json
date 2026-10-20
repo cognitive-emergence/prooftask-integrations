@@ -8,7 +8,7 @@
       "typeVersion": 1,
       "position": [
         0,
-        220
+        300
       ],
       "parameters": {}
     },
@@ -19,7 +19,7 @@
       "typeVersion": 2,
       "position": [
         220,
-        220
+        300
       ],
       "parameters": {
         "jsCode": "// Only non-secret configuration. Configure credentials on their respective nodes.\nconst configuration = {spreadsheetId:'REPLACE_SPREADSHEET_ID',sheetId:'0',slackChannelId:'REPLACE_SLACK_CHANNEL_ID'};\nif (!/^[a-zA-Z0-9_-]{20,}$/.test(configuration.spreadsheetId) || configuration.spreadsheetId.startsWith('REPLACE') || !/^\\d+$/.test(configuration.sheetId) || !/^[CG][A-Z0-9]+$/.test(configuration.slackChannelId)) throw new Error('Set spreadsheetId, numeric sheetId and the authorized Slack channel ID in Configuration.');\nreturn [{json:configuration}];"
@@ -32,7 +32,7 @@
       "typeVersion": 4.7,
       "position": [
         440,
-        220
+        300
       ],
       "parameters": {
         "resource": "sheet",
@@ -58,7 +58,7 @@
       "typeVersion": 2,
       "position": [
         660,
-        220
+        300
       ],
       "parameters": {
         "jsCode": "const run = function selectQueue(items) {\n  const rows = items.map(i => i.json);\n  const ids = new Set();\n  for (const row of rows) {\n    const id = String(row.task_id || '').trim();\n    if (!id || !/^[A-Za-z0-9:_-]{1,100}$/.test(id) || ids.has(id)) {\n      throw new Error('Every populated row needs a unique task_id (letters, digits, colon, underscore or hyphen). No rows were changed.');\n    }\n    ids.add(id);\n  }\n  if (rows.length > 200) throw new Error('Use a queue of at most 200 rows per manual run.');\n  return items.flatMap((item, i) => String(item.json.ready_for_review).trim().toUpperCase() === 'YES'\n    && !(item.json.job_id && item.json.notified_job_id === item.json.job_id)\n    ? [{ json: item.json, pairedItem: { item: i } }] : []);\n};\nreturn run($input.all());"
@@ -71,7 +71,7 @@
       "typeVersion": 3,
       "position": [
         880,
-        220
+        300
       ],
       "parameters": {
         "batchSize": 1,
@@ -85,7 +85,7 @@
       "typeVersion": 2,
       "position": [
         1100,
-        320
+        400
       ],
       "parameters": {
         "action": "generate",
@@ -100,7 +100,7 @@
       "typeVersion": 2,
       "position": [
         1320,
-        320
+        400
       ],
       "parameters": {
         "jsCode": "const run = function inspectDelivery(input) {\n  const text = key => String(input[key] ?? '').trim();\n  const row = { task_id: text('task_id'), project_id: text('project_id'), request_id: text('request_id'),\n    request_json: text('request_json'), job_id: text('job_id'), notified_job_id: text('notified_job_id'),\n    prepared_at: text('prepared_at'), kind: 'invalid', handover_state: 'NEEDS_INPUT', handover_note: '' };\n  const invalid = message => ({ ...row, handover_note: message });\n  const uuid = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/;\n  if (!/^delivery_[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(row.project_id)) return invalid('Set the exact authorized project_id.');\n  const summary = text('summary');\n  if (summary.length < 10 || summary.length > 4000) return invalid('summary must contain 10–4000 characters describing this delivery.');\n  let raw;\n  try { raw = JSON.parse(text('materials_json')); } catch { return invalid('materials_json must be a JSON array. See the sample queue.'); }\n  if (!Array.isArray(raw) || raw.length < 1 || raw.length > 20) return invalid('Provide 1–20 material items, one per agreed criterion.');\n  const ids = new Set(), materials = [];\n  for (const item of raw) {\n    if (!item || typeof item !== 'object' || Array.isArray(item) || Object.keys(item).some(k => !['criterionId', 'summary', 'references', 'files'].includes(k))) return invalid('Use only criterionId, summary, references and files in each material item.');\n    if (typeof item.criterionId !== 'string' || !item.criterionId.trim() || item.criterionId.length > 64 || ids.has(item.criterionId)) return invalid('Each material needs a distinct agreed criterionId, up to 64 characters.');\n    ids.add(item.criterionId);\n    if (typeof item.summary !== 'string' || item.summary.trim().length < 10 || item.summary.length > 4000) return invalid('Each material summary must contain 10–4000 characters.');\n    if (!Array.isArray(item.references) || item.references.length < 1 || item.references.length > 5 || new Set(item.references).size !== item.references.length || item.references.some(r => typeof r !== 'string' || !/^https:\\/\\/[^\\s]+$/.test(r))) return invalid('Provide 1–5 distinct original material references per criterion, using HTTPS. Links are not fetched or quality-checked.');\n    if (!Array.isArray(item.files) || item.files.length !== item.references.length || new Set(item.files.map(f => f?.reference)).size !== item.references.length) return invalid('Each original material reference needs matching actual file metadata: reference, name, size and sha256.');\n    for (const file of item.files) {\n      if (!file || typeof file !== 'object' || Object.keys(file).some(k => !['reference','name','size','sha256'].includes(k)) || !item.references.includes(file.reference) || typeof file.name !== 'string' || !file.name.trim() || file.name.length > 255 || !Number.isSafeInteger(file.size) || file.size < 0 || file.size > 2 * 1024 * 1024 * 1024 || !/^[a-f0-9]{64}$/.test(file.sha256 || '')) return invalid('File metadata must describe the actual original: matching reference, name, byte size up to 2 GiB and lowercase SHA-256 digest.');\n    }\n    materials.push({ criterionId: item.criterionId, summary: item.summary, references: item.references, files: item.files });\n  }\n  if (row.job_id && !/^job_[a-f0-9]{64}$/.test(row.job_id)) return invalid('job_id is invalid. Preserve the original identity and reconcile it before retrying.');\n  if ((row.request_id || row.request_json || row.job_id) && !(row.request_id && row.request_json)) return invalid('Incomplete retry identity. Recover request_id AND request_json; do not generate a replacement for an uncertain request.');\n  const requestId = row.request_id || input.candidate_request_id;\n  if (!uuid.test(requestId || '')) return invalid('A valid UUID v4 request ID is required.');\n  const body = { requestId, projectId: row.project_id, workflowReference: 'sheet:' + row.task_id, summary, materials };\n  const serialized = JSON.stringify(body);\n  if (serialized.length > 40000) return invalid('The saved request exceeds the 40,000 character queue-cell limit.');\n  if (row.request_json && row.request_json !== serialized) return invalid('The source differs from the saved request. Restore it to retry; use a new task row for a deliberate new delivery revision.');\n  return { ...row, request_id: requestId, request_json: serialized, kind: row.job_id ? 'resume' : 'prepare', handover_state: 'PREPARING', handover_note: 'Preparing only. No delivery has been submitted or accepted.' };\n};\nreturn [{json:run($input.first().json),pairedItem: {item:0}}];"
@@ -113,7 +113,7 @@
       "typeVersion": 2.2,
       "position": [
         1540,
-        320
+        400
       ],
       "parameters": {
         "conditions": {
@@ -146,7 +146,7 @@
       "typeVersion": 4.2,
       "position": [
         1760,
-        220
+        300
       ],
       "parameters": {
         "authentication": "genericCredentialType",
@@ -185,7 +185,7 @@
       "typeVersion": 2,
       "position": [
         1980,
-        220
+        300
       ],
       "parameters": {
         "jsCode": "const run = function checkProject(row, response) {\n  const fail = message => ({ ...row, kind: 'invalid', handover_state: 'NEEDS_OWNER', handover_note: message });\n  if (response.statusCode !== 200 || !response.body?.project) return fail('Authorized project read failed. Check the scoped credential and project access; no preparation was attempted.');\n  const view = response.body, project = view.project;\n  if (project.taskId !== row.project_id) return fail('The API returned a different project. Stop and check configuration.');\n  if (row.kind === 'prepare' && (view.automation?.mode !== 'AGENT' || !view.availableActions?.includes('SUBMIT_MATERIALS'))) return fail('This project does not currently permit this Agent to prepare delivery. The owner must review its authorization.');\n  const criteria = project.agreement?.criteria;\n  const materials = JSON.parse(row.request_json).materials;\n  if (!Array.isArray(criteria) || criteria.length !== materials.length || criteria.some(c => !materials.some(m => m.criterionId === c.id))) return fail('Map material items to every CURRENT agreed criterion exactly once. Completeness is not buyer acceptance.');\n  const rawUrl = view.humanUrl;\n  const humanUrl = typeof rawUrl === 'string' && rawUrl.startsWith('/') && !rawUrl.startsWith('//')\n    ? 'https://prooftask.com' + rawUrl : typeof rawUrl === 'string' && rawUrl.startsWith('https://prooftask.com/') ? rawUrl : '';\n  return { ...row, human_url: humanUrl };\n};\nreturn [{json:run($('Inspect delivery').item.json,$input.first().json),pairedItem: {item:0}}];"
@@ -198,7 +198,7 @@
       "typeVersion": 2.2,
       "position": [
         2200,
-        220
+        300
       ],
       "parameters": {
         "conditions": {
@@ -231,7 +231,7 @@
       "typeVersion": 2.2,
       "position": [
         2420,
-        120
+        300
       ],
       "parameters": {
         "conditions": {
@@ -264,7 +264,7 @@
       "typeVersion": 4.2,
       "position": [
         2640,
-        -60
+        240
       ],
       "parameters": {
         "authentication": "genericCredentialType",
@@ -303,7 +303,7 @@
       "typeVersion": 2,
       "position": [
         2860,
-        -60
+        240
       ],
       "parameters": {
         "jsCode": "const run = function assessJob(row, response, mode, now) {\n  const result = { task_id: row.task_id, request_id: row.request_id, job_id: row.job_id, prepared_at: row.prepared_at,\n    handover_state: 'RETRY_SAME_REQUEST', handover_note: '', notify: false, human_url: row.human_url || '' };\n  const status = response.statusCode;\n  const failed = message => ({ ...result, handover_note: message });\n  if (!Number.isInteger(status)) return failed('Request outcome is uncertain. Retry with the SAME saved request or job ID; never clear its identity.');\n  if (status < 200 || status >= 300) return failed('Prooftask returned HTTP ' + status + '. Resolve access, input or service errors, then retry the same saved identity. No acceptance is inferred.');\n  const value = response.body;\n  if (!value || !/^job_[a-f0-9]{64}$/.test(value.id || '') || value.workflowReference !== 'sheet:' + row.task_id) return failed('Unexpected job response. Reconcile the same request before continuing.');\n  if (mode === 'prepare' && (value.prepared?.projectId !== row.project_id || value.prepared?.envelope?.input?.requestId !== row.request_id)) return failed('Prepared request identity did not match. Stop and reconcile the saved request.');\n  if (mode === 'resume' && (value.id !== row.job_id || value.requestId !== row.request_id || value.current?.projectId !== row.project_id)) return failed('Saved job identity did not match. Stop and reconcile the original task.');\n  if (typeof value.submitted !== 'boolean') return failed('Missing explicit submission state. Stop and reconcile the saved request.');\n  if (value.submitted) return { ...result, job_id: value.id, handover_state: 'ALREADY_SUBMITTED', handover_note: 'This job was already submitted separately. Read its actual buyer decision in Prooftask; no new submission was made.' };\n  return { ...result, job_id: value.id, prepared_at: row.prepared_at || now, handover_state: 'PREPARED',\n    handover_note: 'Saved for authorized human review. Submission and buyer acceptance remain separate.', notify: row.notified_job_id !== value.id };\n};\nreturn [{json:run($('Check agreed criteria').item.json,$input.first().json,'resume',new Date().toISOString()),pairedItem: {item:0}}];"
@@ -316,7 +316,7 @@
       "typeVersion": 4.7,
       "position": [
         2640,
-        340
+        640
       ],
       "parameters": {
         "resource": "sheet",
@@ -404,7 +404,7 @@
       "typeVersion": 4.7,
       "position": [
         2860,
-        340
+        640
       ],
       "parameters": {
         "resource": "sheet",
@@ -438,7 +438,7 @@
       "typeVersion": 2,
       "position": [
         3080,
-        340
+        640
       ],
       "parameters": {
         "jsCode": "const run = function confirmSnapshot(expected, items) {\n  if (items.length !== 1) throw new Error('Expected exactly one task row on readback. No preparation was attempted.');\n  const saved = items[0].json;\n  if (saved.task_id !== expected.task_id || saved.request_id !== expected.request_id || saved.request_json !== expected.request_json || saved.job_id) {\n    throw new Error('Durable request readback did not match, or a job already exists. Stop concurrent runs and reconcile the queue before continuing.');\n  }\n  return expected;\n};\nreturn [{json:run($('Check agreed criteria').item.json,$input.all()),pairedItem: {item:0}}];"
@@ -451,7 +451,7 @@
       "typeVersion": 4.2,
       "position": [
         3300,
-        340
+        640
       ],
       "parameters": {
         "authentication": "genericCredentialType",
@@ -494,7 +494,7 @@
       "typeVersion": 2,
       "position": [
         3520,
-        340
+        640
       ],
       "parameters": {
         "jsCode": "const run = function assessJob(row, response, mode, now) {\n  const result = { task_id: row.task_id, request_id: row.request_id, job_id: row.job_id, prepared_at: row.prepared_at,\n    handover_state: 'RETRY_SAME_REQUEST', handover_note: '', notify: false, human_url: row.human_url || '' };\n  const status = response.statusCode;\n  const failed = message => ({ ...result, handover_note: message });\n  if (!Number.isInteger(status)) return failed('Request outcome is uncertain. Retry with the SAME saved request or job ID; never clear its identity.');\n  if (status < 200 || status >= 300) return failed('Prooftask returned HTTP ' + status + '. Resolve access, input or service errors, then retry the same saved identity. No acceptance is inferred.');\n  const value = response.body;\n  if (!value || !/^job_[a-f0-9]{64}$/.test(value.id || '') || value.workflowReference !== 'sheet:' + row.task_id) return failed('Unexpected job response. Reconcile the same request before continuing.');\n  if (mode === 'prepare' && (value.prepared?.projectId !== row.project_id || value.prepared?.envelope?.input?.requestId !== row.request_id)) return failed('Prepared request identity did not match. Stop and reconcile the saved request.');\n  if (mode === 'resume' && (value.id !== row.job_id || value.requestId !== row.request_id || value.current?.projectId !== row.project_id)) return failed('Saved job identity did not match. Stop and reconcile the original task.');\n  if (typeof value.submitted !== 'boolean') return failed('Missing explicit submission state. Stop and reconcile the saved request.');\n  if (value.submitted) return { ...result, job_id: value.id, handover_state: 'ALREADY_SUBMITTED', handover_note: 'This job was already submitted separately. Read its actual buyer decision in Prooftask; no new submission was made.' };\n  return { ...result, job_id: value.id, prepared_at: row.prepared_at || now, handover_state: 'PREPARED',\n    handover_note: 'Saved for authorized human review. Submission and buyer acceptance remain separate.', notify: row.notified_job_id !== value.id };\n};\nreturn [{json:run($('Check agreed criteria').item.json,$input.first().json,'prepare',new Date().toISOString()),pairedItem: {item:0}}];"
@@ -507,7 +507,7 @@
       "typeVersion": 4.7,
       "position": [
         3740,
-        120
+        300
       ],
       "parameters": {
         "resource": "sheet",
@@ -595,7 +595,7 @@
       "typeVersion": 2,
       "position": [
         3960,
-        120
+        300
       ],
       "parameters": {
         "jsCode": "const source = $('Check agreed criteria').item.json; const saved=$input.first().json;\nif(saved.task_id!==source.task_id)throw new Error('Sheet write returned a different task.');\nreturn [{json:{...saved,request_id:source.request_id,notified_job_id:source.notified_job_id,human_url:source.human_url||''},pairedItem: {item:0}}];"
@@ -608,7 +608,7 @@
       "typeVersion": 2.2,
       "position": [
         4180,
-        120
+        300
       ],
       "parameters": {
         "conditions": {
@@ -641,7 +641,7 @@
       "typeVersion": 2,
       "position": [
         4400,
-        20
+        300
       ],
       "parameters": {
         "jsCode": "const run = function notificationText(result, config) {\n  return ['Delivery ready for owner review: ' + result.task_id, 'Saved Prooftask job: ' + result.job_id,\n    result.human_url ? 'Authorized project: ' + result.human_url : 'Open the corresponding authorized project in Prooftask.',\n    'Queue: https://docs.google.com/spreadsheets/d/' + config.spreadsheetId + '/edit#gid=' + config.sheetId,\n    'PREPARED only. Review the exact saved materials before a separate deliberate submission. Buyer acceptance and payment have not been recorded.'].join('\\n');\n};\nreturn [{json:{...$input.first().json,text:run($input.first().json,$('Configuration').first().json)},pairedItem: {item:0}}];"
@@ -654,7 +654,7 @@
       "typeVersion": 2.3,
       "position": [
         4620,
-        20
+        300
       ],
       "parameters": {
         "authentication": "accessToken",
@@ -686,7 +686,7 @@
       "typeVersion": 2,
       "position": [
         4840,
-        20
+        300
       ],
       "parameters": {
         "jsCode": "const reminder=$('Build owner reminder').item.json; const response=$input.first().json; if(!response.ts || response.error || response.ok===false)throw new Error('Slack did not confirm the reminder. Preserve the saved job and reconcile notification delivery.');return [{json:{task_id:reminder.task_id,notified_job_id:reminder.job_id,handover_note:'Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.'},pairedItem: {item:0}}];"
@@ -699,7 +699,7 @@
       "typeVersion": 4.7,
       "position": [
         5060,
-        20
+        300
       ],
       "parameters": {
         "resource": "sheet",
@@ -768,8 +768,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2420,
-        640
+        1980,
+        760
       ],
       "parameters": {
         "resource": "sheet",
@@ -838,89 +838,121 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        1100,
-        60
+        880,
+        580
       ],
       "parameters": {}
     },
     {
       "id": "pt-queue-28",
-      "name": "Start here — setup and scope",
+      "name": "Overview and setup",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -60,
-        -560
+        -680,
+        -80
       ],
       "parameters": {
-        "width": 860,
-        "height": 690,
-        "content": "## Google Sheets delivery queue → Prooftask → Slack\nFor automation consultants handing completed client work to a responsible reviewer. Reads rows marked YES, checks required material mappings against the current agreement, saves a retry-safe job, writes its ID back and reminds the team. It stops before submission.\n\n### Setup (n8n 2.39.8)\n1. Create a Google Sheet using the sample CSV in the linked setup guide. One unique task_id per intended delivery revision.\n2. Set spreadsheetId, numeric sheetId and slackChannelId in Configuration.\n3. Select the SAME Google Sheets OAuth2 credential on every Google Sheets node (read/write access).\n4. Select a Prooftask Header Auth credential on all three HTTP nodes: Authorization = Bearer <project-scoped Agent token>. The owner must grant the existing project and SUBMIT_MATERIALS action.\n5. Select a Slack credential with chat:write and add its bot to the chosen review channel.\n6. Enter actual project/criterion IDs and original links in the sheet; set ready_for_review=YES. Run manually, one execution at a time.\n\nRequires existing agreed Prooftask projects, a Prooftask account/Agent grant, Google Sheets and Slack. Respective service pricing applies. No community node installation is needed.",
-        "color": 5
+        "width": 600,
+        "height": 1140,
+        "content": "## Prepare client deliveries for review\n\nFor automation consultants who track completed client work in Google Sheets and need a clear handoff to their reviewer.\n\n### How it works\n1. Read rows marked `ready_for_review=YES` and process one delivery at a time.\n2. Check material references, file metadata and the current Prooftask agreement.\n3. Save the request before preparing a delivery job, so retries reuse its identity.\n4. Write the result back and send the responsible team a Slack reminder.\n\nA prepared job is ready for internal review. Submission requires a separate deliberate step; buyer acceptance, signing and payment remain separate.\n\n### Setup\n1. Import the [sample queue](https://github.com/cognitive-emergence/prooftask-integrations/blob/main/n8n/delivery-queue-example.csv) into Google Sheets. Replace fictional IDs and materials with your actual project data.\n2. In **Configuration**, set `spreadsheetId`, numeric `sheetId` and `slackChannelId`.\n3. Select the same Google Sheets OAuth2 credential on all Sheet nodes.\n4. On all three HTTP nodes, select Header Auth: `Authorization: Bearer …`. Use an existing project-scoped Agent grant with `SUBMIT_MATERIALS`.\n5. Select a Slack credential with `chat:write` and add its bot to the review channel.\n6. Mark a ready row **YES** and run manually. Allow only one execution per queue at a time.\n\nRequires an agreed Prooftask project, Google Sheets and Slack; service pricing applies. No community nodes are needed. See the [setup and recovery guide](https://github.com/cognitive-emergence/prooftask-integrations/blob/main/n8n/DELIVERY_QUEUE.md).",
+        "color": 1
       }
     },
     {
       "id": "pt-queue-29",
-      "name": "Queue input and validation",
+      "name": "Section 1 — delivery queue",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        820,
-        -560
+        -40,
+        0
       ],
       "parameters": {
-        "width": 850,
-        "height": 530,
-        "content": "## Prepare real materials, not sample payloads\nInput columns: task_id, ready_for_review, project_id, summary, materials_json. Operational columns: request_id, request_json, job_id, handover_state, handover_note, prepared_at, notified_job_id.\n\nUse the sample CSV and setup guide below. materials_json is an array with criterionId, summary, references and files, one entry per current agreed criterion. Material links are not fetched or judged.\n\nInvalid rows receive actionable NEEDS_INPUT/NEEDS_OWNER feedback. Other rows can continue. Duplicate task IDs stop the run before any writes. YES means prepare a job for internal review; it never authorizes submission or acceptance.\n\nSetup + fictional sample CSV:\nhttps://github.com/cognitive-emergence/prooftask-integrations/blob/main/n8n/DELIVERY_QUEUE.md",
-        "color": 5
+        "width": 1060,
+        "height": 800,
+        "content": "## 1. Load the delivery queue\n\nRead ready rows and skip jobs already notified. Duplicate task IDs stop the run before writes.",
+        "color": 7
       }
     },
     {
       "id": "pt-queue-30",
-      "name": "Existing authorization and current agreement",
+      "name": "Section 2 — material checks",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1720,
-        -560
+        1040,
+        0
       ],
       "parameters": {
-        "width": 760,
-        "height": 500,
-        "content": "## Keep the original business process\nThe scoped Agent reads the existing authorized project. Current agreed criteria must match material IDs exactly. A missing permission, human pause or changed agreement produces owner feedback. No agreement, invitation or new business authority is created.\n\nThe preparation endpoint saves the exact envelope server-side. The sheet retains its opaque job ID and retry identity. A saved job is not a submitted delivery, accepted result, signature or payment.\n\nNever run overlapping manual executions against the same queue. Keep sheet access limited to the delivery team and protect its original-material references.",
-        "color": 5
+        "width": 620,
+        "height": 800,
+        "content": "## 2. Check delivery materials\n\nRequire actual references and matching file metadata for every agreed criterion. Incomplete rows go to actionable feedback.",
+        "color": 7
       }
     },
     {
       "id": "pt-queue-31",
-      "name": "Durable retry and recovery",
+      "name": "Section 3 — agreement and feedback",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2540,
-        800
+        1700,
+        0
       ],
       "parameters": {
-        "width": 1050,
-        "height": 500,
-        "content": "## Persist BEFORE calling Prooftask\nThe exact request_id and request_json are written and read back before the first preparation attempt. A timeout is retried with the same identity and identical body. Edited inputs under the saved identity are blocked; use a new task row for a deliberate new revision.\n\nIf preparation succeeds but sheet writeback fails, rerun from the queue: the same saved request returns the same server job. If the reminder fails, the saved job is read instead of preparing a new delivery. Already-submitted jobs are marked separately.\n\nDo not clear request_id/request_json to escape an error. AUTH errors require the owner; replacement Agent grants cannot silently inherit saved jobs. HTTP success never means buyer acceptance.",
-        "color": 5
+        "width": 660,
+        "height": 1060,
+        "content": "## 3. Check access and agreement\n\nRead the authorized project and compare its current criteria. Write missing-input or owner-action feedback to the queue.",
+        "color": 7
       }
     },
     {
       "id": "pt-queue-32",
-      "name": "Human review and customization",
+      "name": "Section 4 — save or resume",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        3700,
-        -560
+        2380,
+        0
       ],
       "parameters": {
-        "width": 1390,
-        "height": 520,
-        "content": "## End at a useful human handoff\nThe queue records PREPARED and an authorized team channel receives the saved job/project references. Review the exact materials, then use the existing separate send-job workflow with confirmed:true. Only the authorized buyer can record acceptance.\n\nThe Slack reminder contains no material contents. Link previews and Slack mentions are disabled. Once notified_job_id is saved, normal reruns skip the row. An uncertain Slack response or failed reminder-marker write can produce a duplicate reminder; job creation remains replay-safe.\n\n### Customize\nMap your own upstream task fields into the documented queue columns, or replace the final Slack node with an equivalent internal notification. Preserve exact IDs, scoped credentials, durable request snapshots and explicit decision boundaries. All HTTP destinations stay fixed HTTPS, with redirects disabled.\n\nOperational data remains in your Google Sheet and Prooftask. Configure access/retention in both services. n8n execution-data saving is disabled; that does not replace your administration controls.",
-        "color": 5
+        "width": 1260,
+        "height": 1060,
+        "content": "## 4. Resume a job or prepare one\n\nTop: verify an existing saved job. Bottom: persist and read back the exact request before preparing. Preserve saved IDs and request data when retrying.",
+        "color": 7
+      }
+    },
+    {
+      "id": "pt-queue-33",
+      "name": "Section 5 — result",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3680,
+        0
+      ],
+      "parameters": {
+        "width": 660,
+        "height": 800,
+        "content": "## 5. Save the handover result\n\nWrite the verified job ID and operational state back to the same task row. Only a prepared, unnotified job continues.",
+        "color": 7
+      }
+    },
+    {
+      "id": "pt-queue-34",
+      "name": "Section 6 — reviewer reminder",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4380,
+        0
+      ],
+      "parameters": {
+        "width": 860,
+        "height": 800,
+        "content": "## 6. Remind the responsible team\n\nSend internal review references, then mark the confirmed reminder. Normal reruns skip it; an uncertain Slack result may duplicate the reminder.",
+        "color": 7
       }
     }
   ],
