@@ -2,12 +2,12 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.cognitive-emergence/prooftask",
   "title": "Prooftask",
-  "description": "Public template discovery over hosted MCP; scoped delivery workflows through the local adapter.",
+  "description": "Free public n8n, AI support and software acceptance templates; scoped private delivery workflows.",
   "repository": {
     "url": "https://github.com/cognitive-emergence/prooftask-integrations",
     "source": "github"
   },
-  "version": "0.1.2",
+  "version": "0.1.3",
   "packages": [
     {
       "registryType": "npm",
@@ -23,5 +23,22 @@
       "type": "streamable-http",
       "url": "https://prooftask-public-mcp-production.up.railway.app/mcp"
     }
-  ]
+  ],
+  "websiteUrl": "https://prooftask.com/developers",
+  "_meta": {
+    "io.modelcontextprotocol.registry/publisher-provided": {
+      "publicTools": [
+        "getAgentCapabilities",
+        "searchPublicSpecifications",
+        "getPublicSpecification"
+      ],
+      "publicDiscovery": {
+        "price": 0,
+        "currency": "USD",
+        "credentialRequired": false
+      },
+      "servicePricingUrl": "https://prooftask.com/pricing",
+      "chineseGuideUrl": "https://prooftask.com/zh"
+    }
+  }
 }
