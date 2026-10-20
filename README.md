@@ -4,6 +4,20 @@ Connect **delivery handover and client acceptance** to your existing n8n workflo
 
 [Prooftask](https://prooftask.com/?utm_source=partner&utm_campaign=github_integrations) · [API documentation](https://prooftask.com/developers?utm_source=partner&utm_campaign=github_integrations) · [Delivery templates](https://prooftask.com/specifications?utm_source=partner&utm_campaign=github_integrations)
 
+## Public discovery: scope and price
+
+**Public template search and exact-version reads are free and need no account or credential.** This describes public discovery only; issued Result Records and separately quoted signing services follow [current product pricing](https://prooftask.com/pricing).
+
+| Public hosted tool | What it reads |
+| --- | --- |
+| `getAgentCapabilities` | Published connection and client capabilities |
+| `searchPublicSpecifications` | Public delivery acceptance templates for a scenario |
+| `getPublicSpecification` | The exact template version and digest returned by search |
+
+Start with an [n8n handover](https://prooftask.com/guides/n8n-handover-checklist), [AI customer-support acceptance](https://prooftask.com/guides/ai-chatbot-acceptance), or [software/project handover](https://prooftask.com/guides/project-handover-checklist). [中文交付指南](https://prooftask.com/zh) provides the same public starting points in Chinese. The canonical product is **prooftask.com**.
+
+These three hosted tools cannot read private projects, create agreements or record acceptance. Private workflows require a separate scoped connection.
+
 ## Get your first successful Agent call
 
 Use the [Agent quickstart](agent/QUICKSTART.md) for copyable MCP configuration, anonymous template search, a public-only connection check, and private-read setup. After cloning, run `node agent/first-call.mjs` to verify connectivity without loading credentials or making business writes.
