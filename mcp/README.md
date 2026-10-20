@@ -2,6 +2,10 @@
 
 Dependency-free Node.js 24+ stdio adapter for delivery agreements, client acceptance and verifiable records.
 
+Public hosted discovery is **free**: no credential is needed for `getAgentCapabilities`, `searchPublicSpecifications` or `getPublicSpecification`. Issued records and signing services have separate [product pricing](https://prooftask.com/pricing).
+
+[中文入口与验收清单](https://prooftask.com/zh) · [n8n handover](https://prooftask.com/guides/n8n-handover-checklist) · [AI support acceptance](https://prooftask.com/guides/ai-chatbot-acceptance) · [Project handover](https://prooftask.com/guides/project-handover-checklist)
+
 ## Start without an account
 
 ```sh
