@@ -62,12 +62,67 @@ export function deliveryQueueWorkflow() {
   edge('Saved job exists','Persist retry identity',1); edge('Persist retry identity','Read persisted request'); edge('Read persisted request','Confirm persisted request'); edge('Confirm persisted request','Prepare saved delivery'); edge('Prepare saved delivery','Assess preparation'); edge('Assess preparation','Write handover result');
   edge('Write handover result','Restore review context'); edge('Restore review context','Ready for owner reminder'); edge('Ready for owner reminder','Build owner reminder',0); edge('Ready for owner reminder','One delivery at a time',1);
   edge('Build owner reminder','Notify responsible team'); edge('Notify responsible team','Remember successful reminder'); edge('Remember successful reminder','Mark reminder delivered'); edge('Mark reminder delivered','One delivery at a time'); edge('Write actionable feedback','One delivery at a time');
-  const note = (name, position, width, height, content, color = 5) => add(name, 'stickyNote', 1, position, { width, height, content, color });
-  note('Start here — setup and scope', [-60,-560], 860, 690, '## Google Sheets delivery queue → Prooftask → Slack\nFor automation consultants handing completed client work to a responsible reviewer. Reads rows marked YES, checks required material mappings against the current agreement, saves a retry-safe job, writes its ID back and reminds the team. It stops before submission.\n\n### Setup (n8n 2.39.8)\n1. Create a Google Sheet using the sample CSV in the linked setup guide. One unique task_id per intended delivery revision.\n2. Set spreadsheetId, numeric sheetId and slackChannelId in Configuration.\n3. Select the SAME Google Sheets OAuth2 credential on every Google Sheets node (read/write access).\n4. Select a Prooftask Header Auth credential on all three HTTP nodes: Authorization = Bearer <project-scoped Agent token>. The owner must grant the existing project and SUBMIT_MATERIALS action.\n5. Select a Slack credential with chat:write and add its bot to the chosen review channel.\n6. Enter actual project/criterion IDs and original links in the sheet; set ready_for_review=YES. Run manually, one execution at a time.\n\nRequires existing agreed Prooftask projects, a Prooftask account/Agent grant, Google Sheets and Slack. Respective service pricing applies. No community node installation is needed.');
-  note('Queue input and validation', [820,-560], 850, 530, '## Prepare real materials, not sample payloads\nInput columns: task_id, ready_for_review, project_id, summary, materials_json. Operational columns: request_id, request_json, job_id, handover_state, handover_note, prepared_at, notified_job_id.\n\nUse the sample CSV and setup guide below. materials_json is an array with criterionId, summary, references and files, one entry per current agreed criterion. Material links are not fetched or judged.\n\nInvalid rows receive actionable NEEDS_INPUT/NEEDS_OWNER feedback. Other rows can continue. Duplicate task IDs stop the run before any writes. YES means prepare a job for internal review; it never authorizes submission or acceptance.\n\nSetup + fictional sample CSV:\nhttps://github.com/cognitive-emergence/prooftask-integrations/blob/main/n8n/DELIVERY_QUEUE.md');
-  note('Existing authorization and current agreement', [1720,-560], 760, 500, '## Keep the original business process\nThe scoped Agent reads the existing authorized project. Current agreed criteria must match material IDs exactly. A missing permission, human pause or changed agreement produces owner feedback. No agreement, invitation or new business authority is created.\n\nThe preparation endpoint saves the exact envelope server-side. The sheet retains its opaque job ID and retry identity. A saved job is not a submitted delivery, accepted result, signature or payment.\n\nNever run overlapping manual executions against the same queue. Keep sheet access limited to the delivery team and protect its original-material references.');
-  note('Durable retry and recovery', [2540,800], 1050, 500, '## Persist BEFORE calling Prooftask\nThe exact request_id and request_json are written and read back before the first preparation attempt. A timeout is retried with the same identity and identical body. Edited inputs under the saved identity are blocked; use a new task row for a deliberate new revision.\n\nIf preparation succeeds but sheet writeback fails, rerun from the queue: the same saved request returns the same server job. If the reminder fails, the saved job is read instead of preparing a new delivery. Already-submitted jobs are marked separately.\n\nDo not clear request_id/request_json to escape an error. AUTH errors require the owner; replacement Agent grants cannot silently inherit saved jobs. HTTP success never means buyer acceptance.');
-  note('Human review and customization', [3700,-560], 1390, 520, '## End at a useful human handoff\nThe queue records PREPARED and an authorized team channel receives the saved job/project references. Review the exact materials, then use the existing separate send-job workflow with confirmed:true. Only the authorized buyer can record acceptance.\n\nThe Slack reminder contains no material contents. Link previews and Slack mentions are disabled. Once notified_job_id is saved, normal reruns skip the row. An uncertain Slack response or failed reminder-marker write can produce a duplicate reminder; job creation remains replay-safe.\n\n### Customize\nMap your own upstream task fields into the documented queue columns, or replace the final Slack node with an equivalent internal notification. Preserve exact IDs, scoped credentials, durable request snapshots and explicit decision boundaries. All HTTP destinations stay fixed HTTPS, with redirects disabled.\n\nOperational data remains in your Google Sheet and Prooftask. Configure access/retention in both services. n8n execution-data saving is disabled; that does not replace your administration controls.');
+  // Notes follow the n8n Creator Hub standard: one yellow overview, then short
+  // white sections behind their nodes. Keep implementation/recovery detail in
+  // DELIVERY_QUEUE.md and node notes instead of turning the canvas into a manual.
+  const positions = {
+    'Run delivery handover': [0, 300], 'Configuration': [220, 300],
+    'Read delivery queue': [440, 300], 'Select queued deliveries': [660, 300],
+    'One delivery at a time': [880, 300], 'Queue run complete': [880, 580],
+    'Candidate request ID': [1100, 400], 'Inspect delivery': [1320, 400],
+    'Input is complete': [1540, 400], 'Read agreed project': [1760, 300],
+    'Check agreed criteria': [1980, 300], 'Project permits handover': [2200, 300],
+    'Write actionable feedback': [1980, 760], 'Saved job exists': [2420, 300],
+    'Read saved job': [2640, 240], 'Assess saved job': [2860, 240],
+    'Persist retry identity': [2640, 640], 'Read persisted request': [2860, 640],
+    'Confirm persisted request': [3080, 640], 'Prepare saved delivery': [3300, 640],
+    'Assess preparation': [3520, 640], 'Write handover result': [3740, 300],
+    'Restore review context': [3960, 300], 'Ready for owner reminder': [4180, 300],
+    'Build owner reminder': [4400, 300], 'Notify responsible team': [4620, 300],
+    'Remember successful reminder': [4840, 300], 'Mark reminder delivered': [5060, 300],
+  };
+  for (const node of nodes) node.position = positions[node.name];
+  const note = (name, position, width, height, content, color) =>
+    add(name, 'stickyNote', 1, position, { width, height, content, color });
+  note('Overview and setup', [-680, -80], 600, 1140, `## Prepare client deliveries for review
+
+For automation consultants who track completed client work in Google Sheets and need a clear handoff to their reviewer.
+
+### How it works
+1. Read rows marked \`ready_for_review=YES\` and process one delivery at a time.
+2. Check material references, file metadata and the current Prooftask agreement.
+3. Save the request before preparing a delivery job, so retries reuse its identity.
+4. Write the result back and send the responsible team a Slack reminder.
+
+A prepared job is ready for internal review. Submission requires a separate deliberate step; buyer acceptance, signing and payment remain separate.
+
+### Setup
+1. Import the [sample queue](https://github.com/cognitive-emergence/prooftask-integrations/blob/main/n8n/delivery-queue-example.csv) into Google Sheets. Replace fictional IDs and materials with your actual project data.
+2. In **Configuration**, set \`spreadsheetId\`, numeric \`sheetId\` and \`slackChannelId\`.
+3. Select the same Google Sheets OAuth2 credential on all Sheet nodes.
+4. On all three HTTP nodes, select Header Auth: \`Authorization: Bearer …\`. Use an existing project-scoped Agent grant with \`SUBMIT_MATERIALS\`.
+5. Select a Slack credential with \`chat:write\` and add its bot to the review channel.
+6. Mark a ready row **YES** and run manually. Allow only one execution per queue at a time.
+
+Requires an agreed Prooftask project, Google Sheets and Slack; service pricing applies. No community nodes are needed. See the [setup and recovery guide](https://github.com/cognitive-emergence/prooftask-integrations/blob/main/n8n/DELIVERY_QUEUE.md).`, 1);
+  note('Section 1 — delivery queue', [-40, 0], 1060, 800, `## 1. Load the delivery queue
+
+Read ready rows and skip jobs already notified. Duplicate task IDs stop the run before writes.`, 7);
+  note('Section 2 — material checks', [1040, 0], 620, 800, `## 2. Check delivery materials
+
+Require actual references and matching file metadata for every agreed criterion. Incomplete rows go to actionable feedback.`, 7);
+  note('Section 3 — agreement and feedback', [1700, 0], 660, 1060, `## 3. Check access and agreement
+
+Read the authorized project and compare its current criteria. Write missing-input or owner-action feedback to the queue.`, 7);
+  note('Section 4 — save or resume', [2380, 0], 1260, 1060, `## 4. Resume a job or prepare one
+
+Top: verify an existing saved job. Bottom: persist and read back the exact request before preparing. Preserve saved IDs and request data when retrying.`, 7);
+  note('Section 5 — result', [3680, 0], 660, 800, `## 5. Save the handover result
+
+Write the verified job ID and operational state back to the same task row. Only a prepared, unnotified job continues.`, 7);
+  note('Section 6 — reviewer reminder', [4380, 0], 860, 800, `## 6. Remind the responsible team
+
+Send internal review references, then mark the confirmed reminder. Normal reruns skip it; an uncertain Slack result may duplicate the reminder.`, 7);
   return { name: 'Prepare client delivery reviews from Google Sheets with Prooftask and Slack', nodes, connections, active: false, pinData: {}, settings: { executionOrder: 'v1', saveDataSuccessExecution: 'none', saveDataErrorExecution: 'none', saveManualExecutions: false }, tags: [] };
 }
 
