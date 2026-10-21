@@ -20,11 +20,16 @@ jobs:
           import json
           v=json.load(open('server.json'))
           assert v['name']=='io.github.cognitive-emergence/prooftask'
-          assert v['version']=='0.1.3'
+          assert v['version']=='0.1.4'
           assert v['description'].startswith('Free public ')
           assert len(v['description']) <= 100
           assert v['websiteUrl']=='https://prooftask.com/developers'
           assert v['_meta']['io.modelcontextprotocol.registry/publisher-provided']['publicTools']==['getAgentCapabilities','searchPublicSpecifications','getPublicSpecification']
+          metadata=v['_meta']['io.modelcontextprotocol.registry/publisher-provided']
+          assert metadata['price']=='free'
+          assert metadata['tools']==metadata['publicTools']
+          assert metadata['publicDiscovery']=={'price':0,'currency':'USD','credentialRequired':False}
+          assert 'Hosted public MCP' in metadata['pricingScope'] and 'separate' in metadata['pricingScope']
           assert v['packages']==[{'registryType':'npm','identifier':'prooftask-mcp','version':'0.1.1','transport':{'type':'stdio'}}]
           assert v['remotes']==[{'type':'streamable-http','url':'https://prooftask-public-mcp-production.up.railway.app/mcp'}]
           PY
@@ -37,3 +42,5 @@ jobs:
         run: ./mcp-publisher login github-oidc
       - name: Publish the reviewed server metadata
         run: ./mcp-publisher publish server.json
+
+

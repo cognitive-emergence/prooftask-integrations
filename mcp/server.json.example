@@ -7,7 +7,7 @@
     "url": "https://github.com/cognitive-emergence/prooftask-integrations",
     "source": "github"
   },
-  "version": "0.1.3",
+  "version": "0.1.4",
   "packages": [
     {
       "registryType": "npm",
@@ -38,7 +38,14 @@
         "credentialRequired": false
       },
       "servicePricingUrl": "https://prooftask.com/pricing",
-      "chineseGuideUrl": "https://prooftask.com/zh"
+      "chineseGuideUrl": "https://prooftask.com/zh",
+      "price": "free",
+      "tools": [
+        "getAgentCapabilities",
+        "searchPublicSpecifications",
+        "getPublicSpecification"
+      ],
+      "pricingScope": "Hosted public MCP discovery and template reads only. Private delivery workflows and Result Records have separate service terms and pricing: https://prooftask.com/pricing"
     }
   }
 }
