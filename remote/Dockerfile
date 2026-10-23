@@ -1,4 +1,5 @@
-FROM node:24-alpine
+FROM node:24.22.1-alpine
+RUN node --version
 WORKDIR /app
 COPY remote/package.json remote/package-lock.json ./remote/
 RUN cd remote && npm ci --omit=dev --ignore-scripts && npm cache clean --force
