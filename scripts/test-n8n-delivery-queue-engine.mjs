@@ -163,7 +163,7 @@ try {
   service.review(buyer, project.taskId, { requestId: randomUUID(), agreementDigest: current.agreement.digest, submissionId: current.submission.id, expectedEventHash: current.headEventHash, action: 'ACCEPT', reason: 'The synthetic buyer checked the exact original workflow.', nextAction: 'NEXT_STEP', criteria: [{ criterionId: 'workflow', verdict: 'MET', materialAccess: 'AVAILABLE', note: 'Checked the exact synthetic file.', checkedFiles }] });
   await sync(); assert.equal(queue[0].review_accepted, 'YES'); assert.equal(queue[0].review_decision, 'ACCEPT'); assert.equal(queue[0].review_job_id, savedJob);
   assert.equal(queue[0].job_id, savedJob); assert.equal(queue.length, 1); assert.equal(preparationCalls, preparationCount); assert.equal(reminders.length, reminderCount);
-  agents.revoke(supplier, grant.id);
+  agents.revoke(supplier, grant.grant.id);
   await sync(); assert.equal(queue[0].review_accepted, 'UNKNOWN'); assert.equal(queue[0].review_state, 'UNKNOWN');
   console.log('PASS actual engine: deliberate submission/replay, pending buyer, exact acceptance writeback and revoked readback; original queue identity preserved.');
   console.log(JSON.stringify({ ok: true, engine: 'n8n 2.39.8', actualProoftaskAPI: true, syntheticGoogleSheetsAndSlack: true, productionWrites: 0, savedJobs: store.listSelfServiceRecords('automation-job').length }));
