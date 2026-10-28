@@ -1,0 +1,391 @@
+{
+  "name": "Sync Prooftask saved delivery status to Google Sheets",
+  "nodes": [
+    {
+      "id": "pt-status-0",
+      "name": "Run status sync",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "pt-status-1",
+      "name": "Configuration",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        300
+      ],
+      "parameters": {
+        "jsCode": "const configuration={spreadsheetId:'REPLACE_SPREADSHEET_ID',sheetId:'0'};if(!/^[a-zA-Z0-9_-]{20,}$/.test(configuration.spreadsheetId)||configuration.spreadsheetId.startsWith('REPLACE')||!/^\\d+$/.test(configuration.sheetId))throw new Error('Set the same spreadsheetId and numeric sheetId as the delivery queue.');return [{json:configuration}];"
+      }
+    },
+    {
+      "id": "pt-status-2",
+      "name": "Read saved delivery queue",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        440,
+        300
+      ],
+      "parameters": {
+        "resource": "sheet",
+        "authentication": "oAuth2",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Configuration').first().json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Configuration').first().json.sheetId }}",
+          "mode": "id"
+        },
+        "operation": "read",
+        "options": {}
+      }
+    },
+    {
+      "id": "pt-status-3",
+      "name": "Select saved jobs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        300
+      ],
+      "parameters": {
+        "jsCode": "const run=function selectSavedJobs(items) {\n  const ids = new Set();\n  if (items.length > 200) throw new Error('Use at most 200 queue rows per manual sync.');\n  for (const { json: row } of items) {\n    if (!/^[A-Za-z0-9:_-]{1,100}$/.test(row.task_id || '') || ids.has(row.task_id)) throw new Error('Every populated row needs a unique task_id. No rows were changed.');\n    ids.add(row.task_id);\n    if (!row.job_id) continue;\n    if (!/^job_[a-f0-9]{64}$/.test(row.job_id) || !/^delivery_[a-f0-9-]{36}$/.test(row.project_id || '') || !/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(row.request_id || '')) throw new Error('Recover the exact job, project and request IDs before syncing. No rows were changed.');\n  }\n  return items.flatMap((item, i) => item.json.job_id ? [{ json: item.json, pairedItem: { item: i } }] : []);\n};return run($input.all());"
+      }
+    },
+    {
+      "id": "pt-status-4",
+      "name": "One saved job at a time",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        880,
+        300
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "pt-status-5",
+      "name": "Read current saved job",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        440
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'https://prooftask.com/api/agents/v1/jobs/' + $json.job_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 20000,
+          "allowUnauthorizedCerts": false,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false,
+              "maxRedirects": 0
+            }
+          },
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000,
+      "notes": "Use Header Auth with the same Agent grant that prepared these saved jobs. Renewal preserves ownership; a new grant cannot read the old jobs. This request only reads status.",
+      "notesInFlow": true
+    },
+    {
+      "id": "pt-status-6",
+      "name": "Map exact saved status",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        440
+      ],
+      "parameters": {
+        "jsCode": "const run=function savedJobStatus(row, response) {\n  const output = { task_id: row.task_id, review_job_id: row.job_id, review_state: 'UNKNOWN', review_decision: '', review_accepted: 'UNKNOWN', review_next_action: 'RECONCILE_SUBMISSION', review_observed_at: '', review_url: '', review_note: '' };\n  const fail = note => ({ ...output, review_note: note });\n  if (response.statusCode !== 200) return fail('Readback failed or access changed. Preserve the saved IDs, reconcile authorization and retry; acceptance is unknown.');\n  const value = response.body, current = value?.current, next = value?.continuation;\n  if (!value || value.id !== row.job_id || value.requestId !== row.request_id || value.workflowReference !== 'sheet:' + row.task_id || current?.projectId !== row.project_id\n    || !/^[a-f0-9]{64}$/.test(current.agreementDigest || '') || !/^sha256:[a-f0-9]{64}$/.test(current.headEventHash || '')\n    || typeof current.state !== 'string' || !current.state || !Number.isFinite(Date.parse(current.observedAt || ''))\n    || typeof value.submitted !== 'boolean' || typeof value.appliesToSavedSubmission !== 'boolean'\n    || next?.schema !== 'prooftask.automation-continuation/v1' || typeof next.acceptedForSavedSubmission !== 'boolean'\n    || !['REVIEW_CURRENT_PROJECT', 'REVIEW_SAVED_REQUEST', 'RECONCILE_SUBMISSION', 'RECORD_ACCEPTANCE', 'WAIT_FOR_HUMAN', 'PREPARE_CORRECTION', 'RECORD_REJECTION', 'WAIT_FOR_BUYER'].includes(next.nextAction)) return fail('Job readback did not match this exact queue row or supported contract. Reconcile the original task before relying on its status.');\n  const accepted = value.submitted && value.appliesToSavedSubmission && value.decisionForSavedSubmission === 'ACCEPT' && current.state === 'BUYER_CONFIRMED' && next.acceptedForSavedSubmission && next.nextAction === 'RECORD_ACCEPTANCE';\n  if ((next.acceptedForSavedSubmission || next.nextAction === 'RECORD_ACCEPTANCE') && !accepted) return fail('Conflicting acceptance facts. Read the exact saved submission in Prooftask; do not mark this task accepted.');\n  const rawUrl = current.humanUrl;\n  const url = typeof rawUrl === 'string' && rawUrl.startsWith('/') && !rawUrl.startsWith('//') ? 'https://prooftask.com' + rawUrl\n    : typeof rawUrl === 'string' && rawUrl.startsWith('https://prooftask.com/') ? rawUrl : '';\n  const decision = value.appliesToSavedSubmission ? value.decisionForSavedSubmission : null;\n  if (decision !== null && !['ACCEPT', 'REQUEST_CHANGES', 'REQUEST_EVIDENCE', 'REJECT'].includes(decision)) return fail('Unknown saved-submission decision. Review the current API contract before using this status.');\n  return { ...output, review_state: current.state, review_decision: decision || '', review_accepted: accepted ? 'YES' : 'NO', review_next_action: next.nextAction, review_observed_at: current.observedAt, review_url: url,\n    review_note: 'Current readback for this saved job only. A buyer decision does not establish signing, record verification or payment.' };\n};return [{json:run($('One saved job at a time').item.json,$input.first().json),pairedItem:{item:0}}];"
+      }
+    },
+    {
+      "id": "pt-status-7",
+      "name": "Update original queue status",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1540,
+        440
+      ],
+      "parameters": {
+        "resource": "sheet",
+        "authentication": "oAuth2",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Configuration').first().json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Configuration').first().json.sheetId }}",
+          "mode": "id"
+        },
+        "operation": "update",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "task_id": "={{ $json.task_id }}",
+            "review_job_id": "={{ $json.review_job_id }}",
+            "review_state": "={{ $json.review_state }}",
+            "review_decision": "={{ $json.review_decision }}",
+            "review_accepted": "={{ $json.review_accepted }}",
+            "review_next_action": "={{ $json.review_next_action }}",
+            "review_observed_at": "={{ $json.review_observed_at }}",
+            "review_url": "={{ $json.review_url }}",
+            "review_note": "={{ $json.review_note }}"
+          },
+          "matchingColumns": [
+            "task_id"
+          ],
+          "schema": [
+            {
+              "id": "task_id",
+              "displayName": "task_id",
+              "type": "string",
+              "required": false,
+              "defaultMatch": true,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "review_job_id",
+              "displayName": "review_job_id",
+              "type": "string",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "review_state",
+              "displayName": "review_state",
+              "type": "string",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "review_decision",
+              "displayName": "review_decision",
+              "type": "string",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "review_accepted",
+              "displayName": "review_accepted",
+              "type": "string",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "review_next_action",
+              "displayName": "review_next_action",
+              "type": "string",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "review_observed_at",
+              "displayName": "review_observed_at",
+              "type": "string",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "review_url",
+              "displayName": "review_url",
+              "type": "string",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "review_note",
+              "displayName": "review_note",
+              "type": "string",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "cellFormat": "RAW",
+          "handlingExtraData": "ignoreIt"
+        }
+      },
+      "notes": "Add all review_* columns before running. Select the same Google Sheets credential on both Sheet nodes. Update existing unique task_id rows only. This does not overwrite request, job, material or preparation fields.",
+      "notesInFlow": true
+    },
+    {
+      "id": "pt-status-8",
+      "name": "Status sync complete",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        140
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "pt-status-9",
+      "name": "Status sync setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -650,
+        80
+      ],
+      "parameters": {
+        "width": 580,
+        "height": 760,
+        "color": 1,
+        "content": "## Sync saved delivery status to the original queue\n\nThis companion is separate from published template #21159. It reads current Prooftask jobs and updates existing Sheet rows, including jobs already notified. It never submits, accepts, signs or pays.\n\n1. Read n8n/DELIVERY_LOOP.md and add every review_* column listed there.\n2. Set the same spreadsheetId and numeric sheetId in Configuration.\n3. Use the same Google Sheets credential on both Sheet nodes.\n4. On the HTTP node, select Header Auth for the original Agent grant that created these jobs.\n5. Run manually, one execution per queue at a time. Keep request_id and job_id unchanged.\n\nA failed or mismatched read writes UNKNOWN, never an acceptance. Status observations may change after corrections or concerns. This example has no schedule, webhook receiver or notification."
+      }
+    }
+  ],
+  "connections": {
+    "Run status sync": {
+      "main": [
+        [
+          {
+            "node": "Configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Configuration": {
+      "main": [
+        [
+          {
+            "node": "Read saved delivery queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read saved delivery queue": {
+      "main": [
+        [
+          {
+            "node": "Select saved jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select saved jobs": {
+      "main": [
+        [
+          {
+            "node": "One saved job at a time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "One saved job at a time": {
+      "main": [
+        [
+          {
+            "node": "Status sync complete",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Read current saved job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read current saved job": {
+      "main": [
+        [
+          {
+            "node": "Map exact saved status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Map exact saved status": {
+      "main": [
+        [
+          {
+            "node": "Update original queue status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update original queue status": {
+      "main": [
+        [
+          {
+            "node": "One saved job at a time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "none",
+    "saveManualExecutions": false
+  },
+  "tags": []
+}

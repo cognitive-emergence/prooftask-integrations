@@ -40,11 +40,12 @@ Or import [n8n/discover-templates.json](n8n/discover-templates.json) into n8n an
 | --- | --- |
 | Decide what a client should check | Search public templates above; no account required |
 | Connect an MCP client | Install the [published adapter](mcp/README.md) with `npx -y prooftask-mcp@0.1.1` (Node.js 24+) |
-| Hand over an existing automation | Import the [annotated n8n workflow](channels/n8n-prepare-client-delivery.json), then follow its canvas notes |
+| Hand over an n8n project | Agree scope and client checks with the [n8n handover checklist](https://prooftask.com/guides/n8n-handover-checklist) |
+| Manage a delivery queue with n8n | Import the [annotated n8n workflow](channels/n8n-prepare-client-delivery.json), then follow the [complete delivery loop](n8n/DELIVERY_LOOP.md) |
 | Prepare a client delivery job | Use an existing authorized project and [n8n setup](n8n/README.md); preparation saves a job before any send |
 | Evaluate adoption for your service team | Read the [provider guide](providers/README.md) |
 
-The n8n template was submitted for human review on 2026-10-17 (submission 21159); marketplace listing is pending. The JSON can already be imported from this repository.
+The [n8n delivery queue template #21159](https://n8n.io/workflows/21159-prepare-reviewable-client-delivery-jobs-from-google-sheets-with-prooftask-and-slack/) is published. It prepares saved jobs and internal Slack review. Follow the [complete delivery loop](n8n/DELIVERY_LOOP.md) for deliberate submission, buyer review, queue status sync and production acceptance. Listing approval covers the published preparation template; live service credentials and result writeback remain your setup.
 
 ## Choose an integration
 

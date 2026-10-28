@@ -3,13 +3,14 @@
 // is replaced only in temporary test copies. No external business writes.
 import assert from 'node:assert/strict';
 import { generateKeyPairSync, randomUUID } from 'node:crypto';
-import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createServer } from 'node:http';
 import { spawn } from 'node:child_process';
 import { deliveryQueueWorkflow } from './build-n8n-delivery-queue.mjs';
+import { jobStatusWorkflow } from './build-n8n-job-status.mjs';
 
 const source = process.env.PROOFTASK_SOURCE_ROOT;
 const cli = process.env.N8N_CLI;
@@ -125,6 +126,46 @@ try {
   assert.equal(preparationCalls, callsBeforeReminder); assert.equal(queue[0].notified_job_id, queue[0].job_id);
   assert.equal(service.get(buyer, project.taskId).events.length, initialEvents);
   console.log('PASS actual engine: failed reminder resumes by saved job ID without preparing again.');
+
+  const savedJob = queue[0].job_id, preparationCount = preparationCalls, reminderCount = reminders.length;
+  const statusFlow = jobStatusWorkflow(); statusFlow.id = 'synthetic-job-status-sync';
+  statusFlow.nodes.find(n => n.name === 'Configuration').parameters.jsCode = 'return [{json:{spreadsheetId:"synthetic-sheet-id-123456789",sheetId:"0"}}];';
+  for (const node of statusFlow.nodes) {
+    if (node.type.endsWith('googleSheets')) {
+      const read = node.parameters.operation === 'read', fields = Object.keys(node.parameters.columns?.value || {});
+      node.type = 'n8n-nodes-base.httpRequest'; node.typeVersion = 4.2;
+      node.parameters = { method: read ? 'GET' : 'POST', url: fixtureOrigin + (read ? '/queue' : '/queue/update'), options: {} };
+      if (!read) Object.assign(node.parameters, { sendBody: true, specifyBody: 'json', jsonBody: '={{ JSON.stringify({' + fields.map(k => JSON.stringify(k) + ':$json.' + k).join(',') + '}) }}' });
+    } else if (node.type.endsWith('httpRequest')) {
+      node.parameters.url = node.parameters.url.replace('https://prooftask.com', origin);
+      delete node.parameters.authentication; delete node.parameters.genericAuthType;
+      node.parameters.sendHeaders = true; node.parameters.headerParameters = { parameters: [{ name: 'Authorization', value: 'Bearer ' + grant.token }] };
+    }
+  }
+  writeFileSync(join(home, 'status.json'), JSON.stringify(statusFlow), { mode: 0o600 });
+  await run(['import:workflow', '--input=' + join(home, 'status.json')]);
+  const sync = () => run(['execute', '--id=' + statusFlow.id, '--rawOutput']);
+  await sync(); assert.equal(queue[0].review_accepted, 'NO'); assert.equal(queue[0].review_next_action, 'REVIEW_SAVED_REQUEST');
+
+  const send = JSON.parse(readFileSync(new URL('../n8n/send-job.json', import.meta.url), 'utf8')); send.id = 'synthetic-saved-job-submit';
+  send.nodes.find(n => n.name === 'Input').parameters.jsCode = 'return [{json:' + JSON.stringify({ id: savedJob, confirmed: true }) + '}];';
+  for (const node of send.nodes.filter(n => n.type.endsWith('httpRequest'))) {
+    node.parameters.url = node.parameters.url.replace('https://prooftask.com', origin);
+    delete node.parameters.authentication; delete node.parameters.genericAuthType;
+    node.parameters.sendHeaders = true; node.parameters.headerParameters = { parameters: [{ name: 'Authorization', value: 'Bearer ' + grant.token }] };
+  }
+  writeFileSync(join(home, 'send.json'), JSON.stringify(send), { mode: 0o600 });
+  await run(['import:workflow', '--input=' + join(home, 'send.json')]);
+  await run(['execute', '--id=' + send.id, '--rawOutput']);
+  await run(['execute', '--id=' + send.id, '--rawOutput']);
+  await sync(); assert.equal(queue[0].review_accepted, 'NO'); assert.equal(queue[0].review_next_action, 'WAIT_FOR_BUYER');
+  const current = service.get(buyer, project.taskId), checkedFiles = JSON.parse(queue[0].materials_json)[0].files;
+  service.review(buyer, project.taskId, { requestId: randomUUID(), agreementDigest: current.agreement.digest, submissionId: current.submission.id, expectedEventHash: current.headEventHash, action: 'ACCEPT', reason: 'The synthetic buyer checked the exact original workflow.', nextAction: 'NEXT_STEP', criteria: [{ criterionId: 'workflow', verdict: 'MET', materialAccess: 'AVAILABLE', note: 'Checked the exact synthetic file.', checkedFiles }] });
+  await sync(); assert.equal(queue[0].review_accepted, 'YES'); assert.equal(queue[0].review_decision, 'ACCEPT'); assert.equal(queue[0].review_job_id, savedJob);
+  assert.equal(queue[0].job_id, savedJob); assert.equal(queue.length, 1); assert.equal(preparationCalls, preparationCount); assert.equal(reminders.length, reminderCount);
+  agents.revoke(supplier, grant.grant.id);
+  await sync(); assert.equal(queue[0].review_accepted, 'UNKNOWN'); assert.equal(queue[0].review_state, 'UNKNOWN');
+  console.log('PASS actual engine: deliberate submission/replay, pending buyer, exact acceptance writeback and revoked readback; original queue identity preserved.');
   console.log(JSON.stringify({ ok: true, engine: 'n8n 2.39.8', actualProoftaskAPI: true, syntheticGoogleSheetsAndSlack: true, productionWrites: 0, savedJobs: store.listSelfServiceRecords('automation-job').length }));
 } finally {
   await new Promise(r => api.close(r)); await new Promise(r => fixture.close(r)); store.close(); rmSync(home, { recursive: true, force: true });
