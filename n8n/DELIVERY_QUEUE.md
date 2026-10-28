@@ -4,6 +4,8 @@ For automation consultants who keep a delivery checklist in Google Sheets and ne
 
 **The endpoint is an internal review handoff.** Preparation saves a job; it does not submit delivery, accept work, sign or pay. The owner reviews the saved materials before using the existing separate [send-job workflow](send-job.json). Only the authorized buyer records acceptance.
 
+For the next steps, use the [complete delivery loop](DELIVERY_LOOP.md): deliberate saved-job submission, buyer review, a separate [queue status sync](sync-job-status.json), and production acceptance. This published preparation workflow skips already-notified jobs; it does not continually refresh their later acceptance status.
+
 ## Requirements
 
 - n8n 2.39.8 or a compatible later release, using built-in Google Sheets, Crypto, Code, HTTP Request, If, Loop Over Items and Slack nodes. No community node is required.
