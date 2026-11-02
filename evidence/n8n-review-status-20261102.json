@@ -1,0 +1,18 @@
+{
+  "observedOn": "2026-11-02",
+  "portalState": "IMPLEMENT CHANGES",
+  "dashboardSection": "Pending",
+  "displayedDate": "2026-10-28",
+  "submissionId": 21159,
+  "lastSubmittedExport": "evidence/n8n-last-submitted-20261102.json",
+  "lastSubmittedMatchesRepositoryExport": true,
+  "lastSubmittedSha256": "0bd036530075dd85ba5649917e6e65314b695ae5e0b40e079c9cea19bf3bea7d",
+  "previousExecutionNodes": 28,
+  "previousStickyNotes": 7,
+  "publicListingHttpStatus": 404,
+  "publicTemplateApiHttpStatus": 404,
+  "publicApiMessage": "Workflow not found",
+  "replacementSubmitted": false,
+  "replacementUploadPreflight": "Uploaded: delivery-lifecycle.json. Click or drag to replace.",
+  "submitForHumanReviewEnabled": true
+}
