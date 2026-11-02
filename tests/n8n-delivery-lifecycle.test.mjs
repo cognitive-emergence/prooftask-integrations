@@ -16,6 +16,7 @@ test('changed, missing, duplicate or mismatched saved identity blocks submission
   assert.equal(selectReviewedJob([{ json: row }], config)[0].json.id, row.job_id);
   for (const change of [{ job_id: 'job_' + 'b'.repeat(64) }, { request_id: 'other' }, { task_id: 'other' }, { project_id: 'other' }, { request_json: '{}' }, { request_json: 'broken' }]) assert.throws(() => selectReviewedJob([{ json: { ...row, ...change } }], config));
   assert.throws(() => selectReviewedJob([], config));
+  assert.throws(() => selectReviewedJob(Array.from({length:201}, (_, i) => ({json:{...row, task_id:'task-' + i}})), config), /200/);
   assert.throws(() => selectReviewedJob([{ json: row }, { json: row }], config));
 });
 test('single manual entry routes exclusively and submits before fresh queue sync', () => {

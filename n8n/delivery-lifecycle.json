@@ -982,11 +982,11 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        660,
+        1040,
         0
       ],
       "parameters": {
-        "width": 1060,
+        "width": 680,
         "height": 800,
         "content": "## 1. Load the delivery queue\n\nRead ready rows and skip jobs already notified. Duplicate task IDs stop the run before writes.",
         "color": 7
@@ -1348,7 +1348,7 @@
         1200
       ],
       "parameters": {
-        "jsCode": "const select=function selectReviewedJob(items, config) {\n  const ids = new Set();\n  for (const { json: row } of items) {\n    if (!row.task_id || ids.has(row.task_id)) throw new Error('Queue task IDs must be present and unique.');\n    ids.add(row.task_id);\n  }\n  const matches = items.filter(({ json }) => json.task_id === config.reviewedTaskId);\n  if (matches.length !== 1) throw new Error('Reviewed task must still exist exactly once.');\n  const row = matches[0].json;\n  if (config.operation !== 'submit' || config.submitConfirmed !== true || row.job_id !== config.reviewedJobId || row.request_id !== config.reviewedRequestId) throw new Error('Explicit approval does not match this saved task, request and job.');\n  let request;\n  try { request = JSON.parse(row.request_json); } catch { throw new Error('Recover the frozen request before submission.'); }\n  if (request.requestId !== row.request_id || request.projectId !== row.project_id || request.workflowReference !== 'sheet:' + row.task_id) throw new Error('Frozen request does not belong to the reviewed queue task.');\n  return [{ json: { id: row.job_id, confirmed: true }, pairedItem: { item: items.indexOf(matches[0]) } }];\n};return select($input.all(),$('Configuration').first().json);"
+        "jsCode": "const select=function selectReviewedJob(items, config) {\n  if (items.length > 200) throw new Error('Use at most 200 queue rows before submitting or syncing.');\n  const ids = new Set();\n  for (const { json: row } of items) {\n    if (!row.task_id || ids.has(row.task_id)) throw new Error('Queue task IDs must be present and unique.');\n    ids.add(row.task_id);\n  }\n  const matches = items.filter(({ json }) => json.task_id === config.reviewedTaskId);\n  if (matches.length !== 1) throw new Error('Reviewed task must still exist exactly once.');\n  const row = matches[0].json;\n  if (config.operation !== 'submit' || config.submitConfirmed !== true || row.job_id !== config.reviewedJobId || row.request_id !== config.reviewedRequestId) throw new Error('Explicit approval does not match this saved task, request and job.');\n  let request;\n  try { request = JSON.parse(row.request_json); } catch { throw new Error('Recover the frozen request before submission.'); }\n  if (request.requestId !== row.request_id || request.projectId !== row.project_id || request.workflowReference !== 'sheet:' + row.task_id) throw new Error('Frozen request does not belong to the reviewed queue task.');\n  return [{ json: { id: row.job_id, confirmed: true }, pairedItem: { item: items.indexOf(matches[0]) } }];\n};return select($input.all(),$('Configuration').first().json);"
       }
     },
     {

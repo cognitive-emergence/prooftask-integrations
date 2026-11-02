@@ -59,7 +59,8 @@ const fixture = createServer(async (req, res) => {
 });
 await new Promise(r => fixture.listen(0, '127.0.0.1', r));
 const fixtureOrigin = 'http://127.0.0.1:' + fixture.address().port;
-const env = { ...process.env, N8N_USER_FOLDER: home, N8N_ENCRYPTION_KEY: 'synthetic-queue-engine-test', N8N_DIAGNOSTICS_ENABLED: 'false', N8N_VERSION_NOTIFICATIONS_ENABLED: 'false', N8N_TEMPLATES_ENABLED: 'false', N8N_RUNNERS_MODE: 'internal', N8N_RUNNERS_BROKER_PORT: '5689', N8N_LOG_LEVEL: 'error' };
+// isolated-vm requires this Node 20+ runtime flag; keep it in the disposable test process only.
+const env = { ...process.env, NODE_OPTIONS: [process.env.NODE_OPTIONS, '--no-node-snapshot'].filter(Boolean).join(' '), N8N_USER_FOLDER: home, N8N_ENCRYPTION_KEY: 'synthetic-queue-engine-test', N8N_DIAGNOSTICS_ENABLED: 'false', N8N_VERSION_NOTIFICATIONS_ENABLED: 'false', N8N_TEMPLATES_ENABLED: 'false', N8N_RUNNERS_MODE: 'internal', N8N_RUNNERS_BROKER_PORT: '5689', N8N_LOG_LEVEL: 'error' };
 async function run(args, expectSuccess = true) {
   const output = await new Promise((resolveRun, reject) => {
     const child = spawn(cli, args, { env, stdio: ['ignore', 'pipe', 'pipe'] }); let out = '';
@@ -148,13 +149,27 @@ try {
   const submittedEvents = service.get(buyer, project.taskId).events.length;
   await executeMode('submit', true);
   assert.equal(service.get(buyer, project.taskId).events.length, submittedEvents, 'Replay must not create another delivery.');
-  const current = service.get(buyer, project.taskId), checkedFiles = JSON.parse(queue[0].materials_json)[0].files;
-  service.review(buyer, project.taskId, { requestId: randomUUID(), agreementDigest: current.agreement.digest, submissionId: current.submission.id, expectedEventHash: current.headEventHash, action: 'ACCEPT', reason: 'The synthetic buyer checked the exact original workflow.', nextAction: 'NEXT_STEP', criteria: [{ criterionId: 'workflow', verdict: 'MET', materialAccess: 'AVAILABLE', note: 'Checked the exact synthetic file.', checkedFiles }] });
-  await executeMode('sync'); assert.equal(queue[0].review_accepted, 'YES'); assert.equal(queue[0].review_decision, 'ACCEPT'); assert.equal(queue[0].review_job_id, savedJob);
-  assert.equal(queue[0].job_id, savedJob); assert.equal(queue.length, 1); assert.equal(preparationCalls, preparationCount); assert.equal(reminders.length, reminderCount);
+  const firstSubmitted = service.get(buyer, project.taskId), checkedFiles = JSON.parse(queue[0].materials_json)[0].files;
+  service.review(buyer, project.taskId, {requestId:randomUUID(),agreementDigest:firstSubmitted.agreement.digest,submissionId:firstSubmitted.submission.id,expectedEventHash:firstSubmitted.headEventHash,action:'REQUEST_CHANGES',reason:'The synthetic buyer requests a corrected original workflow.',nextAction:'WAIT_FOR_CORRECTION',criteria:[{criterionId:'workflow',verdict:'NOT_MET',materialAccess:'AVAILABLE',note:'The original requires a correction.',checkedFiles}]});
+  await executeMode('sync'); assert.equal(queue[0].review_accepted,'NO'); assert.equal(queue[0].review_next_action,'PREPARE_CORRECTION');
+  const correction = row('reminder-v2'), revisedMaterials = JSON.parse(correction.materials_json);
+  revisedMaterials[0].references = ['https://example.test/corrected-workflow.json'];
+  revisedMaterials[0].files = [{reference:revisedMaterials[0].references[0],name:'workflow-v2.json',size:4,sha256:createHash('sha256').update('[{}]').digest('hex')}];
+  correction.materials_json = JSON.stringify(revisedMaterials); correction.summary = 'Corrected workflow ready for the buyer to review.';
+  queue.push(correction);
+  await executeMode('prepare');
+  const correctedJob = queue[1].job_id;
+  assert.match(correctedJob,/^job_[a-f0-9]{64}$/); assert.notEqual(correctedJob,savedJob); assert.equal(queue[0].job_id,savedJob);
+  await executeMode('submit',true,{reviewedTaskId:queue[1].task_id,reviewedRequestId:queue[1].request_id,reviewedJobId:correctedJob});
+  assert.equal(queue[1].review_accepted,'NO'); assert.equal(queue[1].review_next_action,'WAIT_FOR_BUYER');
+  const current = service.get(buyer, project.taskId), revisedFiles = JSON.parse(queue[1].materials_json)[0].files;
+  service.review(buyer, project.taskId, { requestId: randomUUID(), agreementDigest: current.agreement.digest, submissionId: current.submission.id, expectedEventHash: current.headEventHash, action: 'ACCEPT', reason: 'The synthetic buyer checked the exact corrected original workflow.', nextAction: 'NEXT_STEP', criteria: [{ criterionId: 'workflow', verdict: 'MET', materialAccess: 'AVAILABLE', note: 'Checked the exact synthetic corrected file.', checkedFiles:revisedFiles }] });
+  await executeMode('sync'); assert.equal(queue[1].review_accepted, 'YES'); assert.equal(queue[1].review_decision, 'ACCEPT'); assert.equal(queue[1].review_job_id, correctedJob);
+  assert.equal(queue[0].review_accepted,'NO','The earlier job cannot inherit the corrected version acceptance.');
+  assert.equal(queue[0].job_id, savedJob); assert.equal(queue.length, 2); assert.equal(preparationCalls, preparationCount+1); assert.equal(reminders.length, reminderCount+1);
   agents.revoke(supplier, grant.grant.id);
-  await executeMode('sync'); assert.equal(queue[0].review_accepted, 'UNKNOWN'); assert.equal(queue[0].review_state, 'UNKNOWN');
-  console.log('PASS unified actual engine: approval guard, deliberate submission/replay, automatic pending readback, exact acceptance and revoked readback.');
+  await executeMode('sync'); assert.equal(queue[0].review_accepted, 'UNKNOWN'); assert.equal(queue[0].review_state, 'UNKNOWN'); assert.equal(queue[1].review_accepted, 'UNKNOWN');
+  console.log('PASS unified actual engine: approval guard, deliberate submission/replay, automatic pending readback, correction/new delivery identity, exact acceptance and revoked readback.');
   console.log(JSON.stringify({ ok: true, engine: 'n8n 2.39.8', combinedWorkflow: true, exportSha256, actualProoftaskAPI: true, syntheticGoogleSheetsAndSlack: true, productionWrites: 0, savedJobs: store.listSelfServiceRecords('automation-job').length }));
 } finally {
   await new Promise(r => api.close(r)); await new Promise(r => fixture.close(r)); store.close(); rmSync(home, { recursive: true, force: true });

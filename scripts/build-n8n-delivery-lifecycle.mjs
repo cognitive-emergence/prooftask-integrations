@@ -12,6 +12,7 @@ export function validateConfiguration(value) {
 }
 
 export function selectReviewedJob(items, config) {
+  if (items.length > 200) throw new Error('Use at most 200 queue rows before submitting or syncing.');
   const ids = new Set();
   for (const { json: row } of items) {
     if (!row.task_id || ids.has(row.task_id)) throw new Error('Queue task IDs must be present and unique.');
@@ -67,6 +68,8 @@ export function deliveryLifecycleWorkflow() {
   }
   component(deliveryQueueWorkflow(), 'Prepare · ', [700, 0]);
   component(jobStatusWorkflow(), 'Sync · ', [700, 1800]);
+  const queueSection = nodes.find(n => n.name === 'Prepare · Section 1 — delivery queue');
+  queueSection.position = [1040, 0]; queueSection.parameters.width = 680;
   edge('Prepare deliveries', 'Prepare · Read delivery queue');
   edge('Submit reviewed job', 'Sync · Read saved delivery queue', 1);
   const submit = JSON.parse(readFileSync(new URL('../n8n/send-job.json', import.meta.url)));

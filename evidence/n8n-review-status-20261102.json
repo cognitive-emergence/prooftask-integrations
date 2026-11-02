@@ -14,5 +14,14 @@
   "publicApiMessage": "Workflow not found",
   "replacementSubmitted": false,
   "replacementUploadPreflight": "Uploaded: delivery-lifecycle.json. Click or drag to replace.",
-  "submitForHumanReviewEnabled": true
+  "submitForHumanReviewEnabled": true,
+  "uploadPreflightExportSha256": "14c502e3b189b7b3835eab0a06451c3f07809b73d2aff080bbd121abcb879a02",
+  "replacementCurrentlyStaged": false,
+  "portalStateAfterDiscardingPreflight": "IMPLEMENT CHANGES",
+  "draftPullRequest": "https://github.com/cognitive-emergence/prooftask-integrations/pull/9",
+  "previousUploadPreflightExportSha256": "f62ffd24a673e04715c222b1a8990019395e0dc6600fa15b14b216b8a04d9377",
+  "finalCandidateUploadPreflightPassed": true,
+  "engineVerification": "evidence/n8n-lifecycle-engine-20261102.json",
+  "engineVerificationPassed": true,
+  "liveGoogleSheetsAndSlackAccepted": false
 }

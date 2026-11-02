@@ -12,7 +12,7 @@ An automation consultant tracks client delivery revisions in Google Sheets. Prev
 2. Use an existing, mutually agreed Prooftask project. Connect its supplier Agent with project-scoped `SUBMIT_MATERIALS`; retain the original grant for saved-job reads. In n8n, select the same Header Auth credential on **all five** Prooftask HTTP nodes. Store the token only in Credentials.
 3. Select the same Google Sheets OAuth credential on every Sheet node. Set `spreadsheetId`, numeric `sheetId` and the authorized internal `slackChannelId` in **Configuration**. Select the internal bot credential on the Slack node (`chat:write`, bot added to the channel).
 4. Replace the sample materials with actual references, criterion mappings and file metadata. Existing [material preparation and failure recovery](DELIVERY_QUEUE.md) applies. Run `node agent/fingerprint-file.mjs /path/to/original https://your-original-reference` to compute metadata from the actual original file rather than inventing a digest. The helper only reads your local file; it does not upload it.
-5. Operate only one execution per queue at a time. Automatic triggers and concurrent runs are not configured.
+5. Use at most 200 queue rows and operate only one execution per queue at a time. Automatic triggers and concurrent runs are not configured.
 
 ## Run the complete scenario
 
@@ -56,7 +56,7 @@ node --test tests/n8n-delivery-queue.test.mjs tests/n8n-job-status.test.mjs test
 node scripts/check.mjs
 ```
 
-These checks have passed. This new combined canvas has not yet been imported/executed in the actual n8n engine or tested with real Google/Slack credentials. Previous engine evidence for the separate components does not prove combined execution. Complete the [production acceptance scenarios](DELIVERY_LOOP.md#production-acceptance) and the demonstration above before resubmitting. No deployment, buyer acceptance, signature or payment has been performed by this follow-up.
+These checks have passed. The combined export also passed import and execution in n8n 2.39.8 against an isolated actual Prooftask API, with synthetic Google Sheets and Slack transport. The [engine evidence](../evidence/n8n-lifecycle-engine-20261102.json) records the exact export digest and verified scenarios, including corrections with new file metadata, old-version non-inheritance and revoked readback. Real Google/Slack credentials and destination writes remain untested. Complete the [production acceptance scenarios](DELIVERY_LOOP.md#production-acceptance) and the demonstration above before resubmitting. No deployment, buyer acceptance, signature or payment has been performed by this follow-up.
 
 To run the combined canvas in an isolated real n8n engine (n8n 2.39.8), provide a local Prooftask source checkout and the installed CLI:
 
@@ -64,4 +64,4 @@ To run the combined canvas in an isolated real n8n engine (n8n 2.39.8), provide 
 PROOFTASK_SOURCE_ROOT=/path/to/prooftask N8N_CLI=/path/to/n8n/bin/n8n node scripts/test-n8n-delivery-lifecycle-engine.mjs
 ```
 
-That harness reads the exported JSON, replaces Google Sheets/Slack transport only in a disposable copy, imports it into an isolated n8n database and checks preparation, feedback, retries, approval blocking, saved-job submission/replay, automatic pending-status writeback, exact acceptance and revoked readback against the actual isolated Prooftask API. It reports the original export digest. It cannot establish real Google/Slack OAuth or destination writes.
+That harness reads the exported JSON, replaces Google Sheets/Slack transport only in a disposable copy, imports it into an isolated n8n database and checks preparation, feedback, retries, approval blocking, saved-job submission/replay, automatic pending-status writeback, correction with a new saved delivery, exact acceptance and revoked readback against the actual isolated Prooftask API. It reports the original export digest. It cannot establish real Google/Slack OAuth or destination writes.

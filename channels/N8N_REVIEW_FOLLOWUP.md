@@ -7,14 +7,14 @@ Submission: #21159. Candidate source: upstream snapshot `6d54a1afa459bf83bed8eeb
 - 2026-11-02: public listing and official template API return HTTP 404; API message is `Workflow not found`.
 - After the owner signed in, Creator Portal shows the existing submission under Pending with `IMPLEMENT CHANGES` (displayed date 2026-10-28). The resubmission dialog permits replacing the workflow JSON and submitting for human review.
 - `Copy your last submitted JSON` was saved to `evidence/n8n-last-submitted-20261102.json` and recursively compared with the prior repository export: all values match (28 execution nodes and seven notes). The feedback therefore applies to the enhanced preparation export, not merely the initial small example. A replacement file was staged for preflight only; no human-review resubmission has been made.
-- The revised JSON passed the Creator Portal upload preflight: `Uploaded: delivery-lifecycle.json`; Submit for human review is enabled. The submit button has not been clicked.
-- Local checks: 20 tests passed; export/provenance/MCP check passed; no actual n8n-engine execution or real Google/Slack transport acceptance for the combined candidate.
+- The revised JSON passed the Creator Portal upload preflight: `Uploaded: delivery-lifecycle.json`; Submit for human review is enabled. The submit button was not clicked. The temporary upload was then discarded; the dashboard still shows Implement changes. The final candidate, including layout and queue-limit refinements, passed a second preflight; both export digests are retained in the evidence.
+- Local checks: 20 tests passed; export/provenance/MCP check passed; the combined candidate passed n8n 2.39.8 import/execution against the actual isolated Prooftask API, using synthetic Sheet/Slack transport. The exact export digest matches the final portal preflight. Real Google/Slack transport acceptance remains pending.
 - Repository status wording is corrected locally. The live Prooftask website has not been changed.
 
 ## Confirm before sending
 
 - Read the existing Creator Portal submission and retain the observed `IMPLEMENT CHANGES` state and original JSON evidence. The current combined candidate was not in the last submitted JSON.
-- Import and run the combined candidate in n8n, then complete the authorized end-to-end demonstration with actual Sheet/Slack transport.
+- Complete the authorized end-to-end demonstration with actual Sheet/Slack transport in the operator’s test instance. Local engine execution is verified, but it does not establish OAuth or real destination writes.
 - Replace the previous submission only after review of the exact final JSON and description. No duplicate submission or approval claim.
 
 ## Proposed title

@@ -7,7 +7,7 @@ Updated 2026-11-02 for n8n. Other channel evidence retains its original observat
 | GitHub | Public integration repository with MCP adapter, n8n preparation/submission/status examples and provider guidance |
 | npm | [prooftask-mcp@0.1.0](https://www.npmjs.com/package/prooftask-mcp) published; clean installation and stdio initialize/tools-list passed with 21 read-only tools |
 | Official MCP Registry | io.github.cognitive-emergence/prooftask version 0.1.0 published and independently returned as active/latest by the public API at 2026-10-17T15:14Z |
-| n8n | Not currently verified as published. The owner supplied a 2026-11-02 rejection email; listing #21159 and the official API return 404. Earlier published observations below are historical. A unified lifecycle candidate is available locally; no resubmission, new approval or live Google Sheets/Slack acceptance is claimed. |
+| n8n | Not currently verified as published. The owner supplied a 2026-11-02 rejection email; listing #21159 and the official API return 404. Earlier published observations below are historical. A separate lifecycle candidate has passed n8n 2.39.8 engine checks with synthetic Google Sheets/Slack transport; no resubmission, new approval or live destination acceptance is claimed. |
 | Service providers | Public onboarding guidance; no outreach or adoption claimed |
 | Public customer cases | Requires real projects and bilateral approval |
 

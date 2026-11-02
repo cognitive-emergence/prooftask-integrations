@@ -4,7 +4,7 @@
 
 The owner supplied a rejection email dated 2026-11-02 stating that the workflow is too basic. On the same date, the public listing and `https://api.n8n.io/templates/workflows/21159` returned HTTP 404 (`Workflow not found` from the API). Earlier published observations below are retained as history, not current approval. Authenticated Creator Portal now shows the existing submission under Pending with `IMPLEMENT CHANGES`. Its last-submitted JSON recursively matches the repository preparation export (28 execution nodes plus seven notes). The combined candidate has not yet been submitted. A 404 alone does not establish a permanent removal.
 
-The [unified lifecycle candidate](../n8n/delivery-lifecycle.json) and [review package](../n8n/DELIVERY_LIFECYCLE.md) are ready for local review. No resubmission or reviewer communication has been sent. Keep the previous export intact for comparison.
+The [unified lifecycle candidate](../n8n/delivery-lifecycle.json) and [review package](../n8n/DELIVERY_LIFECYCLE.md) are ready for local review. The candidate passed n8n 2.39.8 execution against the isolated Prooftask API with synthetic Sheet/Slack transport; see the [exact-export engine evidence](../evidence/n8n-lifecycle-engine-20261102.json). Real destination acceptance remains pending. No resubmission or reviewer communication has been sent. Keep the previous export intact for comparison.
 
 ## Previous title and scope
 
