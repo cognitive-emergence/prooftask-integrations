@@ -6,10 +6,12 @@ import { generateKeyPairSync, randomUUID } from 'node:crypto';
 import { mkdtempSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { pathToFileURL, fileURLToPath } from 'node:url';
 import { createServer } from 'node:http';
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { createProviderFixture } from './n8n-lab/provider-fixture.mjs';
+const nativeProviders = process.env.N8N_PROVIDER_TRANSPORT === 'native';
 
 const source = process.env.PROOFTASK_SOURCE_ROOT;
 const cli = process.env.N8N_CLI;
@@ -38,10 +40,12 @@ const origin = 'http://127.0.0.1:' + api.address().port;
 let preparationCalls = 0;
 api.on('request', (request) => { if (request.method === 'POST' && request.url === '/api/agents/v1/jobs') preparationCalls++; });
 let queue = [], reminders = [], failWrite = false, failReminder = false;
+const providers=createProviderFixture({getRows:()=>queue,setRows:rows=>queue=rows,reminders,shouldFailWrite:()=>{if(!failWrite)return false;failWrite=false;return true;},shouldFailReminder:()=>{if(!failReminder)return false;failReminder=false;return true;}});
 const body = async req => { let s = ''; for await (const b of req) s += b; return s ? JSON.parse(s) : {}; };
 const fixture = createServer(async (req, res) => {
   const send = (status, value) => { res.writeHead(status, { 'content-type': 'application/json' }); res.end(JSON.stringify(value)); };
   try {
+    if(nativeProviders && await providers.handler(req,res))return;
     if (req.url === '/queue' && req.method === 'GET') return send(200, queue);
     const value = await body(req);
     if (req.url === '/queue/read') return send(200, queue.filter(r => r.task_id === value.task_id));
@@ -60,7 +64,7 @@ const fixture = createServer(async (req, res) => {
 await new Promise(r => fixture.listen(0, '127.0.0.1', r));
 const fixtureOrigin = 'http://127.0.0.1:' + fixture.address().port;
 // isolated-vm requires this Node 20+ runtime flag; keep it in the disposable test process only.
-const env = { ...process.env, NODE_OPTIONS: [process.env.NODE_OPTIONS, '--no-node-snapshot'].filter(Boolean).join(' '), N8N_USER_FOLDER: home, N8N_ENCRYPTION_KEY: 'synthetic-queue-engine-test', N8N_DIAGNOSTICS_ENABLED: 'false', N8N_VERSION_NOTIFICATIONS_ENABLED: 'false', N8N_TEMPLATES_ENABLED: 'false', N8N_RUNNERS_MODE: 'internal', N8N_RUNNERS_BROKER_PORT: '5689', N8N_LOG_LEVEL: 'error' };
+const env = { ...process.env, NODE_OPTIONS: [process.env.NODE_OPTIONS, '--no-node-snapshot', ...(nativeProviders ? ['--require='+JSON.stringify(fileURLToPath(new URL('./n8n-lab/provider-redirect.cjs',import.meta.url)))] : [])].filter(Boolean).join(' '), ...(nativeProviders ? {N8N_LAB_PROVIDER_ORIGIN:fixtureOrigin} : {}), N8N_USER_FOLDER: home, N8N_ENCRYPTION_KEY: 'synthetic-queue-engine-test', N8N_DIAGNOSTICS_ENABLED: 'false', N8N_VERSION_NOTIFICATIONS_ENABLED: 'false', N8N_TEMPLATES_ENABLED: 'false', N8N_RUNNERS_MODE: 'internal', N8N_RUNNERS_BROKER_PORT: '5689', N8N_LOG_LEVEL: 'error' };
 async function run(args, expectSuccess = true) {
   const output = await new Promise((resolveRun, reject) => {
     const child = spawn(cli, args, { env, stdio: ['ignore', 'pipe', 'pipe'] }); let out = '';
@@ -82,7 +86,10 @@ function configure(values) {
   for (const assignment of node.parameters.assignments.assignments) if (Object.hasOwn(values, assignment.name)) assignment.value = values[assignment.name];
 }
 configure({operation:'prepare', spreadsheetId:'synthetic-sheet-id-123456789',sheetId:'0',slackChannelId:'CSYNTHETIC'});
+const googleCredentialId='11111111-2222-4333-8444-555555555555', slackCredentialId='11111111-2222-4333-8444-666666666666';
 for (const node of flow.nodes) {
+  if(nativeProviders && node.type.endsWith('googleSheets')) {node.credentials={googleSheetsOAuth2Api:{id:googleCredentialId,name:'Simulation only: Google Sheets'}};continue;}
+  if(nativeProviders && node.type.endsWith('slack')) {node.credentials={slackApi:{id:slackCredentialId,name:'Simulation only: Slack'}};continue;}
   if (node.type.endsWith('googleSheets')) {
     const fields = Object.keys(node.parameters.columns?.value || {});
     const endpoint = node.parameters.operation === 'read' ? (node.parameters.filtersUI ? '/queue/read' : '/queue') : '/queue/update';
@@ -101,6 +108,10 @@ for (const node of flow.nodes) {
 }
 writeFileSync(join(home, 'workflow.json'), JSON.stringify(flow), { mode: 0o600 });
 try {
+  if(nativeProviders) {
+    const credentials=[{id:googleCredentialId,name:'Simulation only: Google Sheets',type:'googleSheetsOAuth2Api',data:{clientId:'mock-client-id',clientSecret:'mock-client-secret',oauthTokenData:{access_token:'mock-google-access-token',token_type:'Bearer',expires_in:86400,expiry_date:Date.now()+86400000}}},{id:slackCredentialId,name:'Simulation only: Slack',type:'slackApi',data:{accessToken:'xoxb-mock-slack-token'}}];
+    const credentialPath=join(home,'mock-credentials.json');writeFileSync(credentialPath,JSON.stringify(credentials),{mode:0o600});await run(['import:credentials','--input='+credentialPath]);
+  }
   await run(['import:workflow', '--input=' + join(home, 'workflow.json')]);
   queue = [row('valid-v1'), { ...row('missing-v1'), materials_json: '[]' }];
   const initialEvents = service.get(buyer, project.taskId).events.length;
@@ -170,7 +181,12 @@ try {
   agents.revoke(supplier, grant.grant.id);
   await executeMode('sync'); assert.equal(queue[0].review_accepted, 'UNKNOWN'); assert.equal(queue[0].review_state, 'UNKNOWN'); assert.equal(queue[1].review_accepted, 'UNKNOWN');
   console.log('PASS unified actual engine: approval guard, deliberate submission/replay, automatic pending readback, correction/new delivery identity, exact acceptance and revoked readback.');
-  console.log(JSON.stringify({ ok: true, engine: 'n8n 2.39.8', combinedWorkflow: true, exportSha256, actualProoftaskAPI: true, syntheticGoogleSheetsAndSlack: true, productionWrites: 0, savedJobs: store.listSelfServiceRecords('automation-job').length }));
+  if(nativeProviders) {
+    assert.ok(providers.audit.some(r=>r.provider==='googleSheets'&&r.method==='POST'));assert.ok(providers.audit.some(r=>r.provider==='slack'));
+    const evidencePath=process.env.N8N_PROVIDER_EVIDENCE;
+    if(evidencePath)writeFileSync(evidencePath,JSON.stringify({ok:true,nativeGoogleSheetsAndSlackNodes:true,exportSha256,...providers.snapshot()},null,2)+'\n');
+  }
+  console.log(JSON.stringify({ ok: true, nativeGoogleSheetsAndSlackNodes:nativeProviders, providerRequests:nativeProviders?providers.audit.length:undefined, engine: 'n8n 2.39.8', combinedWorkflow: true, exportSha256, actualProoftaskAPI: true, syntheticGoogleSheetsAndSlack: true, productionWrites: 0, savedJobs: store.listSelfServiceRecords('automation-job').length }));
 } finally {
   await new Promise(r => api.close(r)); await new Promise(r => fixture.close(r)); store.close(); rmSync(home, { recursive: true, force: true });
 }

@@ -6,16 +6,16 @@ Submission: #21159. Candidate source: upstream snapshot `6d54a1afa459bf83bed8eeb
 
 - 2026-11-02: public listing and official template API return HTTP 404; API message is `Workflow not found`.
 - After the owner signed in, Creator Portal shows the existing submission under Pending with `IMPLEMENT CHANGES` (displayed date 2026-10-28). The resubmission dialog permits replacing the workflow JSON and submitting for human review.
-- `Copy your last submitted JSON` was saved to `evidence/n8n-last-submitted-20261102.json` and recursively compared with the prior repository export: all values match (28 execution nodes and seven notes). The feedback therefore applies to the enhanced preparation export, not merely the initial small example. A replacement file was staged for preflight only; no human-review resubmission has been made.
+- `Copy your last submitted JSON` was saved to `evidence/n8n-last-submitted-20261102.json` and recursively compared with upstream preparation export `6d54a1af`: all values matched at inspection (28 execution nodes and seven notes). The feedback therefore applies to the enhanced preparation export, not merely the initial small example. A replacement file was staged for preflight only; no human-review resubmission has been made.
 - The revised JSON passed the Creator Portal upload preflight: `Uploaded: delivery-lifecycle.json`; Submit for human review is enabled. The submit button was not clicked. The temporary upload was then discarded; the dashboard still shows Implement changes. The final candidate, including layout and queue-limit refinements, passed a second preflight; both export digests are retained in the evidence.
-- Local checks: 20 tests passed; export/provenance/MCP check passed; the combined candidate passed n8n 2.39.8 import/execution against the actual isolated Prooftask API, using synthetic Sheet/Slack transport. The exact export digest matches the final portal preflight. Real Google/Slack transport acceptance remains pending.
+- Local checks: 25 tests passed; export/provenance/MCP check passed; the combined candidate passed n8n 2.39.8 import/execution against the actual isolated Prooftask API, using synthetic Sheet/Slack transport. The previous preflight digest is retained separately from the native-node-corrected candidate. Real Google/Slack transport acceptance remains pending.
 - Repository status wording is corrected locally. The live Prooftask website has not been changed.
 
 ## Confirm before sending
 
 - Read the existing Creator Portal submission and retain the observed `IMPLEMENT CHANGES` state and original JSON evidence. The current combined candidate was not in the last submitted JSON.
-- Complete the authorized end-to-end demonstration with actual Sheet/Slack transport in the operator’s test instance. Local engine execution is verified, but it does not establish OAuth or real destination writes.
-- Replace the previous submission only after review of the exact final JSON and description. No duplicate submission or approval claim.
+- The owner authorized API-contract simulation in place of connecting live vendor accounts for this review revision. Native nodes and browser runs are verified; do not claim live OAuth or vendor delivery.
+- Use the tested native-node-corrected export and describe the simulation scope accurately. No duplicate submission or approval claim.
 
 ## Proposed title
 
@@ -37,7 +37,13 @@ Thank you for reviewing template #21159. We are revising the workflow around a c
 
 Could you confirm which revision the November 2 feedback refers to? We previously observed the listing as published, but its public page and template API now return 404. We want to update the existing submission with the correct scope rather than submit a duplicate.
 
-We will provide the final tested workflow and an end-to-end demonstration with the revision.
+The revision includes native-node API simulations and local browser execution evidence; live OAuth and vendor delivery are separate operator setup steps.
 
 Best,
 Prooftask
+
+## Native-node correction and local lab
+
+The native Slack V2 helper normalizes `ts` into `message_timestamp`. The previous reminder code accepted only `ts`; the revision accepts either successful receipt format and rejects failures or conflicting timestamps. Both reproducible exports are corrected, while the original portal JSON is retained as historical evidence.
+
+The owner’s local n8n lab is running with a runnable SIMULATION workflow. Two browser executions succeeded; the repeated run kept task/request/job identity and a single captured message. See `evidence/n8n-native-provider-engine-20261102.json`, `evidence/n8n-local-lab-20261102.json` and `n8n/LOCAL_LAB.md`.

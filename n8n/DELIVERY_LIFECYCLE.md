@@ -1,10 +1,12 @@
 # Manage client delivery reviews in one n8n workflow
 
-Import [delivery-lifecycle.json](delivery-lifecycle.json). This candidate combines preparation, explicit saved-job submission and exact buyer-status readback on one canvas. It does not require importing companion workflows. It has not been submitted or approved by n8n.
+Import [delivery-lifecycle.json](delivery-lifecycle.json). This candidate combines preparation, explicit saved-job submission and exact buyer-status readback on one canvas. It does not require importing companion workflows. Its review status is tracked in [the existing submission record](../channels/N8N_SUBMISSION.md); marketplace approval is not claimed.
 
 ## Who it helps and what changes
 
 An automation consultant tracks client delivery revisions in Google Sheets. Previously, preparation stopped at a Slack reminder and the operator had to configure two more workflow imports. This candidate uses one configuration and three deliberate run modes. A submitted job is immediately read back into the original queue; after buyer action, another sync records pending review, correction, acceptance or an uncertain read. A correction gets a new task row, retaining the earlier delivery history.
+
+For a ready-to-run personal simulation environment, see [Local n8n lab](LOCAL_LAB.md). The lab uses fake credentials and does not require connecting your Google or Slack accounts.
 
 ## Configure once
 
@@ -56,7 +58,7 @@ node --test tests/n8n-delivery-queue.test.mjs tests/n8n-job-status.test.mjs test
 node scripts/check.mjs
 ```
 
-These checks have passed. The combined export also passed import and execution in n8n 2.39.8 against an isolated actual Prooftask API, with synthetic Google Sheets and Slack transport. The [engine evidence](../evidence/n8n-lifecycle-engine-20261102.json) records the exact export digest and verified scenarios, including corrections with new file metadata, old-version non-inheritance and revoked readback. Real Google/Slack credentials and destination writes remain untested. Complete the [production acceptance scenarios](DELIVERY_LOOP.md#production-acceptance) and the demonstration above before resubmitting. No deployment, buyer acceptance, signature or payment has been performed by this follow-up.
+These checks have passed. The current export also passed import and execution in n8n 2.39.8 against an isolated actual Prooftask API while retaining the native Google Sheets and Slack nodes. Their API calls used fake credentials and local contract simulations. The [native-node evidence](../evidence/n8n-native-provider-engine-20261102.json) records 130 provider requests and the exact export digest. Browser execution and repeat-run results are in the [local lab evidence](../evidence/n8n-local-lab-20261102.json). Real OAuth, workspace permissions and vendor delivery remain unverified; complete the [production acceptance scenarios](DELIVERY_LOOP.md#production-acceptance) before operational use. The owner authorized simulated validation for this review revision. No live customer decision, signature or payment was performed.
 
 To run the combined canvas in an isolated real n8n engine (n8n 2.39.8), provide a local Prooftask source checkout and the installed CLI:
 

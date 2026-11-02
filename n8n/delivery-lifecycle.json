@@ -822,7 +822,7 @@
         300
       ],
       "parameters": {
-        "jsCode": "const reminder=$('Prepare · Build owner reminder').item.json; const response=$input.first().json; if(!response.ts || response.error || response.ok===false)throw new Error('Slack did not confirm the reminder. Preserve the saved job and reconcile notification delivery.');return [{json:{task_id:reminder.task_id,notified_job_id:reminder.job_id,handover_note:'Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.'},pairedItem: {item:0}}];"
+        "jsCode": "const run = function confirmedReminder(reminder, response) {\n  const timestamp = response.message_timestamp ?? response.ts;\n  if (response.error || response.ok === false || typeof timestamp !== 'string' || !/^\\d+\\.\\d+$/.test(timestamp)\n    || response.message_timestamp && response.ts && response.message_timestamp !== response.ts) {\n    throw new Error('Slack did not confirm the reminder. Preserve the saved job and reconcile notification delivery.');\n  }\n  return {task_id:reminder.task_id,notified_job_id:reminder.job_id,handover_note:'Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.'};\n};\nreturn [{json:run($('Prepare · Build owner reminder').item.json,$input.first().json),pairedItem: {item:0}}];"
       }
     },
     {

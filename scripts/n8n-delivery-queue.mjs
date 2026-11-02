@@ -99,3 +99,13 @@ export function notificationText(result, config) {
     'Queue: https://docs.google.com/spreadsheets/d/' + config.spreadsheetId + '/edit#gid=' + config.sheetId,
     'PREPARED only. Review the exact saved materials before a separate deliberate submission. Buyer acceptance and payment have not been recorded.'].join('\n');
 }
+
+// n8n Slack V2 renames the vendor's ts field to message_timestamp.
+export function confirmedReminder(reminder, response) {
+  const timestamp = response.message_timestamp ?? response.ts;
+  if (response.error || response.ok === false || typeof timestamp !== 'string' || !/^\d+\.\d+$/.test(timestamp)
+    || response.message_timestamp && response.ts && response.message_timestamp !== response.ts) {
+    throw new Error('Slack did not confirm the reminder. Preserve the saved job and reconcile notification delivery.');
+  }
+  return {task_id:reminder.task_id,notified_job_id:reminder.job_id,handover_note:'Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.'};
+}

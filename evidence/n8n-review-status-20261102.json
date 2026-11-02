@@ -20,8 +20,13 @@
   "portalStateAfterDiscardingPreflight": "IMPLEMENT CHANGES",
   "draftPullRequest": "https://github.com/cognitive-emergence/prooftask-integrations/pull/9",
   "previousUploadPreflightExportSha256": "f62ffd24a673e04715c222b1a8990019395e0dc6600fa15b14b216b8a04d9377",
-  "finalCandidateUploadPreflightPassed": true,
-  "engineVerification": "evidence/n8n-lifecycle-engine-20261102.json",
+  "finalCandidateUploadPreflightPassed": false,
+  "engineVerification": "evidence/n8n-native-provider-engine-20261102.json",
   "engineVerificationPassed": true,
-  "liveGoogleSheetsAndSlackAccepted": false
+  "liveGoogleSheetsAndSlackAccepted": false,
+  "currentCandidateSha256": "53ca3e0f0a2499134bec8785b4ab6d0f31592b6b0f9c4fd30afa35b207f22511",
+  "previousFinalCandidatePreflightPassed": true,
+  "nativeProviderNodesVerified": true,
+  "localBrowserVerification": "evidence/n8n-local-lab-20261102.json",
+  "simulatedValidationAuthorizedByOwner": true
 }

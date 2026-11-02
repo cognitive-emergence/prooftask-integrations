@@ -1,0 +1,22 @@
+{
+  "ok": true,
+  "nativeGoogleSheetsAndSlackNodes": true,
+  "providerRequests": 130,
+  "engine": "n8n 2.39.8",
+  "combinedWorkflow": true,
+  "exportSha256": "53ca3e0f0a2499134bec8785b4ab6d0f31592b6b0f9c4fd30afa35b207f22511",
+  "actualProoftaskAPI": true,
+  "syntheticGoogleSheetsAndSlack": true,
+  "productionWrites": 0,
+  "savedJobs": 4,
+  "observedAt": "2026-11-02T08:13:20.155824+00:00",
+  "scope": "Real n8n Google Sheets and Slack nodes with API-contract simulations and fake credentials; no live OAuth or vendor workspace delivery.",
+  "scenarioChecks": [
+    "PASS actual engine: real preparation, missing-row feedback, normal rerun skips the notified job.",
+    "PASS actual engine: lost sheet writeback recovers the same server job and frozen request.",
+    "PASS actual engine: failed reminder resumes by saved job ID without preparing again.",
+    "PASS unified actual engine: approval guard, deliberate submission/replay, automatic pending readback, correction/new delivery identity, exact acceptance and revoked readback."
+  ],
+  "sheetWriteRequests": 132,
+  "slackMessagesCaptured": 4
+}
