@@ -1,0 +1,61 @@
+{
+  "observedAt": "2026-11-02T08:39:14.707265+00:00",
+  "existingRuntimeSearch": {
+    "localPort5678": "No existing listener before setup",
+    "localConfiguration": "No prior n8n database/configuration found in checked locations",
+    "railwayProjectsChecked": 5,
+    "n8nServicesFound": 0
+  },
+  "version": "n8n 2.39.8",
+  "editorUrl": "http://localhost:5678",
+  "listenAddress": "127.0.0.1",
+  "providerStateUrl": "http://127.0.0.1:5680/lab/state",
+  "workflowIds": [
+    "prooftask-delivery-lifecycle-review",
+    "prooftask-delivery-lifecycle-lab"
+  ],
+  "candidateSha256": "53ca3e0f0a2499134bec8785b4ab6d0f31592b6b0f9c4fd30afa35b207f22511",
+  "browserRuns": [
+    {
+      "id": "1",
+      "status": "Succeeded",
+      "durationSeconds": 6.851
+    },
+    {
+      "id": "2",
+      "status": "Succeeded",
+      "durationSeconds": 2.115
+    }
+  ],
+  "repeatRunChecks": {
+    "jobIdUnchanged": true,
+    "requestIdUnchanged": true,
+    "reminderIdUnchanged": true,
+    "messages": 1,
+    "providerRequests": 22
+  },
+  "initialRows": [
+    {
+      "task_id": "local-client-v1",
+      "handover_state": "PREPARED",
+      "job_saved": true,
+      "reminder_marked": true
+    },
+    {
+      "task_id": "local-missing-materials",
+      "handover_state": "NEEDS_INPUT",
+      "job_saved": false,
+      "reminder_marked": false
+    }
+  ],
+  "credentialStorage": {
+    "localOnly": true,
+    "permissionMode": "0600",
+    "excludedFromGit": true,
+    "valuesPublished": false
+  },
+  "simulationOnly": true,
+  "liveGoogleOAuthVerified": false,
+  "liveSlackDeliveryVerified": false,
+  "productionWrites": 0
+}

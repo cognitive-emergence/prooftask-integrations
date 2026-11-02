@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import { selectQueue, inspectDelivery, checkProject, confirmSnapshot, assessJob, notificationText } from '../scripts/n8n-delivery-queue.mjs';
+import { selectQueue, inspectDelivery, checkProject, confirmSnapshot, assessJob, notificationText, confirmedReminder } from '../scripts/n8n-delivery-queue.mjs';
 import { deliveryQueueWorkflow } from '../scripts/build-n8n-delivery-queue.mjs';
 
 const project = 'delivery_' + randomUUID(), request = randomUUID(), job = 'job_' + 'a'.repeat(64);
@@ -88,4 +88,10 @@ test('export is reproducible, inactive and scoped; source snapshots remain intac
   assert.equal(flow.connections['Persist retry identity'].main[0][0].node, 'Read persisted request');
   assert.equal(flow.connections['Confirm persisted request'].main[0][0].node, 'Prepare saved delivery');
   assert.equal(flow.connections['Notify responsible team'].main[0][0].node, 'Remember successful reminder');
+});
+
+test('native Slack message_timestamp and vendor ts confirm one reminder; failed or conflicting receipts do not', () => {
+  const reminder = {task_id:'review-1',job_id:job};
+  for (const response of [{ok:true,message_timestamp:'123.000001'},{ok:true,ts:'123.000001'},{message_timestamp:'123.000001',ts:'123.000001'}]) assert.equal(confirmedReminder(reminder,response).notified_job_id,job);
+  for (const response of [{},{ok:false,message_timestamp:'123.000001'},{error:'channel_not_found',ts:'123.000001'},{message_timestamp:'123.000001',ts:'456.000001'},{message_timestamp:123}]) assert.throws(()=>confirmedReminder(reminder,response),/Slack did not confirm/);
 });

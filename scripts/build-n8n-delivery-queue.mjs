@@ -1,6 +1,6 @@
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { selectQueue, inspectDelivery, checkProject, confirmSnapshot, assessJob, notificationText } from './n8n-delivery-queue.mjs';
+import { selectQueue, inspectDelivery, checkProject, confirmSnapshot, assessJob, notificationText, confirmedReminder } from './n8n-delivery-queue.mjs';
 
 export function deliveryQueueWorkflow() {
   const nodes = [], connections = {};
@@ -50,7 +50,7 @@ export function deliveryQueueWorkflow() {
   condition('Ready for owner reminder', [4180, 120], "={{ $json.handover_state === 'PREPARED' && $json.notified_job_id !== $json.job_id ? 'YES' : 'NO' }}", 'YES');
   code('Build owner reminder', [4400, 20], notificationText, `return [{json:{...$input.first().json,text:run($input.first().json,${config})},${pair}}];`);
   add('Notify responsible team', 'slack', 2.3, [4620, 20], { authentication: 'accessToken', resource: 'message', operation: 'post', select: 'channel', channelId: { __rl: true, value: `={{ ${config}.slackChannelId }}`, mode: 'id' }, messageType: 'text', text: '={{ $json.text }}', otherOptions: { includeLinkToWorkflow: false, mrkdwn: false, link_names: false, unfurl_links: false, unfurl_media: false } }, { notes: 'Select a Slack credential authorized for this channel. Only task/job IDs and review links are sent, never original material contents. A failed reminder stops here; a rerun resumes the saved job.', notesInFlow: true });
-  add('Remember successful reminder', 'code', 2, [4840, 20], { jsCode: `const reminder=$('Build owner reminder').item.json; const response=$input.first().json; if(!response.ts || response.error || response.ok===false)throw new Error('Slack did not confirm the reminder. Preserve the saved job and reconcile notification delivery.');return [{json:{task_id:reminder.task_id,notified_job_id:reminder.job_id,handover_note:'Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.'},${pair}}];` });
+  code('Remember successful reminder', [4840, 20], confirmedReminder, `return [{json:run($('Build owner reminder').item.json,$input.first().json),${pair}}];`);
   update('Mark reminder delivered', [5060, 20], ['task_id', 'notified_job_id', 'handover_note']);
   update('Write actionable feedback', [2420, 640], ['task_id', 'handover_state', 'handover_note']);
   add('Queue run complete', 'noOp', 1, [1100, 60], {});

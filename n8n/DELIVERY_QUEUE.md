@@ -1,10 +1,12 @@
 # Prepare client delivery reviews from Google Sheets
 
+> Status checked 2026-11-02: #21159 is not currently verified as published; the owner received a rejection and the public listing/API return 404. References to publication below describe the previous export. For the new single-import workflow, use [delivery lifecycle setup](DELIVERY_LIFECYCLE.md).
+
 For automation consultants who keep a delivery checklist in Google Sheets and need to hand the actual materials to a responsible reviewer. This template reads the queue, identifies missing input, checks the current agreed criteria in Prooftask, saves a delivery job, writes the job ID back and posts an internal Slack reminder.
 
 **The endpoint is an internal review handoff.** Preparation saves a job; it does not submit delivery, accept work, sign or pay. The owner reviews the saved materials before using the existing separate [send-job workflow](send-job.json). Only the authorized buyer records acceptance.
 
-For the next steps, use the [complete delivery loop](DELIVERY_LOOP.md): deliberate saved-job submission, buyer review, a separate [queue status sync](sync-job-status.json), and production acceptance. This published preparation workflow skips already-notified jobs; it does not continually refresh their later acceptance status.
+For the next steps, use the [complete delivery loop](DELIVERY_LOOP.md): deliberate saved-job submission, buyer review, a separate [queue status sync](sync-job-status.json), and production acceptance. This preparation workflow skips already-notified jobs; it does not continually refresh their later acceptance status.
 
 ## Requirements
 

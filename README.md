@@ -41,11 +41,11 @@ Or import [n8n/discover-templates.json](n8n/discover-templates.json) into n8n an
 | Decide what a client should check | Search public templates above; no account required |
 | Connect an MCP client | Install the [published adapter](mcp/README.md) with `npx -y prooftask-mcp@0.1.1` (Node.js 24+) |
 | Hand over an n8n project | Agree scope and client checks with the [n8n handover checklist](https://prooftask.com/guides/n8n-handover-checklist) |
-| Manage a delivery queue with n8n | Import the [annotated n8n workflow](channels/n8n-prepare-client-delivery.json), then follow the [complete delivery loop](n8n/DELIVERY_LOOP.md) |
+| Manage a delivery queue with n8n | Import the [single-workflow lifecycle candidate](n8n/delivery-lifecycle.json), then follow its [setup and recovery guide](n8n/DELIVERY_LIFECYCLE.md) |
 | Prepare a client delivery job | Use an existing authorized project and [n8n setup](n8n/README.md); preparation saves a job before any send |
 | Evaluate adoption for your service team | Read the [provider guide](providers/README.md) |
 
-The [n8n delivery queue template #21159](https://n8n.io/workflows/21159-prepare-reviewable-client-delivery-jobs-from-google-sheets-with-prooftask-and-slack/) is published. It prepares saved jobs and internal Slack review. Follow the [complete delivery loop](n8n/DELIVERY_LOOP.md) for deliberate submission, buyer review, queue status sync and production acceptance. Listing approval covers the published preparation template; live service credentials and result writeback remain your setup.
+The n8n submission #21159 is not currently verified as published: the owner received a rejection on 2026-11-02 and the official listing/API return 404. Import the [delivery lifecycle candidate](n8n/delivery-lifecycle.json) and follow its [setup and review guide](n8n/DELIVERY_LIFECYCLE.md) to prepare, deliberately submit and sync buyer decisions in one workflow. This candidate has not been resubmitted or marketplace approved. Live Google Sheets/Slack acceptance remains separate.
 
 ## Choose an integration
 

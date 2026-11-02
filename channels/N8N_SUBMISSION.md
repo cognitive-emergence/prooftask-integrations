@@ -1,12 +1,18 @@
-# Published n8n template #21159
+# n8n submission #21159 — follow-up
 
-## Current title and scope
+## Current status — 2026-11-02
+
+The owner supplied a rejection email dated 2026-11-02 stating that the workflow is too basic. On the same date, the public listing and `https://api.n8n.io/templates/workflows/21159` returned HTTP 404 (`Workflow not found` from the API). Earlier published observations below are retained as history, not current approval. Authenticated Creator Portal now shows the existing submission under Pending with `IMPLEMENT CHANGES`. At inspection, its last-submitted JSON recursively matched upstream preparation export `6d54a1af` (28 execution nodes plus seven notes). The frozen portal export remains in evidence; the current preparation and lifecycle exports now include the native Slack receipt correction. The corrected combined candidate was resubmitted to the existing #21159 entry on 2026-11-02; the dashboard now shows `UNDER REVIEW` with that date. A 404 alone does not establish a permanent removal.
+
+The [unified lifecycle candidate](../n8n/delivery-lifecycle.json) and [review package](../n8n/DELIVERY_LIFECYCLE.md) are ready for local review. The current candidate passed n8n 2.39.8 execution with native Google Sheets/Slack nodes calling local API-contract simulations; see [native-node evidence](../evidence/n8n-native-provider-engine-20261102.json). The owner authorized simulated validation. Actual vendor authorization and delivery are not claimed. The JSON replacement was submitted for human review. No separate reviewer message has been sent; marketplace approval remains pending. Keep the previous export intact for comparison.
+
+## Previous title and scope
 
 **Prepare reviewable client delivery jobs from Google Sheets with Prooftask and Slack**
 
 [Official listing](https://n8n.io/workflows/21159-prepare-reviewable-client-delivery-jobs-from-google-sheets-with-prooftask-and-slack/) · [Official template API](https://api.n8n.io/templates/workflows/21159)
 
-The published workflow reads selected Google Sheets rows, validates material mappings and current project access, persists the request and saved job, writes the result to the original queue and sends an internal Slack review reminder. It uses 28 execution nodes and seven canvas notes. The distributable JSON is [channels/n8n-prepare-client-delivery.json](n8n-prepare-client-delivery.json).
+The previous preparation export reads selected Google Sheets rows, validates material mappings and current project access, persists the request and saved job, writes the result to the original queue and sends an internal Slack review reminder. It uses 28 execution nodes and seven canvas notes. The distributable JSON is [channels/n8n-prepare-client-delivery.json](n8n-prepare-client-delivery.json).
 
 Preparation stops at internal review. Submission uses the separate saved-job workflow after explicit review and approval. Buyer acceptance, record issuance, signing and payment remain distinct.
 
@@ -17,7 +23,7 @@ Preparation stops at internal review. Submission uses the separate saved-job wor
 3. Run one manual execution per queue at a time. Preserve the saved request and job IDs on retries. An uncertain Slack response may duplicate a reminder.
 4. Follow the [complete delivery loop](../n8n/DELIVERY_LOOP.md) for review, deliberate submission, buyer decision, separate queue status sync and production acceptance.
 
-No community nodes, credentials or real customer materials are included in the published export. The separate submission, event receiver and status-sync examples are not part of the marketplace-approved preparation template. Keep the approved JSON unchanged unless deliberately revising that publication.
+No community nodes, credentials or real customer materials are included in the previous preparation export. The separate submission, event receiver and status-sync examples are not part of the previous preparation template. The new candidate is a separate file so the previous submission can be compared exactly.
 
 ## Publication evidence and history
 
@@ -26,4 +32,4 @@ No community nodes, credentials or real customer materials are included in the p
 - On 2026-10-28 the official public API returned `status=published` and `reviewStatus=published`; its workflow JSON matches the repository's annotated export after normalizing object key order.
 - The existing isolated engine validation used n8n 2.39.8 and an isolated Prooftask API; Google Sheets and Slack transport were synthetic. Production OAuth, an actual receiver write and customer acceptance require their own observed evidence.
 
-Maintain this existing listing rather than submitting duplicates. The Creator Portal management page is https://creators.n8n.io/workflows/21159/edit (creator login required). A public listing or a successful synthetic test does not establish production integration.
+Check this existing submission in the Creator Portal before deciding whether to revise it; avoid duplicate submissions. The Creator Portal management page is https://creators.n8n.io/workflows/21159/edit (creator login required). A public listing or a successful synthetic test does not establish production integration.

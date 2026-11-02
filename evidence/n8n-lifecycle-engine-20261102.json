@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "engine": "n8n 2.39.8",
+  "combinedWorkflow": true,
+  "exportSha256": "14c502e3b189b7b3835eab0a06451c3f07809b73d2aff080bbd121abcb879a02",
+  "actualProoftaskAPI": true,
+  "syntheticGoogleSheetsAndSlack": true,
+  "productionWrites": 0,
+  "savedJobs": 4,
+  "observedAt": "2026-11-02T07:43:20.877307+00:00",
+  "nodeVersion": "24.22.0",
+  "liveGoogleSheetsAndSlackAccepted": false,
+  "scenarioChecks": [
+    "actual engine: real preparation, missing-row feedback, normal rerun skips the notified job.",
+    "actual engine: lost sheet writeback recovers the same server job and frozen request.",
+    "actual engine: failed reminder resumes by saved job ID without preparing again.",
+    "unified actual engine: approval guard, deliberate submission/replay, automatic pending readback, correction/new delivery identity, exact acceptance and revoked readback."
+  ],
+  "environmentRepair": {
+    "initialAttempt": "Interrupted at revoked-readback execution by npm dependency rollback after unrelated Kafka driver build failure",
+    "cleanRerun": "Passed after installation fully completed and required native modules were rebuilt",
+    "runtime": "Local isolated n8n database and Prooftask API; Google Sheets and Slack transports are fixtures"
+  },
+  "prooftaskSourceCommit": "b8d27a9cfe94c394cb51cb7e54ccf5d8648c8f38",
+  "prooftaskTrackedSourceChanges": false
+}

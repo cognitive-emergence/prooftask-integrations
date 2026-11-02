@@ -1,9 +1,11 @@
 # Complete the n8n delivery loop
 
+> Status checked 2026-11-02: #21159 is not currently verified as published; the owner received a rejection and the public listing/API return 404. References to publication below describe the previous export. For the new single-import workflow, use [delivery lifecycle setup](DELIVERY_LIFECYCLE.md).
+
 There are two different starting points:
 
 - **Hand over an n8n project to a client:** use the [handover checklist](https://prooftask.com/guides/n8n-handover-checklist) to agree scope, test cases, original materials and operating responsibilities. The agreement uses the existing Prooftask business-automation specification.
-- **Use n8n to manage Prooftask deliveries:** connect the published preparation workflow, a deliberate submission step and a separate result sync as described below. Your deliverable need not itself be an n8n workflow.
+- **Use n8n to manage Prooftask deliveries:** connect the preparation workflow, a deliberate submission step and a separate result sync as described below. Your deliverable need not itself be an n8n workflow.
 
 ## 1. Agree and connect
 
@@ -13,9 +15,9 @@ Choose the Google Sheets queue and authorized internal Slack review channel. Use
 
 ## 2. Prepare and review
 
-Import [published n8n template #21159](https://n8n.io/workflows/21159-prepare-reviewable-client-delivery-jobs-from-google-sheets-with-prooftask-and-slack/) or the identical [annotated JSON](../channels/n8n-prepare-client-delivery.json). Follow the complete [configuration and recovery guide](DELIVERY_QUEUE.md).
+Import the [annotated preparation JSON](../channels/n8n-prepare-client-delivery.json). The historical #21159 library link is currently unavailable. Follow the complete [configuration and recovery guide](DELIVERY_QUEUE.md).
 
-The published template is the preparation workflow only: read selected rows, check current criteria and material metadata, persist and read back `request_id` and `request_json`, save the Prooftask job, write `job_id` and notify Slack. `PREPARED` is an internal handoff label. It is not submission or buyer acceptance.
+This preparation export handles preparation only: read selected rows, check current criteria and material metadata, persist and read back `request_id` and `request_json`, save the Prooftask job, write `job_id` and notify Slack. `PREPARED` is an internal handoff label. It is not submission or buyer acceptance.
 
 The internal reviewer checks the frozen `request_json` and actual original files in the queue before approving submission. The Slack project link opens the authorized project; a prepared job has not yet attached a submitted material set to that project. Inspect the saved job through `GET /api/agents/v1/jobs/{jobId}` as needed. Do not assume the project page already displays unsubmitted materials.
 
@@ -35,7 +37,7 @@ Record issuance, paid coverage, signing and payment remain separate. The status 
 
 ## 5. Sync the result to the same queue
 
-The published preparation workflow skips already-notified rows. It is not a continuing acceptance-status poller. Import the separate [sync-job-status.json](sync-job-status.json) companion to read **all saved jobs**, including those rows.
+The preparation workflow skips already-notified rows. It is not a continuing acceptance-status poller. Import the separate [sync-job-status.json](sync-job-status.json) companion to read **all saved jobs**, including those rows.
 
 1. Add these exact new columns to the same sheet, leaving existing columns unchanged:
 
