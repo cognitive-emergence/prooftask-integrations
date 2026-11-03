@@ -1,6 +1,6 @@
 # MCP 0.1.2 compatibility candidate
 
-Status: npm 0.1.2 remains an unpublished candidate. Source/gateway work is tracked in pull request #10 and can deploy independently; npm publication remains a separate release step.
+Status: npm 0.1.2 remains an unpublished candidate. Source/gateway work from pull request #10 can be promoted independently through an explicitly reviewed commit pin; npm publication remains a separate release step.
 
 Base: integrations main `8e0e5f152eb653474b9aaca32f36cef18e6a7e9f`, whose tree matches the original reviewed `883352b1fbacdff56c2391e8741929aae41588c5` base.
 This candidate preserves the existing catalog-v1 tool names, routes, annotations,
@@ -64,10 +64,14 @@ require independent issuer trust and offline verification after download.
 ## Source/gateway phase and later package release
 
 The gateway imports the source adapter/catalog directly, without installing the npm
-package. Railway tracks main and watches those files plus the remote runtime, dependency
-files and Dockerfile. A reviewed source merge can therefore trigger a public-only
-deployment; verify its exact commit, three tools, template digest and private-tool
-refusal afterward. This does not repair installed npm 0.1.1 or publish private exports.
+package. Railway names main but pins an exact `source.commitSha`, disabling automatic
+deployment on branch pushes. Watch patterns include those files plus the remote
+runtime, dependency files and Dockerfile; a merge alone does not promote the source.
+Stage only the production public-MCP service's `source.commitSha` to the reviewed
+commit, inspect the exact one-field diff and obtain deployment approval before
+accepting it. Preserve commit pinning and all unrelated services, environments and
+settings. After promotion, verify the exact health commit, three tools, template
+digest and private-tool refusal. This does not repair installed npm 0.1.1 or publish private exports.
 
 Keep npm publication open: publish the exact reviewed 0.1.2 tarball through an
 authorized route, independently install and verify it, then advance both client
