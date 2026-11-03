@@ -84,8 +84,8 @@ export function deliveryLifecycleWorkflow() {
 For automation consultants managing client deliverables in Google Sheets. Choose one manual operation per run: prepare validated jobs and notify an internal Slack reviewer; deliberately submit one exact reviewed job; or sync buyer decisions to the original rows. Submission also refreshes queue status. Buyer review happens in Prooftask between runs. Corrections use a new task row, preserving delivery history.
 
 ### Setup
-1. Import the [sample queue](https://github.com/cognitive-emergence/prooftask-integrations/blob/fix/n8n-delivery-lifecycle-review/n8n/delivery-lifecycle-example.csv). Replace fictional data with actual material references, file metadata and agreed project criteria.
-2. Set spreadsheetId, numeric sheetId and slackChannelId in Configuration. Follow the [complete setup and recovery guide](https://github.com/cognitive-emergence/prooftask-integrations/blob/fix/n8n-delivery-lifecycle-review/n8n/DELIVERY_LIFECYCLE.md).
+1. Import the [sample queue](https://github.com/cognitive-emergence/prooftask-integrations/blob/main/n8n/delivery-lifecycle-example.csv). Replace fictional data with actual material references, file metadata and agreed project criteria.
+2. Set spreadsheetId, numeric sheetId and slackChannelId in Configuration. Follow the [complete setup and recovery guide](https://github.com/cognitive-emergence/prooftask-integrations/blob/main/n8n/DELIVERY_LIFECYCLE.md).
 3. Use the same Google Sheets OAuth credential on every Sheet node, the original project-scoped Agent Header Auth on all five Prooftask HTTP nodes, and an internal Slack bot with chat:write.
 4. Run operation=prepare. Review the frozen request and originals. For operation=submit, set reviewedTaskId, reviewedRequestId, reviewedJobId and submitConfirmed=true deliberately. Reset confirmation afterwards.
 5. After buyer action, run operation=sync; inspect review_next_action and review_accepted.
