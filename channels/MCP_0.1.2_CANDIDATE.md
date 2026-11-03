@@ -43,12 +43,12 @@ reviewed release must publish npm 0.1.2 before distributing its npx pins, then
 review/update registry metadata and verify the actual installed package and
 hosted gateway independently. This document authorizes none of those actions.
 
-The active registry publication workflow remains unchanged. Its reviewed assertions
-currently require server metadata 0.1.4/npm 0.1.1 and will reject this candidate.
-Before any future authorized publication, separately review the two version-only
-assertion changes to 0.1.5/0.1.2; preserve its trigger, permissions, pinned publisher
-checksum and all other metadata checks. The older workflow example in `channels/`
-is historical and is not a release command.
+The manual registry publication workflow's two version assertions are prepared for
+server metadata 0.1.5/npm 0.1.2. Its manual trigger, permissions, pinned publisher
+checksum and all other metadata checks remain unchanged. This candidate has not
+dispatched publication. Publish and independently verify npm 0.1.2 before making
+the registry metadata/pins the active release. The older workflow example in
+`channels/` remains historical and is not a release command.
 
 ## Deliberate limits
 

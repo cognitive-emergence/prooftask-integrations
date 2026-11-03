@@ -20,7 +20,7 @@ jobs:
           import json
           v=json.load(open('server.json'))
           assert v['name']=='io.github.cognitive-emergence/prooftask'
-          assert v['version']=='0.1.4'
+          assert v['version']=='0.1.5'
           assert v['description'].startswith('Free public ')
           assert len(v['description']) <= 100
           assert v['websiteUrl']=='https://prooftask.com/developers'
@@ -30,7 +30,7 @@ jobs:
           assert metadata['tools']==metadata['publicTools']
           assert metadata['publicDiscovery']=={'price':0,'currency':'USD','credentialRequired':False}
           assert 'Hosted public MCP' in metadata['pricingScope'] and 'separate' in metadata['pricingScope']
-          assert v['packages']==[{'registryType':'npm','identifier':'prooftask-mcp','version':'0.1.1','transport':{'type':'stdio'}}]
+          assert v['packages']==[{'registryType':'npm','identifier':'prooftask-mcp','version':'0.1.2','transport':{'type':'stdio'}}]
           assert v['remotes']==[{'type':'streamable-http','url':'https://prooftask-public-mcp-production.up.railway.app/mcp'}]
           PY
       - name: Install the reviewed official publisher
