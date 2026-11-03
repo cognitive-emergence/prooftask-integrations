@@ -1,6 +1,6 @@
 # MCP 0.1.2 compatibility candidate
 
-Status: DRAFT PULL REQUEST #10 — not published or released.
+Status: DRAFT PULL REQUEST #10 — source/gateway fix under review; npm 0.1.2 remains unpublished. A source merge can deploy the public gateway independently of npm.
 
 Base: integrations main `8e0e5f152eb653474b9aaca32f36cef18e6a7e9f`, whose tree matches the original reviewed `883352b1fbacdff56c2391e8741929aae41588c5` base.
 This candidate preserves the existing catalog-v1 tool names, routes, annotations,
@@ -31,9 +31,9 @@ service change is claimed.
 ## Prepared future-release files
 
 - `mcp/package.json`: npm candidate 0.1.2.
-- Both MCP client JSON examples: future `prooftask-mcp@0.1.2` pin.
-- `mcp/server.json.example`: registry metadata candidate 0.1.5, npm package 0.1.2.
-- README/CHANGELOG: explicit candidate status; old 0.1.1 evidence remains historical.
+- Both active MCP client JSON examples retain published `prooftask-mcp@0.1.1`.
+- `mcp/server.json.example` retains active registry metadata 0.1.4/npm 0.1.1.
+- Packaged README/CHANGELOG describe version behavior without claiming availability; this channel document retains unpublished status.
 - `ASSET_PROVENANCE.json`: original retrieval/hashes retained, local backports and
   source commit recorded separately; current file hashes do not pretend to be an
   unchanged upstream download.
@@ -43,8 +43,8 @@ reviewed release must publish npm 0.1.2 before distributing its npx pins, then
 review/update registry metadata and verify the actual installed package and
 hosted gateway independently. This document authorizes none of those actions.
 
-The manual registry publication workflow's two version assertions are prepared for
-server metadata 0.1.5/npm 0.1.2. Its manual trigger, permissions, pinned publisher
+The manual registry publication workflow's two version assertions retain
+server metadata 0.1.4/npm 0.1.1. Its manual trigger, permissions, pinned publisher
 checksum and all other metadata checks remain unchanged. The download URL now names
 immutable publisher v1.8.1, whose downloaded bytes and official asset digest both
 match the existing SHA256 `a06c9096dcb9727c13555b6be26c7effa707b01f06a4c561ba7a3635443cf2cc`.
@@ -60,3 +60,16 @@ New draft HOLDER-signing and trust-policy options remain outside the old catalog
 their conditional validation requires a separate change. No permissions, signatures,
 acceptance decisions or payment behavior are added. Record/Status signatures still
 require independent issuer trust and offline verification after download.
+
+## Source/gateway phase and later package release
+
+The gateway imports the source adapter/catalog directly, without installing the npm
+package. Railway tracks main and watches those files plus the remote runtime, dependency
+files and Dockerfile. A reviewed source merge can therefore trigger a public-only
+deployment; verify its exact commit, three tools, template digest and private-tool
+refusal afterward. This does not repair installed npm 0.1.1 or publish private exports.
+
+Keep npm publication open: publish the exact reviewed 0.1.2 tarball through an
+authorized route, independently install and verify it, then advance both client
+pins and registry metadata/version assertions together to 0.1.2/0.1.5. No registry
+dispatch is required for this source phase.

@@ -82,7 +82,7 @@ Preparation, submission, acceptance, record issuance and payment are distinct. T
 - [Agent workflow guide](https://prooftask.com/developers/agent-workflows.md)
 - [Trust and verification boundaries](https://prooftask.com/trust)
 
-Public template discovery is available over [hosted Streamable HTTP](remote/README.md) without a credential. The npm adapter uses local stdio for separately authorized private workflows. The existing immutable publication is [prooftask-mcp@0.1.1](https://www.npmjs.com/package/prooftask-mcp). This checkout prepares 0.1.2; it has not been published and its release pins are candidates only. The [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.cognitive-emergence%2Fprooftask) publishes the independently versioned server metadata; see the registry for its current status. See [channel status](channels/STATUS.md) for verified distribution status.
+Public template discovery is available over [hosted Streamable HTTP](remote/README.md) without a credential. The npm adapter uses local stdio for separately authorized private workflows. The existing immutable publication is [prooftask-mcp@0.1.1](https://www.npmjs.com/package/prooftask-mcp). This checkout prepares 0.1.2; it has not been published and active client examples remain pinned to 0.1.1 and registry metadata remains at 0.1.4. The [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.cognitive-emergence%2Fprooftask) publishes the independently versioned server metadata; see the registry for its current status. See [channel status](channels/STATUS.md) for verified distribution status.
 
 ## Validation and maintenance
 

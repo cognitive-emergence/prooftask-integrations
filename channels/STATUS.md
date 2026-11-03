@@ -5,11 +5,24 @@ Updated 2026-11-02 for n8n. Other channel evidence retains its original observat
 | Channel | Verified state |
 | --- | --- |
 | GitHub | Public integration repository with MCP adapter, n8n preparation/submission/status examples and provider guidance |
-| npm | [prooftask-mcp@0.1.0](https://www.npmjs.com/package/prooftask-mcp) published; clean installation and stdio initialize/tools-list passed with 21 read-only tools |
-| Official MCP Registry | io.github.cognitive-emergence/prooftask version 0.1.0 published and independently returned as active/latest by the public API at 2026-10-17T15:14Z |
+| npm | Current public metadata: prooftask-mcp@0.1.1; source 0.1.2 remains unpublished. See dated verification below. |
+| Official MCP Registry | Current public metadata: active/latest server 0.1.4, npm 0.1.1, existing hosted URL. |
 | n8n | Not currently verified as published. The owner supplied a 2026-11-02 rejection email; listing #21159 and the official API return 404. Earlier published observations below are historical. The corrected lifecycle candidate was resubmitted to #21159 on 2026-11-02; authenticated Creator Portal shows UNDER REVIEW. Native Google Sheets/Slack nodes passed local API simulations and two browser runs. Marketplace approval and live vendor authorization/delivery remain unverified. |
 | Service providers | Public onboarding guidance; no outreach or adoption claimed |
 | Public customer cases | Requires real projects and bilateral approval |
+
+## MCP observation — 2026-11-04
+
+Public npm metadata currently reports latest `prooftask-mcp@0.1.1`; 0.1.2 is absent.
+The official registry currently reports active/latest server metadata 0.1.4 with
+npm 0.1.1 and the hosted public URL. These observations supersede older dated MCP
+release observations below, which remain historical.
+
+Hosted health reports `ok`, exactly three public tools, `privateTools:false`, commit
+`cee21fd6f357a218f948470347d0815fb1685fa4` and deployment
+`57864952-bdae-4f3d-bb4d-af19f923a5ae`. PR10 source/gateway fixes are separate from
+unpublished npm 0.1.2; active npm/registry pins remain unchanged. Verify the deployed
+commit after source rollout. See [phase and release requirements](MCP_0.1.2_CANDIDATE.md).
 
 ## Publication evidence (historical observations)
 

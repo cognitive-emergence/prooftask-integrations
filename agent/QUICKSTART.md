@@ -2,14 +2,14 @@
 
 Requires Node.js 24+. Start without an account or credential.
 
-This checkout contains the unpublished 0.1.2 compatibility candidate. Its prepared
-client JSON pins target that future release; use an absolute Node executable and
-this checkout's `mcp/agent-mcp.mjs` until publication is separately authorized.
+This checkout contains the unpublished 0.1.2 compatibility candidate. Active client JSON pins remain at published 0.1.1, which retains its earlier
+export-redaction behavior. To use the source fixes, use an absolute Node executable
+and this checkout's `mcp/agent-mcp.mjs`; npm publication is a separate pending step.
 The v1 tool names, argument envelopes and HTTP response wrapper remain unchanged.
 
 ## MCP client (Claude Desktop, Cursor or another stdio client)
 
-For this unpublished checkout, configure an absolute Node executable and the absolute path to `mcp/agent-mcp.mjs` in your existing `mcpServers` object. Preserve other servers. The prepared [mcp-client.json](../mcp/mcp-client.json) uses the future npm 0.1.2 pin and is for after separately authorized publication. Restart or reconnect the client, then ask:
+For this unpublished checkout, configure an absolute Node executable and the absolute path to `mcp/agent-mcp.mjs` in your existing `mcpServers` object. Preserve other servers. The active [mcp-client.json](../mcp/mcp-client.json) uses published npm 0.1.1 and does not contain these source fixes. Restart or reconnect the client, then ask:
 
 > Use Prooftask getAgentCapabilities and summarize the supported connection and workflow options. Do not create or modify anything.
 
