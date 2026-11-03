@@ -10,7 +10,7 @@ Public hosted discovery is **free**: no credential is needed for `getAgentCapabi
 
 This checkout prepares a reviewable 0.1.2 candidate. It preserves the existing 45-tool
 catalog, 23 read-only tools and `{httpStatus,data}` response wrapper; it does not
-replace them with the website's separate 16 task tools. No npm or registry release
+replace them with the website's separately versioned task-level tools. No npm or registry release
 of this candidate is claimed. The client JSON files and registry metadata are
 prepared for that future release and must not be used as evidence of availability.
 

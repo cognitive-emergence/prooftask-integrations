@@ -1,8 +1,8 @@
 # MCP 0.1.2 compatibility candidate
 
-Status: LOCAL CANDIDATE — not published, pushed, submitted or released.
+Status: DRAFT PULL REQUEST #10 — not published or released.
 
-Base: integrations commit `883352b1fbacdff56c2391e8741929aae41588c5`.
+Base: integrations main `8e0e5f152eb653474b9aaca32f36cef18e6a7e9f`, whose tree matches the original reviewed `883352b1fbacdff56c2391e8741929aae41588c5` base.
 This candidate preserves the existing catalog-v1 tool names, routes, annotations,
 top-level argument envelopes and `{httpStatus,data}` MCP result wrapper. The
 website's task-level v2 MCP is a separate interface and is not copied here.
@@ -45,7 +45,10 @@ hosted gateway independently. This document authorizes none of those actions.
 
 The manual registry publication workflow's two version assertions are prepared for
 server metadata 0.1.5/npm 0.1.2. Its manual trigger, permissions, pinned publisher
-checksum and all other metadata checks remain unchanged. This candidate has not
+checksum and all other metadata checks remain unchanged. The download URL now names
+immutable publisher v1.8.1, whose downloaded bytes and official asset digest both
+match the existing SHA256 `a06c9096dcb9727c13555b6be26c7effa707b01f06a4c561ba7a3635443cf2cc`.
+This repairs the mutable `latest` URL without upgrading the trusted binary. This candidate has not
 dispatched publication. Publish and independently verify npm 0.1.2 before making
 the registry metadata/pins the active release. The older workflow example in
 `channels/` remains historical and is not a release command.
