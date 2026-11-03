@@ -8,6 +8,23 @@ An automation consultant tracks client delivery revisions in Google Sheets. Prev
 
 For a ready-to-run personal simulation environment, see [Local n8n lab](LOCAL_LAB.md). The lab uses fake credentials and does not require connecting your Google or Slack accounts.
 
+## Connect Google Sheets and Slack first
+
+Reuse existing authorized credentials where available. Otherwise, choose the setup matching your n8n hosting below and review the requested permissions before authorizing. Store secrets only in n8n Credentials, never in the Sheet, workflow export or chat. The separate project-scoped Prooftask Header Auth setup remains in **Configure once**.
+
+**Google Sheets:** Follow [n8n’s Google credential guide](https://docs.n8n.io/integrations/builtin/credentials/google/oauth-single-service/).
+
+- **n8n Cloud, Managed OAuth2:** Choose **Sign in with Google** in the Google Sheets credential; no custom Google Cloud app is required.
+- **Self-hosted, or Cloud with Custom OAuth2:** Choose an authorized Google Cloud project, enable both **Google Sheets API** and **Google Drive API**, and configure the OAuth consent screen. For an External app in Testing, add the intended account as a test user. Create a **Web application** OAuth client and register the exact callback URL copied from your own n8n credential. Enter its Client ID and Client Secret directly in that credential, then complete Google authorization. Do not copy another instance’s callback URL.
+
+Use the connected account’s authorized queue with read/write access; select that credential on every Sheet node below.
+
+**Slack:** The current export uses **Slack API / Access Token**, not the OAuth2 credential. Reuse an authorized bot, or create a Slack app with reviewed bot scope [`chat:write`](https://docs.slack.dev/reference/scopes/chat.write/), install it in the authorized workspace, and invite the bot to an owner-controlled private test channel. Copy its channel ID into Configuration and paste the bot token only into n8n’s Slack API credential.
+
+The [n8n Slack credential guide](https://docs.n8n.io/integrations/builtin/credentials/slack/) also documents OAuth2: Cloud offers **Connect my account**; self-hosted setup needs an app’s Client ID/Secret, the exact n8n callback and workspace installation. That alternative requires deliberately changing the Slack node’s authentication; it does not connect this export unchanged. Review scopes rather than copying the guide’s broad manifest: this workflow posts to a known channel ID with `chat:write`.
+
+Before enabling the workflow, complete the production acceptance checks below with your authorized test destinations.
+
 ## Configure once
 
 1. Import [delivery-lifecycle-example.csv](delivery-lifecycle-example.csv) into Google Sheets. It includes preparation and review columns. All sample IDs and file references are fictional; sample rows start with `ready_for_review=NO`.
