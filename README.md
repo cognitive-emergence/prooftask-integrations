@@ -39,7 +39,7 @@ Or import [n8n/discover-templates.json](n8n/discover-templates.json) into n8n an
 | Your task | Shortest next step |
 | --- | --- |
 | Decide what a client should check | Search public templates above; no account required |
-| Connect an MCP client | Install the [published adapter](mcp/README.md) with `npx -y prooftask-mcp@0.1.1` (Node.js 24+) |
+| Connect an MCP client | Review the [unpublished 0.1.2 compatibility candidate](mcp/README.md); run this checkout with `node mcp/agent-mcp.mjs` (Node.js 24+) |
 | Hand over an n8n project | Agree scope and client checks with the [n8n handover checklist](https://prooftask.com/guides/n8n-handover-checklist) |
 | Manage a delivery queue with n8n | Import the [single-workflow lifecycle candidate](n8n/delivery-lifecycle.json), then follow its [setup and recovery guide](n8n/DELIVERY_LIFECYCLE.md) |
 | Prepare a client delivery job | Use an existing authorized project and [n8n setup](n8n/README.md); preparation saves a job before any send |
@@ -82,7 +82,7 @@ Preparation, submission, acceptance, record issuance and payment are distinct. T
 - [Agent workflow guide](https://prooftask.com/developers/agent-workflows.md)
 - [Trust and verification boundaries](https://prooftask.com/trust)
 
-Public template discovery is available over [hosted Streamable HTTP](remote/README.md) without a credential. The npm adapter uses local stdio for separately authorized private workflows. The adapter is published as [prooftask-mcp@0.1.1](https://www.npmjs.com/package/prooftask-mcp). The [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.cognitive-emergence%2Fprooftask) publishes the independently versioned server metadata; see the registry for its current status. See [channel status](channels/STATUS.md) for verified distribution status.
+Public template discovery is available over [hosted Streamable HTTP](remote/README.md) without a credential. The npm adapter uses local stdio for separately authorized private workflows. The existing immutable publication is [prooftask-mcp@0.1.1](https://www.npmjs.com/package/prooftask-mcp). This checkout prepares 0.1.2; it has not been published and active client examples remain pinned to 0.1.1 and registry metadata remains at 0.1.4. The [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.cognitive-emergence%2Fprooftask) publishes the independently versioned server metadata; see the registry for its current status. See [channel status](channels/STATUS.md) for verified distribution status.
 
 ## Validation and maintenance
 

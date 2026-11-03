@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Node 24+, dependency-free MCP 2025-11-25 stdio adapter over the existing API.
-import { readFileSync } from 'node:fs';
+import { readFileSync, realpathSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 export function validate(schema,value,root=schema) {
@@ -68,8 +68,13 @@ export function createAdapter({catalog,origin='https://prooftask.com',token,allo
       const reader=response.body.getReader();let size=0;const chunks=[];
       try{while(true){const r=await reader.read();if(r.done)break;size+=r.value.length;if(size>20_000_000){await reader.cancel();throw new Error('RESPONSE_LIMIT');}chunks.push(Buffer.from(r.value));}}finally{reader.releaseLock();}
       const data=JSON.parse(Buffer.concat(chunks).toString('utf8'));
-      // Never emit credentials, including accidentally reflected credentials in errors.
-      const clean=JSON.stringify(data).replace(/ptag_[A-Za-z0-9_-]+/g,'[REDACTED]');
+      // Successful API JSON is structured contract data; titles, evidence and
+      // snapshots may be signed or hash-bound. Never rewrite it by redaction.
+      // This is transport preservation, not independent signature verification.
+      const contractData=response.ok;
+      const serialized=JSON.stringify(data);
+      if(contractData&&typeof token==='string'&&token&&serialized.includes(token))return toolError(id,'RESPONSE_CONTAINS_CREDENTIAL',{nextAction:tool.route.mutating?'The response was withheld. Preserve the exact request and requestId; read the original project or saved job and reconcile before retrying. Ask the owner to remove the credential from the source material. Do not generate a replacement request.':'Do not share this response. Ask the owner to remove the credential from the source material and obtain a new response.'});
+      const clean=contractData?serialized:serialized.replace(/ptag_[A-Za-z0-9_-]+/g,'[REDACTED]');
       if(tool.route.mutating&&response.status>=500)return toolError(id,'RESULT_UNKNOWN',{httpStatus:response.status,nextAction:'Read the original project or saved job and reconcile the exact saved request before retrying. A server error does not prove the write failed.'});
       return result(id,{...(response.ok?{}:{isError:true}),content:[{type:'text',text:clean}],structuredContent:{httpStatus:response.status,data:JSON.parse(clean)}});
     }catch{return toolError(id,tool.route.mutating?'RESULT_UNKNOWN':'READ_UNAVAILABLE',{nextAction:'Preserve the exact request and requestId. Read the original project or saved job before retrying; do not generate a replacement request.'});}
@@ -91,7 +96,9 @@ export async function runStdio({input=process.stdin,output=process.stdout,handle
     if(buffer.length>1_100_000){buffer=Buffer.alloc(0);dropping=true;send({jsonrpc:'2.0',id:null,error:{code:-32600,message:'Request too large'}});}
   }
 }
-if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
+// npm binary links and macOS filesystem aliases must resolve to the same entry.
+function isMain(){try{return Boolean(process.argv[1])&&import.meta.url===pathToFileURL(realpathSync(process.argv[1])).href;}catch{return false;}}
+if(isMain()){
   try{
     const origin=process.env.PROOFTASK_ORIGIN||'https://prooftask.com';
     const stored=process.env.PROOFTASK_AGENT_TOKEN_FILE?JSON.parse(readFileSync(process.env.PROOFTASK_AGENT_TOKEN_FILE,'utf8')):undefined;

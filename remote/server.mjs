@@ -9,6 +9,7 @@ import {createAdapter} from '../mcp/agent-mcp.mjs';
 const catalog=JSON.parse(readFileSync(new URL('../mcp/agent-mcp-tools.json',import.meta.url)));
 const names=new Set(['getAgentCapabilities','searchPublicSpecifications','getPublicSpecification']);
 const publicCatalog={...catalog,tools:catalog.tools.filter(t=>names.has(t.name)&&!t.route.authenticated&&!t.route.mutating&&t.route.method==='GET')};
+if(publicCatalog.tools.length!==names.size)throw new Error('Public discovery catalog does not contain the three supported read tools');
 
 export function createPublicGateway({fetcher=fetch,allowedOrigins=[],allowedHosts=['localhost','127.0.0.1'],concurrencyLimit=8}={}) {
   const app=express();
@@ -20,7 +21,7 @@ export function createPublicGateway({fetcher=fetch,allowedOrigins=[],allowedHost
     res.set('Cache-Control','no-store');
     next();
   });
-  app.get('/health',(_req,res)=>res.json({schema:'prooftask.public-mcp-health/v1',status:'ok',commitSha:process.env.RAILWAY_GIT_COMMIT_SHA||null,deploymentId:process.env.RAILWAY_DEPLOYMENT_ID||null,tools:[...names],privateTools:false}));
+  app.get('/health',(_req,res)=>res.json({schema:'prooftask.public-mcp-health/v1',status:'ok',commitSha:process.env.RAILWAY_GIT_COMMIT_SHA||null,deploymentId:process.env.RAILWAY_DEPLOYMENT_ID||null,tools:publicCatalog.tools.map(tool=>tool.name),privateTools:false}));
   let active=0;
   app.post('/mcp',(req,res,next)=>{
     if(active>=concurrencyLimit)return res.status(429).set('Retry-After','5').json({error:'BUSY'});
