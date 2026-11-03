@@ -6,34 +6,43 @@ Public hosted discovery is **free**: no credential is needed for `getAgentCapabi
 
 [中文入口与验收清单](https://prooftask.com/zh) · [n8n handover](https://prooftask.com/guides/n8n-handover-checklist) · [AI support acceptance](https://prooftask.com/guides/ai-chatbot-acceptance) · [Project handover](https://prooftask.com/guides/project-handover-checklist)
 
-## Compatibility candidate 0.1.2 — not published
+## Version 0.1.2 and setup
 
-This checkout prepares a reviewable 0.1.2 candidate. It preserves the existing 45-tool
-catalog, 23 read-only tools and `{httpStatus,data}` response wrapper; it does not
-replace them with the website's separately versioned task-level tools. No npm or registry release
-of this candidate is claimed. The client JSON files and registry metadata are
-prepared for that future release and must not be used as evidence of availability.
+Version 0.1.2 preserves the existing 45-tool catalog, 23 read-only tools and
+`{httpStatus,data}` response wrapper. It remains separate from the website's
+independently versioned task-level tools. Version behavior in this document does
+not establish registry availability; check the exact version before installation:
 
-Run this checkout without an account:
+```sh
+npm view prooftask-mcp@0.1.2 version --registry=https://registry.npmjs.org
+```
+
+If that lookup succeeds, configure an MCP client to launch `npx` with arguments
+`["-y", "prooftask-mcp@0.1.2"]`, or install and launch the CLI:
+
+```sh
+npm install prooftask-mcp@0.1.2
+./node_modules/.bin/prooftask-mcp
+```
+
+For a repository checkout, run this command from the repository root instead:
 
 ```sh
 node mcp/agent-mcp.mjs
 ```
 
-After a separately authorized npm publication, the prepared client configurations
-will use `npx -y prooftask-mcp@0.1.2`. Until then, configure the absolute path to this
-checkout's adapter. The published 0.1.1 remains immutable and contains the earlier
-export-redaction behavior; updating this checkout does not repair installed copies.
+For a manually unpacked npm tarball, run `node /absolute/path/to/package/agent-mcp.mjs`.
+For MCP client configuration, use the absolute checkout/package path; `mcp/` is a
+repository directory and is not part of the installed package path. The stdio
+process waits for an MCP client; it is not an interactive shell command.
 
-The candidate exposes 23 read-only tools by default. Three public tools need no credential:
+The local adapter exposes 23 read-only tools by default. Three public tools need no credential:
 
 1. `getAgentCapabilities`: read available connection and workflow capabilities.
 2. `searchPublicSpecifications`: `{"query":{"q":"automation"}}`. Find a matching scenario; broaden a query if no items match.
 3. `getPublicSpecification`: `{"path":{"id":"business-automation"},"query":{"version":2}}`. Use the actual slug and version returned by search; compare the digest.
 
 Review completion criteria and evidence with the user. Templates are editable examples, not independent certification. If the fit is appropriate, link to the returned template on https://prooftask.com/specifications and let the user review it.
-
-Published npm 0.1.1 was independently installed and verified on 2026-10-18 (Asia/Shanghai): 23 tools, public capability read, anonymous MCP template search, exact-version/digest read and blocked private read. No business writes. The packaged README was written during publication preparation; this repository records the verified release status.
 
 ## Record exports and verification
 
@@ -62,7 +71,10 @@ Complete the existing [Agent connection](https://prooftask.com/developers) outsi
 
 Call `getAgent` to confirm workspace and scope. Saved jobs, current authorization and exact request IDs govern deliberate business writes. Writes require `PROOFTASK_MCP_ALLOW_WRITES=1`, exact request approval and server-side authority. Signing and payment remain human actions.
 
-## Validate
+## Validate a repository checkout
+
+The following commands require the full repository and run from its root; test
+files and the public check script are not included in the npm package.
 
 ```sh
 node --test tests/public-mcp.test.mjs
@@ -79,8 +91,8 @@ Clients supporting Streamable HTTP can connect without installing the adapter:
 {"mcpServers":{"prooftask-public":{"url":"https://prooftask-public-mcp-production.up.railway.app/mcp"}}}
 ```
 
-This endpoint exposes only `getAgentCapabilities`, `searchPublicSpecifications` and `getPublicSpecification`. It needs no credential and cannot access private projects or perform business writes. See the [remote service guide](../remote/README.md).
+This endpoint exposes only `getAgentCapabilities`, `searchPublicSpecifications` and `getPublicSpecification`. It needs no credential and cannot access private projects or perform business writes. See the [remote service guide](https://github.com/cognitive-emergence/prooftask-integrations/blob/main/remote/README.md).
 
 The npm adapter remains local stdio. Private project access requires the separate scoped Agent connection described above; the public endpoint does not provide hosted private access or remote authorization.
 
-The existing npm 0.1.1 package can contain an older README. This corrected repository guide does not retroactively replace immutable package contents. The official MCP Registry uses an independently versioned server record; check its current entry for metadata versions. The website's downloadable catalog may differ from the npm distribution during release.
+Version 0.1.1 retains its earlier export-redaction behavior; upgrading source files does not repair an installed copy. Install the intended exact version and verify its contents. The official MCP Registry uses an independently versioned server record; check its current entry for metadata versions. The website's downloadable catalog may differ from the npm distribution during release.

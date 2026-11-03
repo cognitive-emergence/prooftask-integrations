@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.2 — unpublished compatibility candidate
+## 0.1.2
 
 - Preserve successful structured responses, including signed records/status, export packages, hash-bound templates/bindings and project evidence, instead of regex-redacting their contents. Refuse the exact active credential without returning response data; retain error redaction.
 - Describe current Conformity Packages and separate current status accurately while retaining legacy artifacts and all v1 tool names, arguments and HTTP wrappers.
@@ -8,7 +8,7 @@
 - Start correctly through npm binary symlinks and canonical filesystem aliases.
 - Preserve the three-tool public gateway; derive its health inventory from the actual served catalog.
 
-This candidate has not been published to npm or the MCP Registry. Release requires separate review and authorization.
+Version entries describe package behavior, not registry availability. Check the exact npm version before installation; MCP Registry metadata has an independent version.
 
 ## 0.1.1 — existing immutable npm publication
 
