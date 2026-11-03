@@ -6,16 +6,20 @@ import {StreamableHTTPClientTransport} from '@modelcontextprotocol/sdk/client/st
 import {createPublicGateway} from './server.mjs';
 test('official SDK client discovers public templates over HTTP without private authority',async()=>{
   const upstream=[];
-  const app=createPublicGateway({fetcher:async(url,options)=>{upstream.push({url,options});return Response.json({items:[{slug:'business-automation',version:2,digest:'a'.repeat(64)}]});}});
+  const app=createPublicGateway({fetcher:async(url,options)=>{upstream.push({url,options});return Response.json({items:[{slug:'business-automation',version:2,digest:'a'.repeat(64),title:'ptag_public_label'}]});}});
   const http=app.listen(0,'127.0.0.1');await once(http,'listening');
   const url=new URL('http://127.0.0.1:'+http.address().port+'/mcp');
   const client=new Client({name:'gateway-test',version:'1'});
   try{
     await client.connect(new StreamableHTTPClientTransport(url));
     const listed=await client.listTools();
+    const health=await(await fetch(new URL('/health',url))).json();
+    assert.deepEqual(health.tools.slice().sort(),listed.tools.map(t=>t.name).sort());
+    assert.equal(health.tools.length,3);assert.equal(health.privateTools,false);
     assert.deepEqual(listed.tools.map(t=>t.name).sort(),['getAgentCapabilities','getPublicSpecification','searchPublicSpecifications']);
     const result=await client.callTool({name:'searchPublicSpecifications',arguments:{query:{q:'automation'}}});
     assert.equal(result.isError,undefined);assert.equal(result.structuredContent.httpStatus,200);
+    assert.equal(result.structuredContent.data.items[0].title,'ptag_public_label');
     assert.equal(upstream[0].options.headers.authorization,undefined);
     assert.equal(upstream[0].options.method,'GET');
     await assert.rejects(client.callTool({name:'getAgent',arguments:{}}));

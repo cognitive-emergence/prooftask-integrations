@@ -1,6 +1,6 @@
 {
   "name": "prooftask-mcp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Local MCP adapter for Prooftask delivery agreements, client acceptance and verifiable records",
   "type": "module",
   "bin": {
@@ -9,7 +9,8 @@
   "files": [
     "agent-mcp.mjs",
     "agent-mcp-tools.json",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ],
   "engines": {
     "node": ">=24"

@@ -6,13 +6,26 @@ Public hosted discovery is **free**: no credential is needed for `getAgentCapabi
 
 [中文入口与验收清单](https://prooftask.com/zh) · [n8n handover](https://prooftask.com/guides/n8n-handover-checklist) · [AI support acceptance](https://prooftask.com/guides/ai-chatbot-acceptance) · [Project handover](https://prooftask.com/guides/project-handover-checklist)
 
-## Start without an account
+## Compatibility candidate 0.1.2 — not published
+
+This checkout prepares a reviewable 0.1.2 candidate. It preserves the existing 45-tool
+catalog, 23 read-only tools and `{httpStatus,data}` response wrapper; it does not
+replace them with the website's separate 16 task tools. No npm or registry release
+of this candidate is claimed. The client JSON files and registry metadata are
+prepared for that future release and must not be used as evidence of availability.
+
+Run this checkout without an account:
 
 ```sh
-npx -y prooftask-mcp@0.1.1
+node mcp/agent-mcp.mjs
 ```
 
-Version 0.1.1 exposes 23 read-only tools by default. Three public tools need no credential:
+After a separately authorized npm publication, the prepared client configurations
+will use `npx -y prooftask-mcp@0.1.2`. Until then, configure the absolute path to this
+checkout's adapter. The published 0.1.1 remains immutable and contains the earlier
+export-redaction behavior; updating this checkout does not repair installed copies.
+
+The candidate exposes 23 read-only tools by default. Three public tools need no credential:
 
 1. `getAgentCapabilities`: read available connection and workflow capabilities.
 2. `searchPublicSpecifications`: `{"query":{"q":"automation"}}`. Find a matching scenario; broaden a query if no items match.
@@ -21,6 +34,27 @@ Version 0.1.1 exposes 23 read-only tools by default. Three public tools need no 
 Review completion criteria and evidence with the user. Templates are editable examples, not independent certification. If the fit is appropriate, link to the returned template on https://prooftask.com/specifications and let the user review it.
 
 Published npm 0.1.1 was independently installed and verified on 2026-10-18 (Asia/Shanghai): 23 tools, public capability read, anonymous MCP template search, exact-version/digest read and blocked private read. No business writes. The packaged README was written during publication preparation; this repository records the verified release status.
+
+## Record exports and verification
+
+`exportResultPackage` preserves the API artifact without rewriting signed strings:
+current projects return a bare Conformity Package; pre-release projects return a
+`prooftask.result-review/v1` wrapper. `exportLegacyRecord` also returns the current
+bare Package for Conformity projects despite its historical tool name. A Package
+is a historical carrier, not fresh status or a second receipt.
+
+Use `getStatus` with a fresh UUID nonce for a separate signed current observation.
+Conformity Status carries nonce and project details in
+`extensions["com.prooftask.status-details"]`; legacy status uses `body`. The old
+`{httpStatus,data}` MCP wrapper remains: save `structuredContent.data` as the artifact,
+not the surrounding transport metadata. These tools return data rather than writing
+local files; the caller controls private storage.
+
+Successful structured responses containing the exact active configured credential are refused with a
+generic error before return. Arbitrary token-like labels or base64url strings are
+preserved, including digest-bound template/binding and project fields. Non-success error text still receives credential redaction. This is transport integrity, not signature verification. Verify current
+artifacts offline with independently confirmed issuer keys; pre-release formats
+require the frozen legacy verifier. See the [current verification guide](https://prooftask.com/developers/agent-workflows.md).
 
 ## Private business integration
 

@@ -4,14 +4,19 @@
     {
       "path": "mcp/agent-mcp.mjs",
       "source": "https://prooftask.com/developers/agent-mcp.mjs",
-      "sha256": "f879b141858d531a6cd181b443224881106d7817ffd0eb615b58ba59a1def818"
+      "sha256": "2f81e98bbe46168f13804d16282e09e329dc9afbcf2530d065160d193782f7d7",
+      "upstreamSha256": "f879b141858d531a6cd181b443224881106d7817ffd0eb615b58ba59a1def818",
+      "localChanges": "Compatibility backport: preserve every successful structured API payload, fail closed on the exact active credential, retain error redaction and v1 routing/HTTP wrappers; canonicalize entry paths for npm binary links. No task-level v2 adapter synchronization.",
+      "backportSource": "https://github.com/cognitive-emergence/prooftask/blob/00e48889a4eb7fd3273050f98edee7e2774f20b1/examples/agent-mcp.mjs"
     },
     {
       "path": "mcp/agent-mcp-tools.json",
       "source": "https://prooftask.com/developers/agent-mcp-tools.json",
-      "sha256": "c1301edf39db64905c0a9a5878a5a4859c12705a7f1828c4498770271a6a70c5",
+      "sha256": "5148d011176df24449af784c74c465cacd091d7872579aa260d279d392c359f9",
       "upstreamSha256": "d342ca73f0f708688651af5bd4fda4e79a36aba90c071779aa4986cad5d1d079",
-      "localChanges": "Two anonymous public discovery GET tools derived from /api/public/openapi.json; original authenticated tools unchanged."
+      "localChanges": "Original two public discovery GET additions retained. Compatibility backports: current Conformity/legacy export descriptions; strict v2 template snapshots alongside original v1 snapshots; current criterion checks/check-run references; explicit draft role. Tool names, routes and top-level v1 contract preserved.",
+      "previousLocalSha256": "c1301edf39db64905c0a9a5878a5a4859c12705a7f1828c4498770271a6a70c5",
+      "backportSource": "https://github.com/cognitive-emergence/prooftask/blob/00e48889a4eb7fd3273050f98edee7e2774f20b1/src/runtime/agent-openapi.ts"
     },
     {
       "path": "n8n/prepare-job.json",
@@ -28,5 +33,13 @@
       "source": "https://prooftask.com/developers/n8n/events.json",
       "sha256": "b43a476f3920361862551b542d936c0f45722e5fbf88a6957130286eb7b0e990"
     }
-  ]
+  ],
+  "localCandidate": {
+    "version": "0.1.2",
+    "preparedOn": "2026-11-04",
+    "status": "UNPUBLISHED_CANDIDATE",
+    "contract": "Existing MCP catalog v1, 45 tools, 23 read-only tools, argument envelopes and HTTP result wrappers preserved.",
+    "schemaBackportsFromApiVersion": "1.11.0",
+    "schemaSourceCommit": "00e48889a4eb7fd3273050f98edee7e2774f20b1"
+  }
 }

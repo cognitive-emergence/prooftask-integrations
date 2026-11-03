@@ -1,0 +1,893 @@
+{
+  "sourceCommit": "883352b1fbacdff56c2391e8741929aae41588c5",
+  "tools": [
+    {
+      "name": "createProject",
+      "route": {
+        "path": "/projects",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "createProposal",
+      "route": {
+        "path": "/proposals",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "exportLegacyRecord",
+      "route": {
+        "path": "/projects/{id}/exports/standard-record",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path"
+      ]
+    },
+    {
+      "name": "exportResultPackage",
+      "route": {
+        "path": "/projects/{id}/exports/result-package",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body"
+      ]
+    },
+    {
+      "name": "getAgent",
+      "route": {
+        "path": "/me",
+        "method": "GET",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "required": []
+    },
+    {
+      "name": "getAgentCapabilities",
+      "route": {
+        "path": "/capabilities",
+        "method": "GET",
+        "authenticated": false,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "required": []
+    },
+    {
+      "name": "getAutomationJob",
+      "route": {
+        "path": "/jobs/{jobId}",
+        "method": "GET",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "required": [
+        "path"
+      ]
+    },
+    {
+      "name": "getCreationDocuments",
+      "route": {
+        "path": "/api/acceptance/legal-config",
+        "method": "GET",
+        "authenticated": false,
+        "mutating": false,
+        "root": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "required": []
+    },
+    {
+      "name": "getPreparedDraftStatus",
+      "route": {
+        "path": "/drafts/{id}",
+        "method": "GET",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "required": [
+        "path"
+      ]
+    },
+    {
+      "name": "getProject",
+      "route": {
+        "path": "/projects/{id}",
+        "method": "GET",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "required": [
+        "path"
+      ]
+    },
+    {
+      "name": "getProposal",
+      "route": {
+        "path": "/proposals/{id}",
+        "method": "GET",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "required": [
+        "path"
+      ]
+    },
+    {
+      "name": "getRecord",
+      "route": {
+        "path": "/projects/{id}/record",
+        "method": "GET",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "required": [
+        "path"
+      ]
+    },
+    {
+      "name": "getStatus",
+      "route": {
+        "path": "/projects/{id}/status",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body"
+      ]
+    },
+    {
+      "name": "getUsableTemplate",
+      "route": {
+        "path": "/templates/{id}",
+        "method": "GET",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "query"
+      ]
+    },
+    {
+      "name": "handoffProposal",
+      "route": {
+        "path": "/proposals/{id}/handoff",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "handoffToHuman",
+      "route": {
+        "path": "/projects/{id}/handoff",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "listAutomationJobs",
+      "route": {
+        "path": "/jobs",
+        "method": "GET",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "required": [
+        "query"
+      ]
+    },
+    {
+      "name": "listProjectWebhooks",
+      "route": {
+        "path": "/webhooks",
+        "method": "GET",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "required": []
+    },
+    {
+      "name": "listProposals",
+      "route": {
+        "path": "/proposals",
+        "method": "GET",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "required": []
+    },
+    {
+      "name": "listUsableTemplates",
+      "route": {
+        "path": "/templates",
+        "method": "GET",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "required": []
+    },
+    {
+      "name": "listWebhookDeliveries",
+      "route": {
+        "path": "/webhooks/{subscriptionId}/deliveries",
+        "method": "GET",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "required": [
+        "path"
+      ]
+    },
+    {
+      "name": "prepareAutomationJob",
+      "route": {
+        "path": "/jobs",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "prepareExternalDraft",
+      "route": {
+        "path": "/drafts",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "prepareTemplate",
+      "route": {
+        "path": "/templates/{id}/prepare",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body"
+      ]
+    },
+    {
+      "name": "previewOperationConfirmation",
+      "route": {
+        "path": "/api/acceptance/confirmation-preview",
+        "method": "POST",
+        "authenticated": false,
+        "mutating": false,
+        "root": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "body"
+      ]
+    },
+    {
+      "name": "publishProposal",
+      "route": {
+        "path": "/proposals/{id}/publish",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "raiseConcern",
+      "route": {
+        "path": "/projects/{id}/concern",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "redeliverProjectEvent",
+      "route": {
+        "path": "/webhooks/{subscriptionId}/deliveries/{deliveryId}/redeliver",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "renewProjectWebhook",
+      "route": {
+        "path": "/webhooks/{subscriptionId}/renew",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "requestDateRevision",
+      "route": {
+        "path": "/projects/{id}/date-revision",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "requestResultIssuance",
+      "route": {
+        "path": "/projects/{id}/issue-record",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "respondProposal",
+      "route": {
+        "path": "/proposals/{id}/respond",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "respondToTerms",
+      "route": {
+        "path": "/projects/{id}/respond",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "reviewDelivery",
+      "route": {
+        "path": "/projects/{id}/review",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "submitAutomationJob",
+      "route": {
+        "path": "/jobs/{jobId}/submit",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "submitMaterials",
+      "route": {
+        "path": "/projects/{id}/submit",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "updateProposal",
+      "route": {
+        "path": "/proposals/{id}/update",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "useTemplate",
+      "route": {
+        "path": "/templates/{id}/use",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body"
+      ]
+    },
+    {
+      "name": "verifyProjectWebhook",
+      "route": {
+        "path": "/webhooks/{subscriptionId}/verify",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": false,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body"
+      ]
+    },
+    {
+      "name": "webhook_pause",
+      "route": {
+        "path": "/webhooks/{subscriptionId}/pause",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "webhook_resume",
+      "route": {
+        "path": "/webhooks/{subscriptionId}/resume",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "webhook_revoke",
+      "route": {
+        "path": "/webhooks/{subscriptionId}/revoke",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "withdrawProposal",
+      "route": {
+        "path": "/proposals/{id}/withdraw",
+        "method": "POST",
+        "authenticated": true,
+        "mutating": true,
+        "root": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "body",
+        "approved"
+      ]
+    },
+    {
+      "name": "searchPublicSpecifications",
+      "route": {
+        "path": "/api/public/specifications",
+        "method": "GET",
+        "authenticated": false,
+        "mutating": false,
+        "root": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "required": []
+    },
+    {
+      "name": "getPublicSpecification",
+      "route": {
+        "path": "/api/public/specifications/{id}",
+        "method": "GET",
+        "authenticated": false,
+        "mutating": false,
+        "root": true
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "required": [
+        "path",
+        "query"
+      ]
+    }
+  ]
+}

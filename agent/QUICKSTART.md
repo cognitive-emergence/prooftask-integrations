@@ -2,9 +2,14 @@
 
 Requires Node.js 24+. Start without an account or credential.
 
+This checkout contains the unpublished 0.1.2 compatibility candidate. Its prepared
+client JSON pins target that future release; use an absolute Node executable and
+this checkout's `mcp/agent-mcp.mjs` until publication is separately authorized.
+The v1 tool names, argument envelopes and HTTP response wrapper remain unchanged.
+
 ## MCP client (Claude Desktop, Cursor or another stdio client)
 
-Copy the `prooftask` entry from [mcp-client.json](../mcp/mcp-client.json) into your client's existing `mcpServers` object. Preserve its other servers. Restart or reconnect the client, then ask:
+For this unpublished checkout, configure an absolute Node executable and the absolute path to `mcp/agent-mcp.mjs` in your existing `mcpServers` object. Preserve other servers. The prepared [mcp-client.json](../mcp/mcp-client.json) uses the future npm 0.1.2 pin and is for after separately authorized publication. Restart or reconnect the client, then ask:
 
 > Use Prooftask getAgentCapabilities and summarize the supported connection and workflow options. Do not create or modify anything.
 
@@ -40,7 +45,7 @@ Expected: `mcpInitialization: PASS`, `publicCapabilities: HTTP_200`, `privateRea
 
 ## Continue with private reads
 
-Complete the [existing Agent connection flow](https://prooftask.com/developers?utm_source=partner&utm_campaign=github_integrations) outside model context. Use the exact credential file produced by the client; do not manually construct a token or paste one into chat. Copy [the private configuration example](../mcp/mcp-client-private.example.json), replacing the absolute credential-file path locally.
+Complete the [existing Agent connection flow](https://prooftask.com/developers?utm_source=partner&utm_campaign=github_integrations) outside model context. Use the exact credential file produced by the client; do not manually construct a token or paste one into chat. Use [the private configuration example](../mcp/mcp-client-private.example.json), replacing the absolute credential-file path locally and using this checkout’s absolute Node/adapter paths until the candidate is published.
 
 Reconnect the MCP client. Call `getAgent` first and confirm the represented workspace and granted scope, then `getProject` with the exact authorized project ID. A successful login does not grant every project or action.
 
