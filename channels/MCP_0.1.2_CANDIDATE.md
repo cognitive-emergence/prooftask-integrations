@@ -1,6 +1,6 @@
 # MCP 0.1.2 compatibility candidate
 
-Status: DRAFT PULL REQUEST #10 — source/gateway fix under review; npm 0.1.2 remains unpublished. A source merge can deploy the public gateway independently of npm.
+Status: npm 0.1.2 remains an unpublished candidate. Source/gateway work is tracked in pull request #10 and can deploy independently; npm publication remains a separate release step.
 
 Base: integrations main `8e0e5f152eb653474b9aaca32f36cef18e6a7e9f`, whose tree matches the original reviewed `883352b1fbacdff56c2391e8741929aae41588c5` base.
 This candidate preserves the existing catalog-v1 tool names, routes, annotations,
