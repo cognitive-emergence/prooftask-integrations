@@ -1,0 +1,691 @@
+{
+  "ok": true,
+  "nativeGoogleSheetsAndSlackNodes": true,
+  "engine": "n8n 2.39.8",
+  "selectedCase": "readiness-three-row",
+  "exportSha256": "53ca3e0f0a2499134bec8785b4ab6d0f31592b6b0f9c4fd30afa35b207f22511",
+  "runnerSha256": "4a74ec144fa3bad7194a02a66fa54b5e774b07538610787232bc44ab694ab1d6",
+  "productionWrites": 0,
+  "cases": {
+    "readinessThreeRow": {
+      "case": "readiness-three-row",
+      "readinessIsNotApproval": true,
+      "explicitSubmissionApprovalUnchanged": true,
+      "inputRows": [
+        {
+          "task_id": "readiness-yes-a",
+          "ready_for_review": "YES",
+          "project_id": "delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "",
+          "request_json": "",
+          "job_id": "",
+          "handover_state": "",
+          "handover_note": "",
+          "prepared_at": "",
+          "notified_job_id": ""
+        },
+        {
+          "task_id": "readiness-yes-b",
+          "ready_for_review": "YES",
+          "project_id": "delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "",
+          "request_json": "",
+          "job_id": "",
+          "handover_state": "",
+          "handover_note": "",
+          "prepared_at": "",
+          "notified_job_id": ""
+        },
+        {
+          "task_id": "readiness-no",
+          "ready_for_review": "NO",
+          "project_id": "delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "",
+          "request_json": "",
+          "job_id": "",
+          "handover_state": "",
+          "handover_note": "",
+          "prepared_at": "",
+          "notified_job_id": ""
+        }
+      ],
+      "afterRejectedReminder": {
+        "rows": [
+          {
+            "task_id": "readiness-yes-a",
+            "ready_for_review": "YES",
+            "project_id": "delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201",
+            "summary": "Configured workflow ready for internal review.",
+            "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+            "request_id": "e953edb3-6137-425e-9f23-2c55f35b9236",
+            "request_json": "{\"requestId\":\"e953edb3-6137-425e-9f23-2c55f35b9236\",\"projectId\":\"delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201\",\"workflowReference\":\"sheet:readiness-yes-a\",\"summary\":\"Configured workflow ready for internal review.\",\"materials\":[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]}",
+            "job_id": "job_b2feb8ca4f65e03c7b8d3bd514b3009e111d80d8c224dd4639c85f30981a7d17",
+            "handover_state": "PREPARED",
+            "handover_note": "Saved for authorized human review. Submission and buyer acceptance remain separate.",
+            "prepared_at": "2026-11-03T18:12:10.841Z",
+            "notified_job_id": ""
+          },
+          {
+            "task_id": "readiness-yes-b",
+            "ready_for_review": "YES",
+            "project_id": "delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201",
+            "summary": "Configured workflow ready for internal review.",
+            "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+            "request_id": "",
+            "request_json": "",
+            "job_id": "",
+            "handover_state": "",
+            "handover_note": "",
+            "prepared_at": "",
+            "notified_job_id": ""
+          },
+          {
+            "task_id": "readiness-no",
+            "ready_for_review": "NO",
+            "project_id": "delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201",
+            "summary": "Configured workflow ready for internal review.",
+            "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+            "request_id": "",
+            "request_json": "",
+            "job_id": "",
+            "handover_state": "",
+            "handover_note": "",
+            "prepared_at": "",
+            "notified_job_id": ""
+          }
+        ],
+        "newJobs": 1,
+        "preparationPosts": 1,
+        "successfulReminders": 0
+      },
+      "afterRecovery": [
+        {
+          "task_id": "readiness-yes-a",
+          "ready_for_review": "YES",
+          "project_id": "delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "e953edb3-6137-425e-9f23-2c55f35b9236",
+          "request_json": "{\"requestId\":\"e953edb3-6137-425e-9f23-2c55f35b9236\",\"projectId\":\"delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201\",\"workflowReference\":\"sheet:readiness-yes-a\",\"summary\":\"Configured workflow ready for internal review.\",\"materials\":[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]}",
+          "job_id": "job_b2feb8ca4f65e03c7b8d3bd514b3009e111d80d8c224dd4639c85f30981a7d17",
+          "handover_state": "PREPARED",
+          "handover_note": "Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.",
+          "prepared_at": "2026-11-03T18:12:10.841Z",
+          "notified_job_id": "job_b2feb8ca4f65e03c7b8d3bd514b3009e111d80d8c224dd4639c85f30981a7d17"
+        },
+        {
+          "task_id": "readiness-yes-b",
+          "ready_for_review": "YES",
+          "project_id": "delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "4c745623-cfb3-44f1-80b1-195ceec3912d",
+          "request_json": "{\"requestId\":\"4c745623-cfb3-44f1-80b1-195ceec3912d\",\"projectId\":\"delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201\",\"workflowReference\":\"sheet:readiness-yes-b\",\"summary\":\"Configured workflow ready for internal review.\",\"materials\":[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]}",
+          "job_id": "job_2df0ddf9a2901b5d41ceb1b6f103d892b033122e5aa4909e8b0def8f189ea296",
+          "handover_state": "PREPARED",
+          "handover_note": "Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.",
+          "prepared_at": "2026-11-03T18:12:22.664Z",
+          "notified_job_id": "job_2df0ddf9a2901b5d41ceb1b6f103d892b033122e5aa4909e8b0def8f189ea296"
+        },
+        {
+          "task_id": "readiness-no",
+          "ready_for_review": "NO",
+          "project_id": "delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "",
+          "request_json": "",
+          "job_id": "",
+          "handover_state": "",
+          "handover_note": "",
+          "prepared_at": "",
+          "notified_job_id": ""
+        }
+      ],
+      "afterReplay": [
+        {
+          "task_id": "readiness-yes-a",
+          "ready_for_review": "YES",
+          "project_id": "delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "e953edb3-6137-425e-9f23-2c55f35b9236",
+          "request_json": "{\"requestId\":\"e953edb3-6137-425e-9f23-2c55f35b9236\",\"projectId\":\"delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201\",\"workflowReference\":\"sheet:readiness-yes-a\",\"summary\":\"Configured workflow ready for internal review.\",\"materials\":[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]}",
+          "job_id": "job_b2feb8ca4f65e03c7b8d3bd514b3009e111d80d8c224dd4639c85f30981a7d17",
+          "handover_state": "PREPARED",
+          "handover_note": "Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.",
+          "prepared_at": "2026-11-03T18:12:10.841Z",
+          "notified_job_id": "job_b2feb8ca4f65e03c7b8d3bd514b3009e111d80d8c224dd4639c85f30981a7d17"
+        },
+        {
+          "task_id": "readiness-yes-b",
+          "ready_for_review": "YES",
+          "project_id": "delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "4c745623-cfb3-44f1-80b1-195ceec3912d",
+          "request_json": "{\"requestId\":\"4c745623-cfb3-44f1-80b1-195ceec3912d\",\"projectId\":\"delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201\",\"workflowReference\":\"sheet:readiness-yes-b\",\"summary\":\"Configured workflow ready for internal review.\",\"materials\":[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]}",
+          "job_id": "job_2df0ddf9a2901b5d41ceb1b6f103d892b033122e5aa4909e8b0def8f189ea296",
+          "handover_state": "PREPARED",
+          "handover_note": "Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.",
+          "prepared_at": "2026-11-03T18:12:22.664Z",
+          "notified_job_id": "job_2df0ddf9a2901b5d41ceb1b6f103d892b033122e5aa4909e8b0def8f189ea296"
+        },
+        {
+          "task_id": "readiness-no",
+          "ready_for_review": "NO",
+          "project_id": "delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "",
+          "request_json": "",
+          "job_id": "",
+          "handover_state": "",
+          "handover_note": "",
+          "prepared_at": "",
+          "notified_job_id": ""
+        }
+      ],
+      "newSavedJobs": 2,
+      "preparationPosts": 2,
+      "successfulReminders": 2,
+      "providerRequests": 34,
+      "projectEventsUnchanged": true,
+      "notificationFailure": "Explicit Slack rejection before successful delivery; not an uncertain delivery/acknowledgement loss.",
+      "messages": [
+        {
+          "channel": "CSYNTHETIC",
+          "text": "Delivery ready for owner review: readiness-yes-a\nSaved Prooftask job: job_b2feb8ca4f65e03c7b8d3bd514b3009e111d80d8c224dd4639c85f30981a7d17\nAuthorized project: https://prooftask.com/provider?delivery=delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201\nQueue: https://docs.google.com/spreadsheets/d/synthetic-sheet-id-123456789/edit#gid=0\nPREPARED only. Review the exact saved materials before a separate deliberate submission. Buyer acceptance and payment have not been recorded.",
+          "includeLinkToWorkflow": false,
+          "link_names": false,
+          "mrkdwn": false,
+          "unfurl_links": false,
+          "unfurl_media": false,
+          "ts": "1.000001"
+        },
+        {
+          "channel": "CSYNTHETIC",
+          "text": "Delivery ready for owner review: readiness-yes-b\nSaved Prooftask job: job_2df0ddf9a2901b5d41ceb1b6f103d892b033122e5aa4909e8b0def8f189ea296\nAuthorized project: https://prooftask.com/provider?delivery=delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201\nQueue: https://docs.google.com/spreadsheets/d/synthetic-sheet-id-123456789/edit#gid=0\nPREPARED only. Review the exact saved materials before a separate deliberate submission. Buyer acceptance and payment have not been recorded.",
+          "includeLinkToWorkflow": false,
+          "link_names": false,
+          "mrkdwn": false,
+          "unfurl_links": false,
+          "unfurl_media": false,
+          "ts": "2.000001"
+        }
+      ]
+    }
+  },
+  "rows": [
+    {
+      "task_id": "readiness-yes-a",
+      "ready_for_review": "YES",
+      "project_id": "delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201",
+      "summary": "Configured workflow ready for internal review.",
+      "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+      "request_id": "e953edb3-6137-425e-9f23-2c55f35b9236",
+      "request_json": "{\"requestId\":\"e953edb3-6137-425e-9f23-2c55f35b9236\",\"projectId\":\"delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201\",\"workflowReference\":\"sheet:readiness-yes-a\",\"summary\":\"Configured workflow ready for internal review.\",\"materials\":[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]}",
+      "job_id": "job_b2feb8ca4f65e03c7b8d3bd514b3009e111d80d8c224dd4639c85f30981a7d17",
+      "handover_state": "PREPARED",
+      "handover_note": "Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.",
+      "prepared_at": "2026-11-03T18:12:10.841Z",
+      "notified_job_id": "job_b2feb8ca4f65e03c7b8d3bd514b3009e111d80d8c224dd4639c85f30981a7d17"
+    },
+    {
+      "task_id": "readiness-yes-b",
+      "ready_for_review": "YES",
+      "project_id": "delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201",
+      "summary": "Configured workflow ready for internal review.",
+      "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+      "request_id": "4c745623-cfb3-44f1-80b1-195ceec3912d",
+      "request_json": "{\"requestId\":\"4c745623-cfb3-44f1-80b1-195ceec3912d\",\"projectId\":\"delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201\",\"workflowReference\":\"sheet:readiness-yes-b\",\"summary\":\"Configured workflow ready for internal review.\",\"materials\":[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]}",
+      "job_id": "job_2df0ddf9a2901b5d41ceb1b6f103d892b033122e5aa4909e8b0def8f189ea296",
+      "handover_state": "PREPARED",
+      "handover_note": "Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.",
+      "prepared_at": "2026-11-03T18:12:22.664Z",
+      "notified_job_id": "job_2df0ddf9a2901b5d41ceb1b6f103d892b033122e5aa4909e8b0def8f189ea296"
+    },
+    {
+      "task_id": "readiness-no",
+      "ready_for_review": "NO",
+      "project_id": "delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201",
+      "summary": "Configured workflow ready for internal review.",
+      "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+      "request_id": "",
+      "request_json": "",
+      "job_id": "",
+      "handover_state": "",
+      "handover_note": "",
+      "prepared_at": "",
+      "notified_job_id": ""
+    }
+  ],
+  "messages": [
+    {
+      "channel": "CSYNTHETIC",
+      "text": "Delivery ready for owner review: readiness-yes-a\nSaved Prooftask job: job_b2feb8ca4f65e03c7b8d3bd514b3009e111d80d8c224dd4639c85f30981a7d17\nAuthorized project: https://prooftask.com/provider?delivery=delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201\nQueue: https://docs.google.com/spreadsheets/d/synthetic-sheet-id-123456789/edit#gid=0\nPREPARED only. Review the exact saved materials before a separate deliberate submission. Buyer acceptance and payment have not been recorded.",
+      "includeLinkToWorkflow": false,
+      "link_names": false,
+      "mrkdwn": false,
+      "unfurl_links": false,
+      "unfurl_media": false,
+      "ts": "1.000001"
+    },
+    {
+      "channel": "CSYNTHETIC",
+      "text": "Delivery ready for owner review: readiness-yes-b\nSaved Prooftask job: job_2df0ddf9a2901b5d41ceb1b6f103d892b033122e5aa4909e8b0def8f189ea296\nAuthorized project: https://prooftask.com/provider?delivery=delivery_2ee8237d-2c92-4e93-94d3-0ec5de392201\nQueue: https://docs.google.com/spreadsheets/d/synthetic-sheet-id-123456789/edit#gid=0\nPREPARED only. Review the exact saved materials before a separate deliberate submission. Buyer acceptance and payment have not been recorded.",
+      "includeLinkToWorkflow": false,
+      "link_names": false,
+      "mrkdwn": false,
+      "unfurl_links": false,
+      "unfurl_media": false,
+      "ts": "2.000001"
+    }
+  ],
+  "requests": [
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "slack",
+      "method": "POST",
+      "path": "/slack/api/chat.postMessage",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "slack",
+      "method": "POST",
+      "path": "/slack/api/chat.postMessage",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "slack",
+      "method": "POST",
+      "path": "/slack/api/chat.postMessage",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    }
+  ],
+  "writes": [
+    {
+      "range": "Delivery queue!F2",
+      "rows": 1,
+      "fields": [
+        "request_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!G2",
+      "rows": 1,
+      "fields": [
+        "request_json"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I2",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!H2",
+      "rows": 1,
+      "fields": [
+        "job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I2",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!K2",
+      "rows": 1,
+      "fields": [
+        "prepared_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!H2",
+      "rows": 1,
+      "fields": [
+        "job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I2",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!K2",
+      "rows": 1,
+      "fields": [
+        "prepared_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!L2",
+      "rows": 1,
+      "fields": [
+        "notified_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!F3",
+      "rows": 1,
+      "fields": [
+        "request_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!G3",
+      "rows": 1,
+      "fields": [
+        "request_json"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I3",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J3",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!H3",
+      "rows": 1,
+      "fields": [
+        "job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I3",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J3",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!K3",
+      "rows": 1,
+      "fields": [
+        "prepared_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J3",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!L3",
+      "rows": 1,
+      "fields": [
+        "notified_job_id"
+      ],
+      "valueInputOption": "RAW"
+    }
+  ]
+}

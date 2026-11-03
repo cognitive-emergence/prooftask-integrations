@@ -34,6 +34,22 @@ Do not leave submit mode and confirmation enabled as an unattended approval mech
 
 If submission times out or fails, the workflow stops before automatic status sync. Set `operation: 'sync'` to reconcile the saved job before retrying the same identity. Never clear request/job IDs to work around an uncertain result. A later status-write failure does not undo a successful submission; sync again. The existing preparation recovery and Slack duplicate-notification limitations still apply.
 
+## Controlled three-row readiness case
+
+`ready_for_review=YES` selects a row for preparation; it is not human submission approval. The controlled native-engine readiness case uses two valid YES rows and one otherwise-valid NO row. Its first execution injects an explicit Slack rejection after saving the first job; the recovery execution resumes that same job, prepares the second YES row and confirms two internal reminders. A further normal replay preserves both saved identities and creates no additional job or confirmed reminder. The NO row stays unchanged, and project delivery/acceptance events never increase.
+
+The earlier [targeted native readiness evidence](../evidence/n8n-three-row-readiness-native-20261104.json) records 34 mocked provider requests, two prepared jobs and two confirmed reminders; it is retained as a historical record with its original runner hash. Run only this new case with:
+
+```sh
+N8N_PROVIDER_TRANSPORT=native N8N_ENGINE_CASE=readiness-three-row \
+N8N_PROVIDER_EVIDENCE=/private/readiness-result.json \
+PROOFTASK_SOURCE_ROOT=/path/to/prooftask N8N_CLI=/path/to/n8n/bin/n8n \
+node scripts/test-n8n-delivery-lifecycle-engine.mjs
+```
+Omitting that selector runs the full existing inventory plus this readiness case; no prior scenario is removed. Native Google Sheets/Slack implementations still use fake credentials and local contract transports. A rejected reminder is different from Slack accepting a message whose acknowledgement or marker is lost: that uncertain case can still duplicate a reminder and requires reconciliation.
+
+This evidence does not justify describing the rows as “approved.” Submission still requires the separate deliberate exact task/request/job approval. Any customer criterion using “approved rows” must be clarified and explicitly agreed before invitation or signing; this test does not amend an existing agreement.
+
 ## Reviewer demonstration
 
 Use an authorized disposable project, Sheet and internal channel. Record only redacted/non-customer material:
@@ -58,12 +74,14 @@ node --test tests/n8n-delivery-queue.test.mjs tests/n8n-job-status.test.mjs test
 node scripts/check.mjs
 ```
 
+The [full native inventory record](../evidence/n8n-full-native-readiness-inventory-20261104.json) includes the observed `N8N_CLI --version` result before workflow execution, the new three-row case and every prior engine scenario. That full run passed with 164 mocked provider requests, six saved jobs and six confirmed reminders overall; the readiness case remains separately scoped to two jobs/two reminders. Its runner hash differs from the preserved earlier targeted record.
+
 These checks have passed. The current export also passed import and execution in n8n 2.39.8 against an isolated actual Prooftask API while retaining the native Google Sheets and Slack nodes. Their API calls used fake credentials and local contract simulations. The [native-node evidence](../evidence/n8n-native-provider-engine-20261102.json) records 130 provider requests and the exact export digest. Browser execution and repeat-run results are in the [local lab evidence](../evidence/n8n-local-lab-20261102.json). Real OAuth, workspace permissions and vendor delivery remain unverified; complete the [production acceptance scenarios](DELIVERY_LOOP.md#production-acceptance) before operational use. The owner authorized simulated validation for this review revision. No live customer decision, signature or payment was performed.
 
-To run the combined canvas in an isolated real n8n engine (n8n 2.39.8), provide a local Prooftask source checkout and the installed CLI:
+To run the combined canvas in an isolated real n8n engine (n8n 2.39.8), provide a local Prooftask source checkout and the installed CLI. Before importing credentials/workflows or executing a scenario, the runner invokes that exact `N8N_CLI --version`, requires the reported version to equal the pinned `2.39.8`, and records the observation in new evidence:
 
 ```sh
-PROOFTASK_SOURCE_ROOT=/path/to/prooftask N8N_CLI=/path/to/n8n/bin/n8n node scripts/test-n8n-delivery-lifecycle-engine.mjs
+N8N_PROVIDER_TRANSPORT=native PROOFTASK_SOURCE_ROOT=/path/to/prooftask N8N_CLI=/path/to/n8n/bin/n8n node scripts/test-n8n-delivery-lifecycle-engine.mjs
 ```
 
 That harness reads the exported JSON, replaces Google Sheets/Slack transport only in a disposable copy, imports it into an isolated n8n database and checks preparation, feedback, retries, approval blocking, saved-job submission/replay, automatic pending-status writeback, correction with a new saved delivery, exact acceptance and revoked readback against the actual isolated Prooftask API. It reports the original export digest. It cannot establish real Google/Slack OAuth or destination writes.
