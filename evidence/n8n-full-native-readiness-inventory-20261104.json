@@ -1,0 +1,2577 @@
+{
+  "ok": true,
+  "nativeGoogleSheetsAndSlackNodes": true,
+  "engine": "n8n 2.39.8",
+  "engineVersionObservation": {
+    "command": "N8N_CLI --version",
+    "exitCode": 0,
+    "reportedVersion": "2.39.8",
+    "expectedVersion": "2.39.8",
+    "output": "2.39.8",
+    "observedAt": "2026-11-03T18:22:22.231Z"
+  },
+  "selectedCase": "full",
+  "exportSha256": "53ca3e0f0a2499134bec8785b4ab6d0f31592b6b0f9c4fd30afa35b207f22511",
+  "runnerSha256": "f93b9bd240d83969b40e4d1a43885d5c51f882c3a74f31889f28879e57f77196",
+  "productionWrites": 0,
+  "cases": {
+    "readinessThreeRow": {
+      "case": "readiness-three-row",
+      "readinessIsNotApproval": true,
+      "explicitSubmissionApprovalUnchanged": true,
+      "inputRows": [
+        {
+          "task_id": "readiness-yes-a",
+          "ready_for_review": "YES",
+          "project_id": "delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "",
+          "request_json": "",
+          "job_id": "",
+          "handover_state": "",
+          "handover_note": "",
+          "prepared_at": "",
+          "notified_job_id": ""
+        },
+        {
+          "task_id": "readiness-yes-b",
+          "ready_for_review": "YES",
+          "project_id": "delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "",
+          "request_json": "",
+          "job_id": "",
+          "handover_state": "",
+          "handover_note": "",
+          "prepared_at": "",
+          "notified_job_id": ""
+        },
+        {
+          "task_id": "readiness-no",
+          "ready_for_review": "NO",
+          "project_id": "delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "",
+          "request_json": "",
+          "job_id": "",
+          "handover_state": "",
+          "handover_note": "",
+          "prepared_at": "",
+          "notified_job_id": ""
+        }
+      ],
+      "afterRejectedReminder": {
+        "rows": [
+          {
+            "task_id": "readiness-yes-a",
+            "ready_for_review": "YES",
+            "project_id": "delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd",
+            "summary": "Configured workflow ready for internal review.",
+            "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+            "request_id": "cc57841f-af5f-4cea-b8bd-0750570c2159",
+            "request_json": "{\"requestId\":\"cc57841f-af5f-4cea-b8bd-0750570c2159\",\"projectId\":\"delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd\",\"workflowReference\":\"sheet:readiness-yes-a\",\"summary\":\"Configured workflow ready for internal review.\",\"materials\":[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]}",
+            "job_id": "job_8d05fef88906f8da3a5a33573cc869be0beec9e0d8e0eb51fd25508f1812e64f",
+            "handover_state": "PREPARED",
+            "handover_note": "Saved for authorized human review. Submission and buyer acceptance remain separate.",
+            "prepared_at": "2026-11-03T18:23:12.045Z",
+            "notified_job_id": ""
+          },
+          {
+            "task_id": "readiness-yes-b",
+            "ready_for_review": "YES",
+            "project_id": "delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd",
+            "summary": "Configured workflow ready for internal review.",
+            "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+            "request_id": "",
+            "request_json": "",
+            "job_id": "",
+            "handover_state": "",
+            "handover_note": "",
+            "prepared_at": "",
+            "notified_job_id": ""
+          },
+          {
+            "task_id": "readiness-no",
+            "ready_for_review": "NO",
+            "project_id": "delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd",
+            "summary": "Configured workflow ready for internal review.",
+            "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+            "request_id": "",
+            "request_json": "",
+            "job_id": "",
+            "handover_state": "",
+            "handover_note": "",
+            "prepared_at": "",
+            "notified_job_id": ""
+          }
+        ],
+        "newJobs": 1,
+        "preparationPosts": 1,
+        "successfulReminders": 0
+      },
+      "afterRecovery": [
+        {
+          "task_id": "readiness-yes-a",
+          "ready_for_review": "YES",
+          "project_id": "delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "cc57841f-af5f-4cea-b8bd-0750570c2159",
+          "request_json": "{\"requestId\":\"cc57841f-af5f-4cea-b8bd-0750570c2159\",\"projectId\":\"delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd\",\"workflowReference\":\"sheet:readiness-yes-a\",\"summary\":\"Configured workflow ready for internal review.\",\"materials\":[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]}",
+          "job_id": "job_8d05fef88906f8da3a5a33573cc869be0beec9e0d8e0eb51fd25508f1812e64f",
+          "handover_state": "PREPARED",
+          "handover_note": "Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.",
+          "prepared_at": "2026-11-03T18:23:12.045Z",
+          "notified_job_id": "job_8d05fef88906f8da3a5a33573cc869be0beec9e0d8e0eb51fd25508f1812e64f"
+        },
+        {
+          "task_id": "readiness-yes-b",
+          "ready_for_review": "YES",
+          "project_id": "delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "e46c67ee-27e9-40f0-aee3-8e2783f748a7",
+          "request_json": "{\"requestId\":\"e46c67ee-27e9-40f0-aee3-8e2783f748a7\",\"projectId\":\"delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd\",\"workflowReference\":\"sheet:readiness-yes-b\",\"summary\":\"Configured workflow ready for internal review.\",\"materials\":[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]}",
+          "job_id": "job_fef53f7c3d7fa10858fa7f1ed931011bc91024c4f451c01fc11b8091d9934bd4",
+          "handover_state": "PREPARED",
+          "handover_note": "Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.",
+          "prepared_at": "2026-11-03T18:23:36.763Z",
+          "notified_job_id": "job_fef53f7c3d7fa10858fa7f1ed931011bc91024c4f451c01fc11b8091d9934bd4"
+        },
+        {
+          "task_id": "readiness-no",
+          "ready_for_review": "NO",
+          "project_id": "delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "",
+          "request_json": "",
+          "job_id": "",
+          "handover_state": "",
+          "handover_note": "",
+          "prepared_at": "",
+          "notified_job_id": ""
+        }
+      ],
+      "afterReplay": [
+        {
+          "task_id": "readiness-yes-a",
+          "ready_for_review": "YES",
+          "project_id": "delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "cc57841f-af5f-4cea-b8bd-0750570c2159",
+          "request_json": "{\"requestId\":\"cc57841f-af5f-4cea-b8bd-0750570c2159\",\"projectId\":\"delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd\",\"workflowReference\":\"sheet:readiness-yes-a\",\"summary\":\"Configured workflow ready for internal review.\",\"materials\":[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]}",
+          "job_id": "job_8d05fef88906f8da3a5a33573cc869be0beec9e0d8e0eb51fd25508f1812e64f",
+          "handover_state": "PREPARED",
+          "handover_note": "Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.",
+          "prepared_at": "2026-11-03T18:23:12.045Z",
+          "notified_job_id": "job_8d05fef88906f8da3a5a33573cc869be0beec9e0d8e0eb51fd25508f1812e64f"
+        },
+        {
+          "task_id": "readiness-yes-b",
+          "ready_for_review": "YES",
+          "project_id": "delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "e46c67ee-27e9-40f0-aee3-8e2783f748a7",
+          "request_json": "{\"requestId\":\"e46c67ee-27e9-40f0-aee3-8e2783f748a7\",\"projectId\":\"delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd\",\"workflowReference\":\"sheet:readiness-yes-b\",\"summary\":\"Configured workflow ready for internal review.\",\"materials\":[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]}",
+          "job_id": "job_fef53f7c3d7fa10858fa7f1ed931011bc91024c4f451c01fc11b8091d9934bd4",
+          "handover_state": "PREPARED",
+          "handover_note": "Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.",
+          "prepared_at": "2026-11-03T18:23:36.763Z",
+          "notified_job_id": "job_fef53f7c3d7fa10858fa7f1ed931011bc91024c4f451c01fc11b8091d9934bd4"
+        },
+        {
+          "task_id": "readiness-no",
+          "ready_for_review": "NO",
+          "project_id": "delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd",
+          "summary": "Configured workflow ready for internal review.",
+          "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+          "request_id": "",
+          "request_json": "",
+          "job_id": "",
+          "handover_state": "",
+          "handover_note": "",
+          "prepared_at": "",
+          "notified_job_id": ""
+        }
+      ],
+      "newSavedJobs": 2,
+      "preparationPosts": 2,
+      "successfulReminders": 2,
+      "providerRequests": 34,
+      "projectEventsUnchanged": true,
+      "notificationFailure": "Explicit Slack rejection before successful delivery; not an uncertain delivery/acknowledgement loss.",
+      "messages": [
+        {
+          "channel": "CSYNTHETIC",
+          "text": "Delivery ready for owner review: readiness-yes-a\nSaved Prooftask job: job_8d05fef88906f8da3a5a33573cc869be0beec9e0d8e0eb51fd25508f1812e64f\nAuthorized project: https://prooftask.com/provider?delivery=delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd\nQueue: https://docs.google.com/spreadsheets/d/synthetic-sheet-id-123456789/edit#gid=0\nPREPARED only. Review the exact saved materials before a separate deliberate submission. Buyer acceptance and payment have not been recorded.",
+          "includeLinkToWorkflow": false,
+          "link_names": false,
+          "mrkdwn": false,
+          "unfurl_links": false,
+          "unfurl_media": false,
+          "ts": "1.000001"
+        },
+        {
+          "channel": "CSYNTHETIC",
+          "text": "Delivery ready for owner review: readiness-yes-b\nSaved Prooftask job: job_fef53f7c3d7fa10858fa7f1ed931011bc91024c4f451c01fc11b8091d9934bd4\nAuthorized project: https://prooftask.com/provider?delivery=delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd\nQueue: https://docs.google.com/spreadsheets/d/synthetic-sheet-id-123456789/edit#gid=0\nPREPARED only. Review the exact saved materials before a separate deliberate submission. Buyer acceptance and payment have not been recorded.",
+          "includeLinkToWorkflow": false,
+          "link_names": false,
+          "mrkdwn": false,
+          "unfurl_links": false,
+          "unfurl_media": false,
+          "ts": "2.000001"
+        }
+      ]
+    }
+  },
+  "rows": [
+    {
+      "task_id": "reminder-v1",
+      "ready_for_review": "YES",
+      "project_id": "delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd",
+      "summary": "Configured workflow ready for internal review.",
+      "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]",
+      "request_id": "c52c6eff-29d9-47c7-86fa-54f6f5d57bf9",
+      "request_json": "{\"requestId\":\"c52c6eff-29d9-47c7-86fa-54f6f5d57bf9\",\"projectId\":\"delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd\",\"workflowReference\":\"sheet:reminder-v1\",\"summary\":\"Configured workflow ready for internal review.\",\"materials\":[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/original-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/original-workflow.json\",\"name\":\"workflow.json\",\"size\":2,\"sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\"}]}]}",
+      "job_id": "job_0a70876ce87d2a597c78f94d7340d27b3a42f0633e0a003f38c92b3598af7d95",
+      "handover_state": "PREPARED",
+      "handover_note": "Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.",
+      "prepared_at": "2026-11-03T18:25:54.670Z",
+      "notified_job_id": "job_0a70876ce87d2a597c78f94d7340d27b3a42f0633e0a003f38c92b3598af7d95",
+      "review_job_id": "job_0a70876ce87d2a597c78f94d7340d27b3a42f0633e0a003f38c92b3598af7d95",
+      "review_state": "UNKNOWN",
+      "review_decision": "",
+      "review_accepted": "UNKNOWN",
+      "review_next_action": "RECONCILE_SUBMISSION",
+      "review_observed_at": "",
+      "review_url": "",
+      "review_note": "Readback failed or access changed. Preserve the saved IDs, reconcile authorization and retry; acceptance is unknown."
+    },
+    {
+      "task_id": "reminder-v2",
+      "ready_for_review": "YES",
+      "project_id": "delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd",
+      "summary": "Corrected workflow ready for the buyer to review.",
+      "materials_json": "[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/corrected-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/corrected-workflow.json\",\"name\":\"workflow-v2.json\",\"size\":4,\"sha256\":\"e10808d43975dc400731053386849f864f297e6c4f7519c380f3dbaf7067a840\"}]}]",
+      "request_id": "633b10da-ca5d-428f-ae12-f9a1ecf9e494",
+      "request_json": "{\"requestId\":\"633b10da-ca5d-428f-ae12-f9a1ecf9e494\",\"projectId\":\"delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd\",\"workflowReference\":\"sheet:reminder-v2\",\"summary\":\"Corrected workflow ready for the buyer to review.\",\"materials\":[{\"criterionId\":\"workflow\",\"summary\":\"Original workflow export and setup instructions.\",\"references\":[\"https://example.test/corrected-workflow.json\"],\"files\":[{\"reference\":\"https://example.test/corrected-workflow.json\",\"name\":\"workflow-v2.json\",\"size\":4,\"sha256\":\"e10808d43975dc400731053386849f864f297e6c4f7519c380f3dbaf7067a840\"}]}]}",
+      "job_id": "job_17424d780d70bb69c2d9f26f175ef8c6fd29cd9ef187114c13c92aa49ed1831d",
+      "handover_state": "PREPARED",
+      "handover_note": "Owner reminder delivered. Await deliberate submission; buyer acceptance is separate.",
+      "prepared_at": "2026-11-03T18:29:26.587Z",
+      "notified_job_id": "job_17424d780d70bb69c2d9f26f175ef8c6fd29cd9ef187114c13c92aa49ed1831d",
+      "review_job_id": "job_17424d780d70bb69c2d9f26f175ef8c6fd29cd9ef187114c13c92aa49ed1831d",
+      "review_state": "UNKNOWN",
+      "review_decision": "",
+      "review_accepted": "UNKNOWN",
+      "review_next_action": "RECONCILE_SUBMISSION",
+      "review_observed_at": "",
+      "review_url": "",
+      "review_note": "Readback failed or access changed. Preserve the saved IDs, reconcile authorization and retry; acceptance is unknown."
+    }
+  ],
+  "messages": [
+    {
+      "channel": "CSYNTHETIC",
+      "text": "Delivery ready for owner review: readiness-yes-a\nSaved Prooftask job: job_8d05fef88906f8da3a5a33573cc869be0beec9e0d8e0eb51fd25508f1812e64f\nAuthorized project: https://prooftask.com/provider?delivery=delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd\nQueue: https://docs.google.com/spreadsheets/d/synthetic-sheet-id-123456789/edit#gid=0\nPREPARED only. Review the exact saved materials before a separate deliberate submission. Buyer acceptance and payment have not been recorded.",
+      "includeLinkToWorkflow": false,
+      "link_names": false,
+      "mrkdwn": false,
+      "unfurl_links": false,
+      "unfurl_media": false,
+      "ts": "1.000001"
+    },
+    {
+      "channel": "CSYNTHETIC",
+      "text": "Delivery ready for owner review: readiness-yes-b\nSaved Prooftask job: job_fef53f7c3d7fa10858fa7f1ed931011bc91024c4f451c01fc11b8091d9934bd4\nAuthorized project: https://prooftask.com/provider?delivery=delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd\nQueue: https://docs.google.com/spreadsheets/d/synthetic-sheet-id-123456789/edit#gid=0\nPREPARED only. Review the exact saved materials before a separate deliberate submission. Buyer acceptance and payment have not been recorded.",
+      "includeLinkToWorkflow": false,
+      "link_names": false,
+      "mrkdwn": false,
+      "unfurl_links": false,
+      "unfurl_media": false,
+      "ts": "2.000001"
+    },
+    {
+      "channel": "CSYNTHETIC",
+      "text": "Delivery ready for owner review: valid-v1\nSaved Prooftask job: job_37c91b848167768092f1a10c5275dbd73b648eab1613188dbc790965ba4a68a7\nAuthorized project: https://prooftask.com/provider?delivery=delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd\nQueue: https://docs.google.com/spreadsheets/d/synthetic-sheet-id-123456789/edit#gid=0\nPREPARED only. Review the exact saved materials before a separate deliberate submission. Buyer acceptance and payment have not been recorded.",
+      "includeLinkToWorkflow": false,
+      "link_names": false,
+      "mrkdwn": false,
+      "unfurl_links": false,
+      "unfurl_media": false,
+      "ts": "3.000001"
+    },
+    {
+      "channel": "CSYNTHETIC",
+      "text": "Delivery ready for owner review: writeback-v1\nSaved Prooftask job: job_7d839d981b1efc4609d7d8d26c1c6da45a6ebe7cd99696c12051e1d937c8c221\nAuthorized project: https://prooftask.com/provider?delivery=delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd\nQueue: https://docs.google.com/spreadsheets/d/synthetic-sheet-id-123456789/edit#gid=0\nPREPARED only. Review the exact saved materials before a separate deliberate submission. Buyer acceptance and payment have not been recorded.",
+      "includeLinkToWorkflow": false,
+      "link_names": false,
+      "mrkdwn": false,
+      "unfurl_links": false,
+      "unfurl_media": false,
+      "ts": "4.000001"
+    },
+    {
+      "channel": "CSYNTHETIC",
+      "text": "Delivery ready for owner review: reminder-v1\nSaved Prooftask job: job_0a70876ce87d2a597c78f94d7340d27b3a42f0633e0a003f38c92b3598af7d95\nAuthorized project: https://prooftask.com/provider?delivery=delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd\nQueue: https://docs.google.com/spreadsheets/d/synthetic-sheet-id-123456789/edit#gid=0\nPREPARED only. Review the exact saved materials before a separate deliberate submission. Buyer acceptance and payment have not been recorded.",
+      "includeLinkToWorkflow": false,
+      "link_names": false,
+      "mrkdwn": false,
+      "unfurl_links": false,
+      "unfurl_media": false,
+      "ts": "5.000001"
+    },
+    {
+      "channel": "CSYNTHETIC",
+      "text": "Delivery ready for owner review: reminder-v2\nSaved Prooftask job: job_17424d780d70bb69c2d9f26f175ef8c6fd29cd9ef187114c13c92aa49ed1831d\nAuthorized project: https://prooftask.com/provider?delivery=delivery_8e2ecfd1-38a2-4b5f-a1d3-f213d911dbdd\nQueue: https://docs.google.com/spreadsheets/d/synthetic-sheet-id-123456789/edit#gid=0\nPREPARED only. Review the exact saved materials before a separate deliberate submission. Buyer acceptance and payment have not been recorded.",
+      "includeLinkToWorkflow": false,
+      "link_names": false,
+      "mrkdwn": false,
+      "unfurl_links": false,
+      "unfurl_media": false,
+      "ts": "6.000001"
+    }
+  ],
+  "requests": [
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "slack",
+      "method": "POST",
+      "path": "/slack/api/chat.postMessage",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "slack",
+      "method": "POST",
+      "path": "/slack/api/chat.postMessage",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "slack",
+      "method": "POST",
+      "path": "/slack/api/chat.postMessage",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "slack",
+      "method": "POST",
+      "path": "/slack/api/chat.postMessage",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "slack",
+      "method": "POST",
+      "path": "/slack/api/chat.postMessage",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "slack",
+      "method": "POST",
+      "path": "/slack/api/chat.postMessage",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "slack",
+      "method": "POST",
+      "path": "/slack/api/chat.postMessage",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "slack",
+      "method": "POST",
+      "path": "/slack/api/chat.postMessage",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "GET",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values/'Delivery queue'",
+      "authorizedWithMockCredential": true
+    },
+    {
+      "provider": "googleSheets",
+      "method": "POST",
+      "path": "/google/v4/spreadsheets/synthetic-sheet-id-123456789/values:batchUpdate",
+      "authorizedWithMockCredential": true
+    }
+  ],
+  "writes": [
+    {
+      "range": "Delivery queue!F2",
+      "rows": 1,
+      "fields": [
+        "request_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!G2",
+      "rows": 1,
+      "fields": [
+        "request_json"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I2",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!H2",
+      "rows": 1,
+      "fields": [
+        "job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I2",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!K2",
+      "rows": 1,
+      "fields": [
+        "prepared_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!H2",
+      "rows": 1,
+      "fields": [
+        "job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I2",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!K2",
+      "rows": 1,
+      "fields": [
+        "prepared_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!L2",
+      "rows": 1,
+      "fields": [
+        "notified_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!F3",
+      "rows": 1,
+      "fields": [
+        "request_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!G3",
+      "rows": 1,
+      "fields": [
+        "request_json"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I3",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J3",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!H3",
+      "rows": 1,
+      "fields": [
+        "job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I3",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J3",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!K3",
+      "rows": 1,
+      "fields": [
+        "prepared_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J3",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!L3",
+      "rows": 1,
+      "fields": [
+        "notified_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!F2",
+      "rows": 1,
+      "fields": [
+        "request_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!G2",
+      "rows": 1,
+      "fields": [
+        "request_json"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I2",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!H2",
+      "rows": 1,
+      "fields": [
+        "job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I2",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!K2",
+      "rows": 1,
+      "fields": [
+        "prepared_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!L2",
+      "rows": 1,
+      "fields": [
+        "notified_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I3",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J3",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I3",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J3",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!F2",
+      "rows": 1,
+      "fields": [
+        "request_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!G2",
+      "rows": 1,
+      "fields": [
+        "request_json"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I2",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!F2",
+      "rows": 1,
+      "fields": [
+        "request_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!G2",
+      "rows": 1,
+      "fields": [
+        "request_json"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I2",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!H2",
+      "rows": 1,
+      "fields": [
+        "job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I2",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!K2",
+      "rows": 1,
+      "fields": [
+        "prepared_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!L2",
+      "rows": 1,
+      "fields": [
+        "notified_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!F2",
+      "rows": 1,
+      "fields": [
+        "request_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!G2",
+      "rows": 1,
+      "fields": [
+        "request_json"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I2",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!H2",
+      "rows": 1,
+      "fields": [
+        "job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I2",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!K2",
+      "rows": 1,
+      "fields": [
+        "prepared_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!H2",
+      "rows": 1,
+      "fields": [
+        "job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I2",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!K2",
+      "rows": 1,
+      "fields": [
+        "prepared_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J2",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!L2",
+      "rows": 1,
+      "fields": [
+        "notified_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!M2",
+      "rows": 1,
+      "fields": [
+        "review_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!N2",
+      "rows": 1,
+      "fields": [
+        "review_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!O2",
+      "rows": 1,
+      "fields": [
+        "review_decision"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!P2",
+      "rows": 1,
+      "fields": [
+        "review_accepted"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!Q2",
+      "rows": 1,
+      "fields": [
+        "review_next_action"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!R2",
+      "rows": 1,
+      "fields": [
+        "review_observed_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!S2",
+      "rows": 1,
+      "fields": [
+        "review_url"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!T2",
+      "rows": 1,
+      "fields": [
+        "review_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!M2",
+      "rows": 1,
+      "fields": [
+        "review_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!N2",
+      "rows": 1,
+      "fields": [
+        "review_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!O2",
+      "rows": 1,
+      "fields": [
+        "review_decision"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!P2",
+      "rows": 1,
+      "fields": [
+        "review_accepted"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!Q2",
+      "rows": 1,
+      "fields": [
+        "review_next_action"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!R2",
+      "rows": 1,
+      "fields": [
+        "review_observed_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!S2",
+      "rows": 1,
+      "fields": [
+        "review_url"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!T2",
+      "rows": 1,
+      "fields": [
+        "review_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!M2",
+      "rows": 1,
+      "fields": [
+        "review_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!N2",
+      "rows": 1,
+      "fields": [
+        "review_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!O2",
+      "rows": 1,
+      "fields": [
+        "review_decision"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!P2",
+      "rows": 1,
+      "fields": [
+        "review_accepted"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!Q2",
+      "rows": 1,
+      "fields": [
+        "review_next_action"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!R2",
+      "rows": 1,
+      "fields": [
+        "review_observed_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!S2",
+      "rows": 1,
+      "fields": [
+        "review_url"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!T2",
+      "rows": 1,
+      "fields": [
+        "review_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!M2",
+      "rows": 1,
+      "fields": [
+        "review_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!N2",
+      "rows": 1,
+      "fields": [
+        "review_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!O2",
+      "rows": 1,
+      "fields": [
+        "review_decision"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!P2",
+      "rows": 1,
+      "fields": [
+        "review_accepted"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!Q2",
+      "rows": 1,
+      "fields": [
+        "review_next_action"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!R2",
+      "rows": 1,
+      "fields": [
+        "review_observed_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!S2",
+      "rows": 1,
+      "fields": [
+        "review_url"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!T2",
+      "rows": 1,
+      "fields": [
+        "review_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!F3",
+      "rows": 1,
+      "fields": [
+        "request_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!G3",
+      "rows": 1,
+      "fields": [
+        "request_json"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I3",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J3",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!H3",
+      "rows": 1,
+      "fields": [
+        "job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!I3",
+      "rows": 1,
+      "fields": [
+        "handover_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J3",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!K3",
+      "rows": 1,
+      "fields": [
+        "prepared_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!J3",
+      "rows": 1,
+      "fields": [
+        "handover_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!L3",
+      "rows": 1,
+      "fields": [
+        "notified_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!M2",
+      "rows": 1,
+      "fields": [
+        "review_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!N2",
+      "rows": 1,
+      "fields": [
+        "review_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!O2",
+      "rows": 1,
+      "fields": [
+        "review_decision"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!P2",
+      "rows": 1,
+      "fields": [
+        "review_accepted"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!Q2",
+      "rows": 1,
+      "fields": [
+        "review_next_action"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!R2",
+      "rows": 1,
+      "fields": [
+        "review_observed_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!S2",
+      "rows": 1,
+      "fields": [
+        "review_url"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!T2",
+      "rows": 1,
+      "fields": [
+        "review_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!M3",
+      "rows": 1,
+      "fields": [
+        "review_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!N3",
+      "rows": 1,
+      "fields": [
+        "review_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!O3",
+      "rows": 1,
+      "fields": [
+        "review_decision"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!P3",
+      "rows": 1,
+      "fields": [
+        "review_accepted"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!Q3",
+      "rows": 1,
+      "fields": [
+        "review_next_action"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!R3",
+      "rows": 1,
+      "fields": [
+        "review_observed_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!S3",
+      "rows": 1,
+      "fields": [
+        "review_url"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!T3",
+      "rows": 1,
+      "fields": [
+        "review_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!M2",
+      "rows": 1,
+      "fields": [
+        "review_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!N2",
+      "rows": 1,
+      "fields": [
+        "review_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!O2",
+      "rows": 1,
+      "fields": [
+        "review_decision"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!P2",
+      "rows": 1,
+      "fields": [
+        "review_accepted"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!Q2",
+      "rows": 1,
+      "fields": [
+        "review_next_action"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!R2",
+      "rows": 1,
+      "fields": [
+        "review_observed_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!S2",
+      "rows": 1,
+      "fields": [
+        "review_url"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!T2",
+      "rows": 1,
+      "fields": [
+        "review_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!M3",
+      "rows": 1,
+      "fields": [
+        "review_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!N3",
+      "rows": 1,
+      "fields": [
+        "review_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!O3",
+      "rows": 1,
+      "fields": [
+        "review_decision"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!P3",
+      "rows": 1,
+      "fields": [
+        "review_accepted"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!Q3",
+      "rows": 1,
+      "fields": [
+        "review_next_action"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!R3",
+      "rows": 1,
+      "fields": [
+        "review_observed_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!S3",
+      "rows": 1,
+      "fields": [
+        "review_url"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!T3",
+      "rows": 1,
+      "fields": [
+        "review_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!M2",
+      "rows": 1,
+      "fields": [
+        "review_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!N2",
+      "rows": 1,
+      "fields": [
+        "review_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!O2",
+      "rows": 1,
+      "fields": [
+        "review_decision"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!P2",
+      "rows": 1,
+      "fields": [
+        "review_accepted"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!Q2",
+      "rows": 1,
+      "fields": [
+        "review_next_action"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!R2",
+      "rows": 1,
+      "fields": [
+        "review_observed_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!S2",
+      "rows": 1,
+      "fields": [
+        "review_url"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!T2",
+      "rows": 1,
+      "fields": [
+        "review_note"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!M3",
+      "rows": 1,
+      "fields": [
+        "review_job_id"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!N3",
+      "rows": 1,
+      "fields": [
+        "review_state"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!O3",
+      "rows": 1,
+      "fields": [
+        "review_decision"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!P3",
+      "rows": 1,
+      "fields": [
+        "review_accepted"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!Q3",
+      "rows": 1,
+      "fields": [
+        "review_next_action"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!R3",
+      "rows": 1,
+      "fields": [
+        "review_observed_at"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!S3",
+      "rows": 1,
+      "fields": [
+        "review_url"
+      ],
+      "valueInputOption": "RAW"
+    },
+    {
+      "range": "Delivery queue!T3",
+      "rows": 1,
+      "fields": [
+        "review_note"
+      ],
+      "valueInputOption": "RAW"
+    }
+  ]
+}

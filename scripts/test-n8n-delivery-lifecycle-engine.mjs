@@ -12,6 +12,8 @@ import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { createProviderFixture } from './n8n-lab/provider-fixture.mjs';
 const nativeProviders = process.env.N8N_PROVIDER_TRANSPORT === 'native';
+const selectedCase=process.env.N8N_ENGINE_CASE??'full';
+if(!['full','readiness-three-row'].includes(selectedCase))throw new Error('N8N_ENGINE_CASE must be full or readiness-three-row.');
 
 const source = process.env.PROOFTASK_SOURCE_ROOT;
 const cli = process.env.N8N_CLI;
@@ -106,13 +108,47 @@ for (const node of flow.nodes) {
     node.parameters.headerParameters = { parameters: [{ name: 'Authorization', value: 'Bearer ' + grant.token }] };
   }
 }
+async function threeRowReadinessCase(){
+  const initialRows=[row('readiness-yes-a'),row('readiness-yes-b'),{...row('readiness-no'),ready_for_review:'NO'}];
+  queue=structuredClone(initialRows);
+  const baseJobs=store.listSelfServiceRecords('automation-job').length,baseCalls=preparationCalls,baseReminders=reminders.length,baseAudit=providers.audit.length;
+  const initialEvents=service.get(buyer,project.taskId).events.length;
+  failReminder=true;
+  await run(['execute','--id='+flow.id,'--rawOutput'],false);
+  assert.match(queue[0].job_id,/^job_[a-f0-9]{64}$/);assert.equal(queue[1].job_id,'');assert.deepEqual(queue[2],initialRows[2]);
+  assert.equal(store.listSelfServiceRecords('automation-job').length,baseJobs+1);assert.equal(preparationCalls,baseCalls+1);assert.equal(reminders.length,baseReminders);
+  const failed={rows:structuredClone(queue),newJobs:1,preparationPosts:1,successfulReminders:0};
+  const saved={request_id:queue[0].request_id,request_json:queue[0].request_json,job_id:queue[0].job_id};
+  await run(['execute','--id='+flow.id,'--rawOutput']);
+  assert.equal(queue[0].request_id,saved.request_id);assert.equal(queue[0].request_json,saved.request_json);assert.equal(queue[0].job_id,saved.job_id);
+  for(const item of queue.slice(0,2)){assert.equal(item.handover_state,'PREPARED');assert.match(item.job_id,/^job_[a-f0-9]{64}$/);assert.equal(item.notified_job_id,item.job_id);}
+  assert.equal(new Set(queue.slice(0,2).map(item=>item.job_id)).size,2);assert.equal(new Set(queue.slice(0,2).map(item=>item.request_id)).size,2);
+  assert.equal(store.listSelfServiceRecords('automation-job').length,baseJobs+2);assert.equal(preparationCalls,baseCalls+2);assert.equal(reminders.length,baseReminders+2);assert.deepEqual(queue[2],initialRows[2]);
+  const successful=reminders.slice(baseReminders);
+  for(const item of queue.slice(0,2))assert.equal(successful.filter(message=>message.text.includes('Delivery ready for owner review: '+item.task_id+'\n')&&message.text.includes(item.job_id)).length,1);
+  assert.ok(successful.every(message=>!message.text.includes('readiness-no')));
+  const recovered=structuredClone(queue);
+  await run(['execute','--id='+flow.id,'--rawOutput']);
+  assert.deepEqual(queue,recovered);assert.equal(preparationCalls,baseCalls+2);assert.equal(store.listSelfServiceRecords('automation-job').length,baseJobs+2);assert.equal(reminders.length,baseReminders+2);
+  assert.equal(service.get(buyer,project.taskId).events.length,initialEvents,'Readiness, preparation, reminders and replay must never submit or accept.');
+  return {case:'readiness-three-row',readinessIsNotApproval:true,explicitSubmissionApprovalUnchanged:true,inputRows:initialRows,afterRejectedReminder:failed,afterRecovery:recovered,afterReplay:structuredClone(queue),newSavedJobs:2,preparationPosts:2,successfulReminders:2,providerRequests:providers.audit.length-baseAudit,projectEventsUnchanged:true,notificationFailure:'Explicit Slack rejection before successful delivery; not an uncertain delivery/acknowledgement loss.',messages:successful};
+}
 writeFileSync(join(home, 'workflow.json'), JSON.stringify(flow), { mode: 0o600 });
 try {
+  const versionRun=await run(['--version']);
+  const reportedVersions=versionRun.out.split(/\r?\n/).map(line=>line.trim()).filter(line=>/^\d+\.\d+\.\d+(?:[-+][A-Za-z0-9.-]+)?$/.test(line));
+  assert.equal(reportedVersions.length,1,'The configured CLI must report exactly one version.');
+  const observedVersion=reportedVersions[0];assert.equal(observedVersion,'2.39.8','This fixture pins n8n 2.39.8; do not label a different executable as this version.');
+  const engineVersionObservation={command:'N8N_CLI --version',exitCode:versionRun.status,reportedVersion:observedVersion,expectedVersion:'2.39.8',output:versionRun.out.trim(),observedAt:new Date().toISOString()};
   if(nativeProviders) {
     const credentials=[{id:googleCredentialId,name:'Simulation only: Google Sheets',type:'googleSheetsOAuth2Api',data:{clientId:'mock-client-id',clientSecret:'mock-client-secret',oauthTokenData:{access_token:'mock-google-access-token',token_type:'Bearer',expires_in:86400,expiry_date:Date.now()+86400000}}},{id:slackCredentialId,name:'Simulation only: Slack',type:'slackApi',data:{accessToken:'xoxb-mock-slack-token'}}];
     const credentialPath=join(home,'mock-credentials.json');writeFileSync(credentialPath,JSON.stringify(credentials),{mode:0o600});await run(['import:credentials','--input='+credentialPath]);
   }
   await run(['import:workflow', '--input=' + join(home, 'workflow.json')]);
+  const readinessCase=await threeRowReadinessCase();
+  console.log('PASS actual engine: three readiness rows, rejected reminder recovery and replay; two prepared jobs, NO row unchanged, no submission.');
+  if(selectedCase==='full'){
+  const basePreparationCalls=preparationCalls,baseReminders=reminders.length;
   queue = [row('valid-v1'), { ...row('missing-v1'), materials_json: '[]' }];
   const initialEvents = service.get(buyer, project.taskId).events.length;
   await run(['execute', '--id=' + flow.id, '--rawOutput']);
@@ -121,10 +157,10 @@ try {
     console.error(JSON.stringify({queueState:queue[0].handover_state,note:queue[0].handover_note,status:response.status,body:await response.json()}));
   }
   assert.equal(queue[0].handover_state, 'PREPARED',queue[0].handover_note); assert.equal(queue[1].handover_state, 'NEEDS_INPUT');
-  assert.match(queue[0].job_id, /^job_[a-f0-9]{64}$/); assert.equal(reminders.length, 1);
+  assert.match(queue[0].job_id, /^job_[a-f0-9]{64}$/); assert.equal(reminders.length, baseReminders+1);
   assert.equal(service.get(buyer, project.taskId).events.length, initialEvents, 'Preparation never submits or accepts.');
   await run(['execute', '--id=' + flow.id, '--rawOutput']);
-  assert.equal(preparationCalls, 1); assert.equal(reminders.length, 1);
+  assert.equal(preparationCalls, basePreparationCalls+1); assert.equal(reminders.length, baseReminders+1);
   console.log('PASS actual engine: real preparation, missing-row feedback, normal rerun skips the notified job.');
 
   queue = [row('writeback-v1')]; failWrite = true;
@@ -181,12 +217,13 @@ try {
   agents.revoke(supplier, grant.grant.id);
   await executeMode('sync'); assert.equal(queue[0].review_accepted, 'UNKNOWN'); assert.equal(queue[0].review_state, 'UNKNOWN'); assert.equal(queue[1].review_accepted, 'UNKNOWN');
   console.log('PASS unified actual engine: approval guard, deliberate submission/replay, automatic pending readback, correction/new delivery identity, exact acceptance and revoked readback.');
+  }
   if(nativeProviders) {
     assert.ok(providers.audit.some(r=>r.provider==='googleSheets'&&r.method==='POST'));assert.ok(providers.audit.some(r=>r.provider==='slack'));
     const evidencePath=process.env.N8N_PROVIDER_EVIDENCE;
-    if(evidencePath)writeFileSync(evidencePath,JSON.stringify({ok:true,nativeGoogleSheetsAndSlackNodes:true,exportSha256,...providers.snapshot()},null,2)+'\n');
+    if(evidencePath)writeFileSync(evidencePath,JSON.stringify({ok:true,nativeGoogleSheetsAndSlackNodes:true,engine:'n8n '+observedVersion,engineVersionObservation,selectedCase,exportSha256,runnerSha256:createHash('sha256').update(readFileSync(fileURLToPath(import.meta.url))).digest('hex'),productionWrites:0,cases:{readinessThreeRow:readinessCase},...providers.snapshot()},null,2)+'\n');
   }
-  console.log(JSON.stringify({ ok: true, nativeGoogleSheetsAndSlackNodes:nativeProviders, providerRequests:nativeProviders?providers.audit.length:undefined, engine: 'n8n 2.39.8', combinedWorkflow: true, exportSha256, actualProoftaskAPI: true, syntheticGoogleSheetsAndSlack: true, productionWrites: 0, savedJobs: store.listSelfServiceRecords('automation-job').length }));
+  console.log(JSON.stringify({ ok: true, nativeGoogleSheetsAndSlackNodes:nativeProviders, providerRequests:nativeProviders?providers.audit.length:undefined, engine: 'n8n '+observedVersion, engineVersionObservation, combinedWorkflow: true, selectedCase, readinessThreeRow:readinessCase, exportSha256, actualProoftaskAPI: true, syntheticGoogleSheetsAndSlack: true, productionWrites: 0, savedJobs: store.listSelfServiceRecords('automation-job').length }));
 } finally {
   await new Promise(r => api.close(r)); await new Promise(r => fixture.close(r)); store.close(); rmSync(home, { recursive: true, force: true });
 }
