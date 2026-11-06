@@ -1,6 +1,6 @@
 # MCP 0.1.2 compatibility candidate
 
-Status: npm 0.1.2 remains an unpublished candidate. Source/gateway work from pull request #10 can be promoted independently through an explicitly reviewed commit pin; npm publication remains a separate release step.
+Status updated 2026-11-06: npm 0.1.2 is published. An anonymous registry install and its actual npm-created binary passed public read-only verification; see [distribution status](STATUS.md). The compatibility review below is retained as release history. Registry metadata publication remains a separate reviewed step.
 
 Base: integrations main `8e0e5f152eb653474b9aaca32f36cef18e6a7e9f`, whose tree matches the original reviewed `883352b1fbacdff56c2391e8741929aae41588c5` base.
 This candidate preserves the existing catalog-v1 tool names, routes, annotations,
@@ -28,20 +28,20 @@ The gateway SDK test confirms that the three public tools still work, private
 authority is absent, and health reports the actual tool inventory. No deployed
 service change is claimed.
 
-## Prepared future-release files
+## Package release and retained registry pins
 
-- `mcp/package.json`: npm candidate 0.1.2.
+- `mcp/package.json`: published npm 0.1.2; its package files remain unchanged.
 - Both active MCP client JSON examples retain published `prooftask-mcp@0.1.1`.
 - `mcp/server.json.example` retains active registry metadata 0.1.4/npm 0.1.1.
-- Packaged README/CHANGELOG describe version behavior without claiming availability; this channel document retains unpublished status.
+- Packaged README/CHANGELOG describe version behavior without claiming availability; this channel document records the separate publication evidence.
 - `ASSET_PROVENANCE.json`: original retrieval/hashes retained, local backports and
   source commit recorded separately; current file hashes do not pretend to be an
   unchanged upstream download.
 
-No immutable 0.1.1 package is repaired by these local changes. A separately
-reviewed release must publish npm 0.1.2 before distributing its npx pins, then
-review/update registry metadata and verify the actual installed package and
-hosted gateway independently. This document authorizes none of those actions.
+No immutable 0.1.1 package is repaired by these local changes. npm 0.1.2 has now been published and independently installed. A separate
+review must advance both client examples, registry metadata to 0.1.5/npm 0.1.2
+and the existing workflow version assertions together; hosted gateway
+verification remains independent. This document authorizes none of those actions.
 
 The manual registry publication workflow's two version assertions retain
 server metadata 0.1.4/npm 0.1.1. Its manual trigger, permissions, pinned publisher
@@ -73,7 +73,7 @@ accepting it. Preserve commit pinning and all unrelated services, environments a
 settings. After promotion, verify the exact health commit, three tools, template
 digest and private-tool refusal. This does not repair installed npm 0.1.1 or publish private exports.
 
-Keep npm publication open: publish the exact reviewed 0.1.2 tarball through an
-authorized route, independently install and verify it, then advance both client
-pins and registry metadata/version assertions together to 0.1.2/0.1.5. No registry
-dispatch is required for this source phase.
+The npm publication and independent installation steps are complete. Keep the
+coordinated client-pin and Registry metadata/version-assertion update open for
+review (npm 0.1.2 / server 0.1.5). Do not republish npm 0.1.2 or dispatch the
+Registry workflow as part of this documentation correction.

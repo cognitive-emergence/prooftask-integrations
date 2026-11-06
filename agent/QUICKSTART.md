@@ -2,20 +2,17 @@
 
 Requires Node.js 24+. Start without an account or credential.
 
-This checkout contains the unpublished 0.1.2 compatibility candidate. Active client JSON pins remain at published 0.1.1, which retains its earlier
-export-redaction behavior. To use the source fixes, use an absolute Node executable
-and this checkout's `mcp/agent-mcp.mjs`; npm publication is a separate pending step.
-The v1 tool names, argument envelopes and HTTP response wrapper remain unchanged.
+npm `prooftask-mcp@0.1.2` is published and was independently installed and checked on 2026-11-06. The v1 tool names, argument envelopes and HTTP response wrapper remain unchanged.
 
 ## MCP client (Claude Desktop, Cursor or another stdio client)
 
-For this unpublished checkout, configure an absolute Node executable and the absolute path to `mcp/agent-mcp.mjs` in your existing `mcpServers` object. Preserve other servers. The active [mcp-client.json](../mcp/mcp-client.json) uses published npm 0.1.1 and does not contain these source fixes. Restart or reconnect the client, then ask:
+Configure `command: "npx"` and `args: ["-y", "prooftask-mcp@0.1.2"]` in your existing `mcpServers` entry. Preserve other servers. The checked-in [mcp-client.json](../mcp/mcp-client.json) retains the earlier 0.1.1 pin pending the coordinated registry release; select 0.1.2 explicitly to use the published compatibility fixes. Restart or reconnect the client, then ask:
 
 > Use Prooftask getAgentCapabilities and summarize the supported connection and workflow options. Do not create or modify anything.
 
 Expected: the tool returns JSON with HTTP 200. A listed tool alone is not a successful server call. If `npx` is unavailable in the GUI client's PATH, use the absolute Node path and the checked-out adapter path as shown in the MCP README.
 
-Published version 0.1.1 exposes 23 read-only tools by default. Call `searchPublicSpecifications` with `{"query":{"q":"automation"}}`, then `getPublicSpecification` with the returned slug and exact version. These two tools need no credential; compare the returned digest before reuse. `listUsableTemplates` remains authenticated. The HTTP example below is also available.
+Published version 0.1.2 exposes 23 read-only tools by default. Call `searchPublicSpecifications` with `{"query":{"q":"automation"}}`, then `getPublicSpecification` with the returned slug and exact version. These two tools need no credential; compare the returned digest before reuse. `listUsableTemplates` remains authenticated. The HTTP example below is also available.
 
 ## Code Agent: anonymous template search
 
@@ -45,7 +42,7 @@ Expected: `mcpInitialization: PASS`, `publicCapabilities: HTTP_200`, `privateRea
 
 ## Continue with private reads
 
-Complete the [existing Agent connection flow](https://prooftask.com/developers?utm_source=partner&utm_campaign=github_integrations) outside model context. Use the exact credential file produced by the client; do not manually construct a token or paste one into chat. Use [the private configuration example](../mcp/mcp-client-private.example.json), replacing the absolute credential-file path locally and using this checkout’s absolute Node/adapter paths until the candidate is published.
+Complete the [existing Agent connection flow](https://prooftask.com/developers?utm_source=partner&utm_campaign=github_integrations) outside model context. Use the exact credential file produced by the client; do not manually construct a token or paste one into chat. Use [the private configuration example](../mcp/mcp-client-private.example.json), replacing the absolute credential-file path locally and selecting the published `prooftask-mcp@0.1.2` version explicitly.
 
 Reconnect the MCP client. Call `getAgent` first and confirm the represented workspace and granted scope, then `getProject` with the exact authorized project ID. A successful login does not grant every project or action.
 
