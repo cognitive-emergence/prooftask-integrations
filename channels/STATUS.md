@@ -1,13 +1,13 @@
 # Distribution status
 
-Updated 2026-11-06 for npm; n8n retains its 2026-11-02 observation. Other channel evidence retains its original observation date. Publication and live customer integration are separate milestones.
+n8n and the hosted MCP registry entries were checked on 2026-11-24. Other observations carry their own dates.
 
 | Channel | Verified state |
 | --- | --- |
 | GitHub | Public integration repository with MCP adapter, n8n preparation/submission/status examples and provider guidance |
 | npm | prooftask-mcp@0.1.2 published and independently installed from the public registry on 2026-11-06; see verification below. |
-| Official MCP Registry | Current public metadata: active/latest server 0.1.4, npm 0.1.1, existing hosted URL. |
-| n8n | Not currently verified as published. The owner supplied a 2026-11-02 rejection email; listing #21159 and the official API return 404. Earlier published observations below are historical. The corrected lifecycle candidate was resubmitted to #21159 on 2026-11-02; authenticated Creator Portal shows UNDER REVIEW. Native Google Sheets/Slack nodes passed local API simulations and two browser runs. Marketplace approval and live vendor authorization/delivery remain unverified. |
+| Official MCP Registry | The hosted [public service](https://registry.modelcontextprotocol.io/v0.1/servers/com.prooftask%2Fmcp-public/versions/latest) and [OAuth service](https://registry.modelcontextprotocol.io/v0.1/servers/com.prooftask%2Fmcp/versions/latest) are active at 2.0.0. The older `io.github.cognitive-emergence/prooftask` entry is active at 0.1.4 and references npm 0.1.1. |
+| n8n | [Workflow #21159](https://n8n.io/workflows/21159/) is public. The [template API](https://api.n8n.io/templates/workflows/21159) reports `published` and serves the workflow with prepare, submit and sync modes. See the [setup guide](../n8n/DELIVERY_LIFECYCLE.md) for Google Sheets and Slack credentials and live acceptance checks. |
 | Service providers | Public onboarding guidance; no outreach or adoption claimed |
 | Public customer cases | Requires real projects and bilateral approval |
 

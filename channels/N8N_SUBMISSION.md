@@ -1,6 +1,10 @@
 # n8n submission #21159 — follow-up
 
-## Current status — 2026-11-02
+## Published workflow — 2026-11-24
+
+[Workflow #21159](https://n8n.io/workflows/21159/) is public. The [template API](https://api.n8n.io/templates/workflows/21159) reports `published`. The workflow prepares a saved delivery job from Google Sheets, submits it after explicit review and syncs the buyer’s decision to the original row. The [setup and recovery guide](../n8n/DELIVERY_LIFECYCLE.md) covers all three modes.
+
+## Historical review — 2026-11-02
 
 The owner supplied a rejection email dated 2026-11-02 stating that the workflow is too basic. On the same date, the public listing and `https://api.n8n.io/templates/workflows/21159` returned HTTP 404 (`Workflow not found` from the API). Earlier published observations below are retained as history, not current approval. Authenticated Creator Portal now shows the existing submission under Pending with `IMPLEMENT CHANGES`. At inspection, its last-submitted JSON recursively matched upstream preparation export `6d54a1af` (28 execution nodes plus seven notes). The frozen portal export remains in evidence; the current preparation and lifecycle exports now include the native Slack receipt correction. The corrected combined candidate was resubmitted to the existing #21159 entry on 2026-11-02; the dashboard now shows `UNDER REVIEW` with that date. A 404 alone does not establish a permanent removal.
 

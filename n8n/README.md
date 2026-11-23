@@ -1,6 +1,6 @@
 # n8n delivery handover and acceptance
 
-> Status checked 2026-11-02: #21159 is not currently verified as published; the owner received a rejection and the public listing/API return 404. References to publication below describe the previous export. For the new single-import workflow, use [delivery lifecycle setup](DELIVERY_LIFECYCLE.md).
+Open [workflow #21159 on n8n](https://n8n.io/workflows/21159/) to prepare a delivery, submit the version an operator reviewed and sync the buyer’s decision back to Google Sheets. Follow the [setup guide](DELIVERY_LIFECYCLE.md) to connect your project, Sheet and Slack channel.
 
 These workflows use built-in n8n nodes and the existing Prooftask API. Import JSON using n8n's import-from-file action. All exports are inactive and contain no credentials or real delivery data.
 
@@ -8,7 +8,7 @@ These workflows use built-in n8n nodes and the existing Prooftask API. Import JS
 
 Import [discover-templates.json](discover-templates.json), edit the search phrase and run manually. The public catalog supplies versioned templates and completion criteria. No account or Agent grant is needed. This is a read-only starting workflow.
 
-For the complete queue scenario, import the [delivery lifecycle candidate](delivery-lifecycle.json) and follow its [configuration, recovery and review steps](DELIVERY_LIFECYCLE.md). Preparation, deliberate submission and buyer-decision sync share one configuration and original queue. The [previous preparation export](../channels/n8n-prepare-client-delivery.json) remains available for comparison and stops before submission; #21159 currently needs changes, not a new duplicate submission.
+To import the marketplace workflow from this repository, use [delivery-lifecycle.json](delivery-lifecycle.json). The [previous preparation export](../channels/n8n-prepare-client-delivery.json) is available for teams comparing their existing setup.
 
 ## 2. Connect an existing delivery
 
@@ -33,4 +33,4 @@ The buyer reviews the submitted version through their Prooftask link. Requests f
 - [Live send-job export](https://prooftask.com/developers/n8n/send-job.json)
 - [Live event receiver export](https://prooftask.com/developers/n8n/events.json)
 
-The authenticated exports are public product snapshots. Review the live version before operational use. Previous publication evidence concerns preparation export #21159 only; its current Creator Portal state is Implement changes. The lifecycle candidate and companion examples do not have new marketplace approval. Complete [production acceptance](DELIVERY_LOOP.md#production-acceptance) with your authorized services before claiming a live integration.
+The standalone exports are product snapshots. Check the live version you intend to run and complete the [production acceptance checks](DELIVERY_LOOP.md#production-acceptance) with your own authorized services.
