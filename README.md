@@ -1,8 +1,10 @@
-# Prooftask integrations
+# ProofTask integrations
 
-Connect **delivery handover and client acceptance** to your existing n8n workflows and AI agents. Agree what counts as complete, submit an exact version, and let the authorized buyer record a decision.
+ProofTask helps a service team and its client agree on what counts as done and keep a record of which delivery the client accepted. This repository connects that review to a Google Sheets queue, Slack, n8n and agent clients.
 
-[Prooftask](https://prooftask.com/?utm_source=partner&utm_campaign=github_integrations) · [API documentation](https://prooftask.com/developers?utm_source=partner&utm_campaign=github_integrations) · [Delivery templates](https://prooftask.com/specifications?utm_source=partner&utm_campaign=github_integrations)
+- **See a review from both sides.** An AI support agent passes 38 of 40 questions, but two handoff records are missing. Follow the buyer’s request through to the exact revision they accept. [Open the public example (no account needed)](https://prooftask.com/example?utm_source=partner&utm_campaign=github_integrations)
+- **Try the n8n template.** Prepare a delivery from a Google Sheets row, notify your team in Slack, then submit the reviewed version and sync the buyer’s decision back to that row. [Open workflow #21159 on n8n](https://n8n.io/workflows/21159/) · [Setup guide and sample queue](n8n/DELIVERY_LIFECYCLE.md#configure-once)
+- **Build your own integration.** Start with delivery criteria you can reuse or connect your own agent. [Delivery templates](https://prooftask.com/specifications?utm_source=partner&utm_campaign=github_integrations) · [API documentation](https://prooftask.com/developers?utm_source=partner&utm_campaign=github_integrations)
 
 ## Public discovery: scope and price
 
@@ -41,11 +43,11 @@ Or import [n8n/discover-templates.json](n8n/discover-templates.json) into n8n an
 | Decide what a client should check | Search public templates above; no account required |
 | Connect an MCP client | Run `npx -y prooftask-mcp@0.1.2` (Node.js 24+); see [MCP adapter setup](mcp/README.md) |
 | Hand over an n8n project | Agree scope and client checks with the [n8n handover checklist](https://prooftask.com/guides/n8n-handover-checklist) |
-| Manage a delivery queue with n8n | Import the [single-workflow lifecycle candidate](n8n/delivery-lifecycle.json), then follow its [setup and recovery guide](n8n/DELIVERY_LIFECYCLE.md) |
+| Manage a delivery queue with n8n | Import the [workflow JSON](n8n/delivery-lifecycle.json) and follow the [setup and recovery guide](n8n/DELIVERY_LIFECYCLE.md) |
 | Prepare a client delivery job | Use an existing authorized project and [n8n setup](n8n/README.md); preparation saves a job before any send |
 | Evaluate adoption for your service team | Read the [provider guide](providers/README.md) |
 
-The n8n submission #21159 is not currently verified as published: the owner received a rejection on 2026-11-02 and the official listing/API return 404. Import the [delivery lifecycle candidate](n8n/delivery-lifecycle.json) and follow its [setup and review guide](n8n/DELIVERY_LIFECYCLE.md) to prepare, deliberately submit and sync buyer decisions in one workflow. This candidate has not been resubmitted or marketplace approved. Live Google Sheets/Slack acceptance remains separate.
+The n8n workflow has three manual modes. `prepare` saves a job and sends an internal Slack reminder. After checking the original files, the operator uses `submit` to send that exact job. The buyer reviews it in ProofTask. Run `sync` to write the latest outcome to the original row, including requests for corrections. If the workflow cannot verify a status, the row shows `UNKNOWN`.
 
 ## Choose an integration
 

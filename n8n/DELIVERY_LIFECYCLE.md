@@ -1,10 +1,10 @@
 # Manage client delivery reviews in one n8n workflow
 
-Import [delivery-lifecycle.json](delivery-lifecycle.json). This candidate combines preparation, explicit saved-job submission and exact buyer-status readback on one canvas. It does not require importing companion workflows. Its review status is tracked in [the existing submission record](../channels/N8N_SUBMISSION.md); marketplace approval is not claimed.
+Open [workflow #21159 on n8n](https://n8n.io/workflows/21159/) or import [delivery-lifecycle.json](delivery-lifecycle.json). The same canvas prepares a delivery, submits the saved job after operator review and syncs the buyer’s decision to the original Google Sheets row.
 
 ## Who it helps and what changes
 
-An automation consultant tracks client delivery revisions in Google Sheets. Previously, preparation stopped at a Slack reminder and the operator had to configure two more workflow imports. This candidate uses one configuration and three deliberate run modes. A submitted job is immediately read back into the original queue; after buyer action, another sync records pending review, correction, acceptance or an uncertain read. A correction gets a new task row, retaining the earlier delivery history.
+An automation consultant can track each client delivery revision in Google Sheets. Configure the workflow once and select a mode for each manual run. Submission refreshes the original row. A later sync shows whether review is pending, the buyer requested a correction, the buyer accepted that revision or the status could not be verified. A corrected delivery gets its own row so the earlier review stays with its original version.
 
 For a ready-to-run personal simulation environment, see [Local n8n lab](LOCAL_LAB.md). The lab uses fake credentials and does not require connecting your Google or Slack accounts.
 
