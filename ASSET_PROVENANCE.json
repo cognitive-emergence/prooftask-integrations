@@ -12,7 +12,7 @@
     {
       "path": "mcp/agent-mcp-tools.json",
       "source": "https://prooftask.com/developers/agent-mcp-tools.json",
-      "sha256": "6675cf59a0a1637f877bce997448716c3672d162360f642cd6f95404fd0659d8",
+      "sha256": "913d090301b32e9d0dc04173ca16c4c9209ee1d3b533cbc0eae17fd7fbb0ffcd",
       "upstreamSha256": "d342ca73f0f708688651af5bd4fda4e79a36aba90c071779aa4986cad5d1d079",
       "localChanges": "Original two public discovery GET additions retained. Compatibility backports: current Conformity/legacy export descriptions; strict v2 template snapshots alongside original v1 snapshots; current criterion checks/check-run references; explicit draft role. Tool names, routes and top-level v1 contract preserved. Public discovery descriptions cover catalog browsing, identifier/version lookup and the structured results of all three public reads.",
       "previousLocalSha256": "c1301edf39db64905c0a9a5878a5a4859c12705a7f1828c4498770271a6a70c5",

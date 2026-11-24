@@ -2207,7 +2207,7 @@
     },
     {
       "name": "getAgentCapabilities",
-      "description": "Read one public compatibility report before connecting a client. Call with {} to check API version, supported transports, connection options and billing behavior. For available templates, use searchPublicSpecifications. The report describes the service; workspace permissions are granted separately.",
+      "description": "Check client compatibility before connecting to ProofTask. Call with {} for the current API version, transports, workspace connection methods and billing behavior. Fetch a fresh report when configuring a client or after an upgrade. Connecting a workspace requires separate human approval. To browse templates, use searchPublicSpecifications.",
       "inputSchema": {
         "type": "object",
         "properties": {},
@@ -7614,7 +7614,7 @@
     },
     {
       "name": "searchPublicSpecifications",
-      "description": "List or search public acceptance templates without signing in. Call with {} to browse the whole catalog, or filter by keywords and industry together. All matches come in one items array in catalog order. If it is empty, broaden the filters. For a known ID or slug and version, call getPublicSpecification directly. Keep the selected item’s version and digest for verification.",
+      "description": "Search public acceptance templates before signing in. Use {} for the whole catalog or {\"query\":{\"q\":\"n8n\",\"industry\":\"retail\"}} to narrow it. Every search word must match and the industry must match exactly, ignoring case. All matches arrive together in catalog order. If none match, drop the industry or a keyword. For a saved ID or slug and version, go directly to getPublicSpecification.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -7638,7 +7638,16 @@
           }
         },
         "required": [],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "examples": [
+          {},
+          {
+            "query": {
+              "q": "n8n",
+              "industry": "retail"
+            }
+          }
+        ]
       },
       "annotations": {
         "readOnlyHint": true,
@@ -7730,7 +7739,7 @@
     },
     {
       "name": "getPublicSpecification",
-      "description": "Read one exact public acceptance template by ID or slug and version, without signing in. You can use a saved identifier directly or take id, slug, version and digest from one searchPublicSpecifications result. Compare the returned digest with your saved digest, then review the scope, criteria and required evidence. An unavailable ID/version returns HTTP 404. Search again before choosing another revision.",
+      "description": "Fetch one public template at a pinned version. For example, pass {\"path\":{\"id\":\"business-automation\"},\"query\":{\"version\":1}}. Use a saved slug or ID and version from the same searchPublicSpecifications item. Only the currently published revision is available. A 404 calls for a new search. If a saved digest differs, stop and review the change before adopting the template.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -7771,7 +7780,17 @@
           "path",
           "query"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "examples": [
+          {
+            "path": {
+              "id": "business-automation"
+            },
+            "query": {
+              "version": 1
+            }
+          }
+        ]
       },
       "annotations": {
         "readOnlyHint": true,
