@@ -2207,7 +2207,7 @@
     },
     {
       "name": "getAgentCapabilities",
-      "description": "Read supported connection, billing and client capabilities without a credential",
+      "description": "Read one public compatibility report before connecting a client. Call with {} to check API version, supported transports, connection options and billing behavior. For available templates, use searchPublicSpecifications. The report describes the service; workspace permissions are granted separately.",
       "inputSchema": {
         "type": "object",
         "properties": {},
@@ -2226,6 +2226,62 @@
         "authenticated": false,
         "mutating": false,
         "root": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "httpStatus": {
+            "type": "integer",
+            "minimum": 200,
+            "maximum": 599,
+            "description": "Upstream HTTP status. A failed read also sets isError on the MCP result."
+          },
+          "data": {
+            "description": "The published result on success, or the upstream error payload."
+          }
+        },
+        "required": [
+          "httpStatus",
+          "data"
+        ],
+        "if": {
+          "properties": {
+            "httpStatus": {
+              "maximum": 299
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "data": {
+              "type": "object",
+              "properties": {
+                "apiVersion": {
+                  "type": "string",
+                  "description": "Agent API contract version."
+                },
+                "connection": {
+                  "type": "object",
+                  "description": "Published ways to connect an agent."
+                },
+                "mcpTransport": {
+                  "type": "object",
+                  "description": "Available MCP transports and endpoints."
+                },
+                "billing": {
+                  "type": "object",
+                  "description": "Credit use and human checkout behavior."
+                }
+              },
+              "required": [
+                "apiVersion",
+                "connection",
+                "mcpTransport",
+                "billing"
+              ]
+            }
+          }
+        }
       }
     },
     {
@@ -2801,7 +2857,7 @@
     },
     {
       "name": "listProjectWebhooks",
-      "description": "List this grant\u2019s subscriptions",
+      "description": "List this grant’s subscriptions",
       "inputSchema": {
         "type": "object",
         "properties": {},
@@ -7558,7 +7614,7 @@
     },
     {
       "name": "searchPublicSpecifications",
-      "description": "Find public delivery acceptance templates before asking a user to connect. Search by delivery scenario such as automation, customer support or software. No credential needed. Empty results mean broaden the query; do not invent a matching template. Returned examples are editable starting points, not quality certification or payment proof. Pin the returned version and digest before reuse.",
+      "description": "List or search public acceptance templates without signing in. Call with {} to browse the whole catalog, or filter by keywords and industry together. All matches come in one items array in catalog order. If it is empty, broaden the filters. For a known ID or slug and version, call getPublicSpecification directly. Keep the selected item’s version and digest for verification.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -7567,15 +7623,18 @@
             "properties": {
               "q": {
                 "type": "string",
-                "maxLength": 200
+                "maxLength": 200,
+                "description": "Keywords describing the delivery, for example n8n workflow or chatbot. All search words must match."
               },
               "industry": {
                 "type": "string",
-                "maxLength": 80
+                "maxLength": 80,
+                "description": "Exact industry filter, case insensitive, for example retail. May be combined with keywords."
               }
             },
             "required": [],
-            "additionalProperties": false
+            "additionalProperties": false,
+            "description": "Optional catalog filters. Omit query to list every published template."
           }
         },
         "required": [],
@@ -7593,11 +7652,85 @@
         "authenticated": false,
         "mutating": false,
         "root": true
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "httpStatus": {
+            "type": "integer",
+            "minimum": 200,
+            "maximum": 599,
+            "description": "Upstream HTTP status. A failed read also sets isError on the MCP result."
+          },
+          "data": {
+            "description": "The published result on success, or the upstream error payload."
+          }
+        },
+        "required": [
+          "httpStatus",
+          "data"
+        ],
+        "if": {
+          "properties": {
+            "httpStatus": {
+              "maximum": 299
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "data": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "description": "All matching public templates in catalog order; empty when no filters match.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "Stable public template identifier."
+                      },
+                      "slug": {
+                        "type": "string",
+                        "description": "Human-readable identifier accepted for direct reads."
+                      },
+                      "version": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "Published revision."
+                      },
+                      "digest": {
+                        "type": "string",
+                        "description": "Digest of the selected template revision."
+                      },
+                      "template": {
+                        "type": "object",
+                        "description": "Published template, including scope and review criteria."
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "slug",
+                      "version",
+                      "digest",
+                      "template"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "items"
+              ]
+            }
+          }
+        }
       }
     },
     {
       "name": "getPublicSpecification",
-      "description": "Read the exact public template version returned by searchPublicSpecifications. No credential needed. Review scope, completion criteria and required evidence with the user before recommending adoption. This read creates no draft, agreement or acceptance and never grants authority.",
+      "description": "Read one exact public acceptance template by ID or slug and version, without signing in. You can use a saved identifier directly or take id, slug, version and digest from one searchPublicSpecifications result. Compare the returned digest with your saved digest, then review the scope, criteria and required evidence. An unavailable ID/version returns HTTP 404. Search again before choosing another revision.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -7608,26 +7741,30 @@
                 "type": "string",
                 "minLength": 1,
                 "maxLength": 80,
-                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+                "pattern": "^[a-z0-9][a-z0-9_-]*$",
+                "description": "A public template ID (rt_…) or slug such as business-automation. Both identify a template directly."
               }
             },
             "required": [
               "id"
             ],
-            "additionalProperties": false
+            "additionalProperties": false,
+            "description": "Identifies the public template to retrieve."
           },
           "query": {
             "type": "object",
             "properties": {
               "version": {
                 "type": "integer",
-                "minimum": 1
+                "minimum": 1,
+                "description": "Positive integer from the selected item or a saved version pin. An unavailable revision returns HTTP 404."
               }
             },
             "required": [
               "version"
             ],
-            "additionalProperties": false
+            "additionalProperties": false,
+            "description": "Pins the lookup to one published version."
           }
         },
         "required": [
@@ -7648,6 +7785,68 @@
         "authenticated": false,
         "mutating": false,
         "root": true
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "httpStatus": {
+            "type": "integer",
+            "minimum": 200,
+            "maximum": 599,
+            "description": "Upstream HTTP status. A failed read also sets isError on the MCP result."
+          },
+          "data": {
+            "description": "The published result on success, or the upstream error payload."
+          }
+        },
+        "required": [
+          "httpStatus",
+          "data"
+        ],
+        "if": {
+          "properties": {
+            "httpStatus": {
+              "maximum": 299
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "data": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Stable public template identifier."
+                },
+                "slug": {
+                  "type": "string",
+                  "description": "Human-readable identifier accepted for direct reads."
+                },
+                "version": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Published revision."
+                },
+                "digest": {
+                  "type": "string",
+                  "description": "Digest of the selected template revision."
+                },
+                "template": {
+                  "type": "object",
+                  "description": "Published template, including scope and review criteria."
+                }
+              },
+              "required": [
+                "id",
+                "slug",
+                "version",
+                "digest",
+                "template"
+              ]
+            }
+          }
+        }
       }
     }
   ],
