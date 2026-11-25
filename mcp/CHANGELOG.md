@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3
+
+- Support optional Bitcoin time proof on agreement creation, draft preparation and proposal terms. Omitted and explicit false keep Bitcoin off.
+
 ## 0.1.2
 
 - Preserve successful structured responses, including signed records/status, export packages, hash-bound templates/bindings and project evidence, instead of regex-redacting their contents. Refuse the exact active credential without returning response data; retain error redaction.

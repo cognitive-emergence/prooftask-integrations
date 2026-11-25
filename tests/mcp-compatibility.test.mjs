@@ -120,12 +120,29 @@ test('v2 template/check backports preserve strict required fields and historical
  assert.equal(validate(checkRun,{id:'check_'+'a'.repeat(64),digest:'b'.repeat(64)}),true);
  for(const bad of [{id:'check_'+'a'.repeat(64)},{id:'wrong',digest:'b'.repeat(64)},{id:'check_'+'a'.repeat(64),digest:'b'.repeat(64),extra:true}])assert.equal(validate(checkRun,bad),false);
 });
-test('packed unpublished 0.1.2 contains its runtime and starts from extracted files',()=>{
+test('agreement, draft and proposal tools accept only optional boolean Bitcoin consent', () => {
+  const subjects = {
+    createProject: 'CreateProject',
+    prepareExternalDraft: 'CreateDraft',
+    createProposal: 'ProposalTerms',
+    updateProposal: 'ProposalTerms',
+  };
+  for (const [name, subject] of Object.entries(subjects)) {
+    const terms = catalog.tools.find(tool => tool.name === name).inputSchema.$defs[subject];
+    assert.ok(!terms.required.includes('bitcoinTimeProof'), name);
+    const option = terms.properties.bitcoinTimeProof;
+    assert.equal(option.type, 'boolean', name);
+    for (const value of [false, true]) assert.ok(validate(option, value), name);
+    for (const value of [null, 'false', 'true', 0, 1]) assert.ok(!validate(option, value), name);
+  }
+});
+
+test('packed 0.1.3 contains its runtime and starts from extracted files',()=>{
  const directory=mkdtempSync(join(tmpdir(),'prooftask-mcp-pack-'));
  try{
   const cwd=resolve('mcp');
   const packed=JSON.parse(execFileSync('npm',['pack','--ignore-scripts','--json','--pack-destination',directory],{cwd,encoding:'utf8'}))[0];
-  assert.equal(packed.version,'0.1.2');
+  assert.equal(packed.version,'0.1.3');
   assert.deepEqual(packed.files.map(f=>f.path).sort(),['CHANGELOG.md','README.md','agent-mcp-tools.json','agent-mcp.mjs','package.json'].sort());
   execFileSync('tar',['-xzf',join(directory,packed.filename),'-C',directory]);
   const messages=[{jsonrpc:'2.0',id:1,method:'initialize',params:{protocolVersion:'2025-11-25',capabilities:{},clientInfo:{name:'packed-test',version:'1'}}},{jsonrpc:'2.0',method:'notifications/initialized'},{jsonrpc:'2.0',id:2,method:'tools/list'}];

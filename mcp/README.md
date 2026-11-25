@@ -6,22 +6,30 @@ Public hosted discovery is **free**: no credential is needed for `getAgentCapabi
 
 [中文入口与验收清单](https://prooftask.com/zh) · [n8n handover](https://prooftask.com/guides/n8n-handover-checklist) · [AI support acceptance](https://prooftask.com/guides/ai-chatbot-acceptance) · [Project handover](https://prooftask.com/guides/project-handover-checklist)
 
-## Version 0.1.2 and setup
+## Bitcoin time proof
 
-Version 0.1.2 preserves the existing 45-tool catalog, 23 read-only tools and
+For `createProject` or `prepareExternalDraft`, set `body.bitcoinTimeProof`.
+For `createProposal` or `updateProposal`, set `body.terms.bitcoinTimeProof`.
+Omit the field or send `false` for baseline timestamps only. Send `true` only
+when the creator chooses an additional Bitcoin time proof for the issued record.
+A draft proposes the choice for review. Public registration is independent.
+
+## Version 0.1.3 and setup
+
+Version 0.1.3 preserves the existing 45-tool catalog, 23 read-only tools and
 `{httpStatus,data}` response wrapper. It remains separate from the website's
 independently versioned task-level tools. Version behavior in this document does
 not establish registry availability; check the exact version before installation:
 
 ```sh
-npm view prooftask-mcp@0.1.2 version --registry=https://registry.npmjs.org
+npm view prooftask-mcp@0.1.3 version --registry=https://registry.npmjs.org
 ```
 
 If that lookup succeeds, configure an MCP client to launch `npx` with arguments
-`["-y", "prooftask-mcp@0.1.2"]`, or install and launch the CLI:
+`["-y", "prooftask-mcp@0.1.3"]`, or install and launch the CLI:
 
 ```sh
-npm install prooftask-mcp@0.1.2
+npm install prooftask-mcp@0.1.3
 ./node_modules/.bin/prooftask-mcp
 ```
 
