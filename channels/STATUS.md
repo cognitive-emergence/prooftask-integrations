@@ -5,7 +5,7 @@ n8n and the hosted MCP registry entries were checked on 2026-11-24. Other observ
 | Channel | Verified state |
 | --- | --- |
 | GitHub | Public integration repository with MCP adapter, n8n preparation/submission/status examples and provider guidance |
-| npm | prooftask-mcp@0.1.2 published and independently installed from the public registry on 2026-11-06; see verification below. |
+| npm | Local adapter release source: `prooftask-mcp@0.1.3`. [Check the exact npm version](https://www.npmjs.com/package/prooftask-mcp/v/0.1.3). The 0.1.2 installation evidence is retained below. |
 | Official MCP Registry | The hosted [public service](https://registry.modelcontextprotocol.io/v0.1/servers/com.prooftask%2Fmcp-public/versions/latest) and [OAuth service](https://registry.modelcontextprotocol.io/v0.1/servers/com.prooftask%2Fmcp/versions/latest) are active at 2.0.0. The older `io.github.cognitive-emergence/prooftask` entry is active at 0.1.4 and references npm 0.1.1. |
 | n8n | [Workflow #21159](https://n8n.io/workflows/21159/) is public. The [template API](https://api.n8n.io/templates/workflows/21159) reports `published` and serves the workflow with prepare, submit and sync modes. See the [setup guide](../n8n/DELIVERY_LIFECYCLE.md) for Google Sheets and Slack credentials and live acceptance checks. |
 | Service providers | Public onboarding guidance; no outreach or adoption claimed |

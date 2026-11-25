@@ -89,7 +89,7 @@ Preparation, submission, acceptance, record issuance and payment are distinct. T
 
 The [official MCP Registry entry for ProofTask public](https://registry.modelcontextprotocol.io/v0.1/servers/com.prooftask%2Fmcp-public/versions/latest) lists the hosted service used above. This repository also documents the [older three-tool gateway](remote/README.md) for existing clients.
 
-The [local npm adapter](https://www.npmjs.com/package/prooftask-mcp/v/0.1.2) uses stdio for separately authorized private workflows. Version 0.1.2 was independently installed from the public npm registry on 2026-11-06. Run `npx -y prooftask-mcp@0.1.2` for that release. The checked-in client examples and the [adapter's registry entry](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.cognitive-emergence%2Fprooftask) have their own version pins. See [channel status](channels/STATUS.md) for release details.
+The [local npm adapter](https://www.npmjs.com/package/prooftask-mcp) uses stdio for authorized private workflows. Run `npx -y prooftask-mcp@0.1.3` for optional Bitcoin time proof. See the [adapter guide](mcp/README.md) for supported operations.
 
 ## Validation and maintenance
 

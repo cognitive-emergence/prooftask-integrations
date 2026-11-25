@@ -12,10 +12,10 @@
     {
       "path": "mcp/agent-mcp-tools.json",
       "source": "https://prooftask.com/developers/agent-mcp-tools.json",
-      "sha256": "913d090301b32e9d0dc04173ca16c4c9209ee1d3b533cbc0eae17fd7fbb0ffcd",
+      "sha256": "d1ce0356c3f0d3d14f79ed6b65b0a527ce72ca8639c928c900fa8f38029234f7",
       "upstreamSha256": "d342ca73f0f708688651af5bd4fda4e79a36aba90c071779aa4986cad5d1d079",
-      "localChanges": "Original two public discovery GET additions retained. Compatibility backports: current Conformity/legacy export descriptions; strict v2 template snapshots alongside original v1 snapshots; current criterion checks/check-run references; explicit draft role. Tool names, routes and top-level v1 contract preserved. Public discovery descriptions cover catalog browsing, identifier/version lookup and the structured results of all three public reads.",
-      "previousLocalSha256": "c1301edf39db64905c0a9a5878a5a4859c12705a7f1828c4498770271a6a70c5",
+      "localChanges": "Original two public discovery GET additions retained. Compatibility backports: current Conformity/legacy export descriptions; strict v2 template snapshots alongside original v1 snapshots; current criterion checks/check-run references; explicit draft role. Tool names, routes and top-level v1 contract preserved. Public discovery descriptions cover catalog browsing, identifier/version lookup and the structured results of all three public reads. The optional Bitcoin time proof field follows the deployed CreateProject, CreateDraft and ProposalTerms schemas.",
+      "previousLocalSha256": "913d090301b32e9d0dc04173ca16c4c9209ee1d3b533cbc0eae17fd7fbb0ffcd",
       "backportSource": "https://github.com/cognitive-emergence/prooftask/blob/00e48889a4eb7fd3273050f98edee7e2774f20b1/src/runtime/agent-openapi.ts"
     },
     {
@@ -35,11 +35,11 @@
     }
   ],
   "localCandidate": {
-    "version": "0.1.2",
-    "preparedOn": "2026-11-04",
-    "status": "UNPUBLISHED_CANDIDATE",
+    "version": "0.1.3",
+    "preparedOn": "2026-11-26",
+    "status": "VERIFIED_RELEASE_SOURCE",
     "contract": "Existing MCP catalog v1, 45 tools, 23 read-only tools, argument envelopes and HTTP result wrappers preserved.",
-    "schemaBackportsFromApiVersion": "1.11.0",
-    "schemaSourceCommit": "00e48889a4eb7fd3273050f98edee7e2774f20b1"
+    "schemaBackportsFromApiVersion": "0.1.0",
+    "schemaSourceCommit": "36b7141457b96eb6ae0783eb6fc36af52b2a9491"
   }
 }
