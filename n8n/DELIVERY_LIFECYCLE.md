@@ -2,6 +2,8 @@
 
 Open [workflow #21159 on n8n](https://n8n.io/workflows/21159/) or import [delivery-lifecycle.json](delivery-lifecycle.json). The same canvas prepares a delivery, submits the saved job after operator review and syncs the buyer’s decision to the original Google Sheets row.
 
+[Replay a completed client sign-off](examples/client-signoff/README.md). A test buyer requested a correction for a duplicate ticket in revision 1, reran the same input on revision 2 and accepted it. The example includes both runnable workflows, the signed record and its offline verification instructions.
+
 ## Who it helps and what changes
 
 An automation consultant can track each client delivery revision in Google Sheets. Configure the workflow once and select a mode for each manual run. Submission refreshes the original row. A later sync shows whether review is pending, the buyer requested a correction, the buyer accepted that revision or the status could not be verified. A corrected delivery gets its own row so the earlier review stays with its original version.

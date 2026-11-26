@@ -1,0 +1,41 @@
+{
+  "engine": "n8n 2.39.8",
+  "marketplaceTemplate": 21159,
+  "deliveryReviewWorkflowSha256": "b82569fbe1438221369ffa3c73b5dc260d7cc36a2cccc9d819e7d30461401c40",
+  "environment": "Local n8n and ProofTask. Synthetic buyer and supplier. Google Sheets and Slack use local fixtures.",
+  "revisions": [
+    {
+      "revision": 1,
+      "file": {
+        "reference": "https://raw.githubusercontent.com/cognitive-emergence/prooftask-integrations/main/n8n/examples/client-signoff/workflow-v1.json",
+        "name": "workflow-v1.json",
+        "size": 1438,
+        "sha256": "3de18fc461737060bf04f689142b40fd61fe28e1d6d4ee9e7a1cd742599867a3"
+      },
+      "observedOutput": [
+        "T-104",
+        "T-104",
+        "T-205"
+      ],
+      "decision": "REQUEST_CHANGES",
+      "submission": "0c04656a-79b0-4f7d-9bcb-bd8a4df6e9a3",
+      "queueAccepted": "NO"
+    },
+    {
+      "revision": 2,
+      "file": {
+        "reference": "https://raw.githubusercontent.com/cognitive-emergence/prooftask-integrations/main/n8n/examples/client-signoff/workflow-v2.json",
+        "name": "workflow-v2.json",
+        "size": 1580,
+        "sha256": "a80d8bc77a26007aa66074c0b67e8f060f7ee8e52a81ed393067a855c40fdfff"
+      },
+      "observedOutput": [
+        "T-104",
+        "T-205"
+      ],
+      "decision": "ACCEPT",
+      "submission": "fdefac81-a3c9-4b69-ba3a-309e92053586",
+      "queueAccepted": "YES"
+    }
+  ]
+}

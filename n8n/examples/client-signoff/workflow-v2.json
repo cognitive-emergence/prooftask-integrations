@@ -1,0 +1,71 @@
+{
+  "id": "ptCaseHandoff02",
+  "name": "Ticket handoff, revision 2",
+  "active": false,
+  "nodes": [
+    {
+      "id": "8d44f086-d19d-5ef8-8739-412e9ede95c2",
+      "name": "Run sample",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "070d0658-c048-5d4d-8566-3e9017aedea3",
+      "name": "Three ticket notifications",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "jsCode": "return ['T-104', 'T-104', 'T-205'].map(ticketId => ({ json: { ticketId } }));"
+      }
+    },
+    {
+      "id": "0b5f1b40-8199-53d0-b928-8a1f6af0561d",
+      "name": "Handoff queue",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const seen = new Set();\nreturn $input.all().filter(({ json }) => {\n  if (seen.has(json.ticketId)) return false;\n  seen.add(json.ticketId);\n  return true;\n});"
+      }
+    }
+  ],
+  "connections": {
+    "Run sample": {
+      "main": [
+        [
+          {
+            "node": "Three ticket notifications",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Three ticket notifications": {
+      "main": [
+        [
+          {
+            "node": "Handoff queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
