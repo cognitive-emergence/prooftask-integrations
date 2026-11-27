@@ -5,7 +5,7 @@ import { pathToFileURL } from 'node:url';
 const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 export function validate(schema,value,root=schema) {
   if(schema.$ref)return validate(root.$defs?.[schema.$ref.replace('#/$defs/','')]??{not:{}},value,root);
-  if(schema.not)return false;
+  if(schema.not && validate(schema.not,value,root))return false;
   if(schema.anyOf&&!schema.anyOf.some(s=>validate(s,value,root)))return false;
   if(schema.oneOf&&schema.oneOf.filter(s=>validate(s,value,root)).length!==1)return false;
   if('const'in schema&&JSON.stringify(schema.const)!==JSON.stringify(value))return false;
@@ -14,6 +14,8 @@ export function validate(schema,value,root=schema) {
   if(schema.type==='object'){
     if(!object(value))return false;
     if((schema.required??[]).some(k=>!Object.hasOwn(value,k)))return false;
+    if(schema.propertyNames && Object.keys(value).some(key=>!validate(schema.propertyNames,key,root)))return false;
+    if(object(schema.additionalProperties) && Object.entries(value).some(([key,item])=>!Object.hasOwn(schema.properties??{},key) && !validate(schema.additionalProperties,item,root)))return false;
     if(schema.additionalProperties===false&&Object.keys(value).some(k=>!Object.hasOwn(schema.properties??{},k)))return false;
     if(Object.entries(schema.properties??{}).some(([k,s])=>Object.hasOwn(value,k)&&!validate(s,value[k],root)))return false;
   }
@@ -22,7 +24,8 @@ export function validate(schema,value,root=schema) {
     if(schema.uniqueItems&&new Set(value.map(v=>JSON.stringify(v))).size!==value.length)return false;
     if(schema.items&&value.some(v=>!validate(schema.items,v,root)))return false;
   }
-  if(schema.type==='string'&&(typeof value!=='string'||value.length<(schema.minLength??0)||value.length>(schema.maxLength??Infinity)||(schema.pattern&&!new RegExp(schema.pattern).test(value))))return false;
+  if(schema.type==='string' && typeof value!=='string')return false;
+  if(typeof value==='string' && (value.length<(schema.minLength??0)||value.length>(schema.maxLength??Infinity)||(schema.pattern&&!new RegExp(schema.pattern).test(value))))return false;
   if(['number','integer'].includes(schema.type)&&(typeof value!=='number'||!Number.isFinite(value)||(schema.type==='integer'&&!Number.isSafeInteger(value))||value<(schema.minimum??-Infinity)||value>(schema.maximum??Infinity)))return false;
   if(schema.type==='boolean'&&typeof value!=='boolean')return false;
   return true;

@@ -16,8 +16,13 @@ test('committed synthetic fixtures retain only public keys and deliberate lookal
  assert.ok((serialized.match(/ptag_[A-Za-z0-9_-]+/g)||[]).every(value=>allowed.has(value)),'fixture contains an unexpected credential-like value');
 });
 
-test('v1 tool names, routes, annotations and top-level argument requirements stay unchanged',()=>{
+test('v1 tool contracts retain their arguments and use the current result export routes',()=>{
  const baseline=JSON.parse(readFileSync(new URL('./fixtures/mcp-v1-contract.json',import.meta.url)));
+ const routes = {
+   exportLegacyRecord: {method:'GET',path:'/projects/{id}/record'},
+   exportResultPackage: {method:'POST',path:'/projects/{id}/exports/record'},
+ };
+ for(const tool of baseline.tools) Object.assign(tool.route, routes[tool.name]);
  assert.deepEqual(catalog.tools.map(t=>({name:t.name,route:t.route,annotations:t.annotations,required:t.inputSchema.required})),baseline.tools);
 });
 const rpc=(name,args)=>({jsonrpc:'2.0',id:2,method:'tools/call',params:{name,arguments:args}});
@@ -137,12 +142,12 @@ test('agreement, draft and proposal tools accept only optional boolean Bitcoin c
   }
 });
 
-test('packed 0.1.3 contains its runtime and starts from extracted files',()=>{
+test('packed 0.1.4 contains its runtime and starts from extracted files',()=>{
  const directory=mkdtempSync(join(tmpdir(),'prooftask-mcp-pack-'));
  try{
   const cwd=resolve('mcp');
   const packed=JSON.parse(execFileSync('npm',['pack','--ignore-scripts','--json','--pack-destination',directory],{cwd,encoding:'utf8'}))[0];
-  assert.equal(packed.version,'0.1.3');
+  assert.equal(packed.version,'0.1.4');
   assert.deepEqual(packed.files.map(f=>f.path).sort(),['CHANGELOG.md','README.md','agent-mcp-tools.json','agent-mcp.mjs','package.json'].sort());
   execFileSync('tar',['-xzf',join(directory,packed.filename),'-C',directory]);
   const messages=[{jsonrpc:'2.0',id:1,method:'initialize',params:{protocolVersion:'2025-11-25',capabilities:{},clientInfo:{name:'packed-test',version:'1'}}},{jsonrpc:'2.0',method:'notifications/initialized'},{jsonrpc:'2.0',id:2,method:'tools/list'}];
@@ -155,4 +160,26 @@ test('packed 0.1.3 contains its runtime and starts from extracted files',()=>{
    assert.equal(listed.length,23);assert.ok(listed.some(t=>t.name==='exportResultPackage'));assert.equal(catalog.tools.length,45);
   }
  }finally{rmSync(directory,{recursive:true,force:true});}
+});
+
+test('project creation validates optional rules and references and uses separate registration and Bitcoin choices', () => {
+  const root = catalog.tools.find(tool => tool.name === 'createProject').inputSchema;
+  const project = root.$defs.CreateProject;
+  const properties = project.properties;
+  const profile = properties.jurisdictionProfile.properties;
+  const reference = { schema:'prooftask.related-reference/v1', meaning:'HISTORICAL_CONTEXT_ONLY', subject:'AGREEMENT', digest:'a'.repeat(64) };
+  const rules = { id:profile.id.const, version:profile.version.const, digest:profile.digest.const };
+  for(const key of ['relatedReferences','jurisdictionProfile','publicRegistration','bitcoinTimeProof']) {
+    assert.ok(!project.required.includes(key), key);
+  }
+  assert.equal(validate(properties.jurisdictionProfile,rules,root),true);
+  assert.equal(validate(properties.jurisdictionProfile,{...rules,digest:'b'.repeat(64)},root),false);
+  assert.equal(validate(properties.relatedReferences,[reference],root),true);
+  assert.equal(validate(properties.relatedReferences,[{...reference,digest:'invalid'}],root),false);
+  assert.deepEqual(properties.publicRegistration.const,true);
+  assert.equal(properties.bitcoinTimeProof.default,false);
+  const extensions = root.$defs.Criterion.properties.ext;
+  assert.equal(validate(extensions,{'org.example.rubric':'A'},root),true);
+  assert.equal(validate(extensions,{'com.prooftask.disallowed':true},root),false);
+  assert.equal(validate(extensions,{'invalid':true},root),false);
 });

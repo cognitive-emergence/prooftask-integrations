@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.4
+
+- Route both export tools to current Agent API result files and preserve the signed contents for SDK offline verification.
+- Support the optional rules reference, related references and public registration on project creation. Bitcoin time proof remains opt-in.
+
 ## 0.1.3
 
 - Support optional Bitcoin time proof on agreement creation, draft preparation and proposal terms. Omitted and explicit false keep Bitcoin off.
