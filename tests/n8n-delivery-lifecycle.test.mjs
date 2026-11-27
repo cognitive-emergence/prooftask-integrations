@@ -45,3 +45,37 @@ test('single manual entry routes exclusively and submits before fresh queue sync
   const code = flow.nodes.find(n => n.name === 'Bind explicit approval to saved task').parameters.jsCode;
   assert.equal(new Function('$input', '$', code)({ all: () => [{ json: row }] }, () => ({ first: () => ({ json: config }) }))[0].json.id, row.job_id);
 });
+
+test('only an explicitly enabled manual sync can request a signed export', () => {
+  const flow = deliveryLifecycleWorkflow();
+  const get = name => flow.nodes.find(node => node.name === name);
+  assert.equal(get('Configuration').parameters.assignments.assignments.find(a => a.name === 'exportSignedRecord').value, false);
+  const expression = get('Export this accepted revision').parameters.conditions.conditions[0].leftValue.slice(3, -2);
+  const evaluate = new Function('$', 'return ' + expression);
+  for (const setting of [undefined, false, 'true', true]) for (const op of ['prepare', 'submit', 'sync']) {
+    for (const status of ['NO', 'UNKNOWN', 'YES']) {
+      const values = name => name === 'Configuration' ? { first: () => ({json:{operation:op,exportSignedRecord:setting}}) } : {item:{json:{review_accepted:status}}};
+      assert.equal(evaluate(values), setting === true && op === 'sync' && status === 'YES');
+    }
+  }
+  assert.equal(flow.connections['Export this accepted revision'].main[1][0].node,'Sync · One saved job at a time');
+});
+
+test('export preserves issued response bytes and refuses unissued, stale or unrelated results', async () => {
+  const { assessSignedExport } = await import('../scripts/n8n-signed-export.mjs');
+  const selection={projectId:'delivery-test',agreementDigest:'a'.repeat(64),headEventHash:'sha256:'+'b'.repeat(64),jobId:'job_test',reviewId:'review-1',nonce:'test-nonce'};
+  const file={schema:'prooftask.result-review/v1',record:{files:[{path:'record.sd-jwt'}]},status:{signature:{value:'signed'},
+    body:{state:'BUYER_CONFIRMED',taskId:selection.projectId,agreementDigest:selection.agreementDigest,headEventHash:selection.headEventHash,nonce:selection.nonce},
+    record:{body:{resultRecord:{state:'ISSUED',confirmationId:selection.reviewId}}}}};
+  const response={statusCode:200,body:JSON.stringify(file,null,2)+'\n'};
+  assert.equal(assessSignedExport(response,selection).content,response.body);
+  for(const key of ['projectId','nonce','reviewId','agreementDigest','headEventHash']){
+    const result=assessSignedExport(response,{...selection,[key]:'changed'});
+    assert.equal(result.exportState,'INVALID_RESPONSE');assert.equal(result.content,undefined);
+  }
+  for(const bad of [{statusCode:403},{statusCode:409},{error:'timeout'},{statusCode:200,body:'{}'}]) {
+    assert.equal(assessSignedExport(bad,selection).content,undefined);
+  }
+  file.status.record.body.resultRecord={state:'NOT_ISSUED'};
+  assert.equal(assessSignedExport({statusCode:200,body:JSON.stringify(file)},selection).exportState,'NOT_ISSUED');
+});

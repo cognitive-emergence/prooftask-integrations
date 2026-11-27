@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { deliveryQueueWorkflow } from './build-n8n-delivery-queue.mjs';
+import { addSignedExport } from './n8n-signed-export.mjs';
 import { jobStatusWorkflow } from './build-n8n-job-status.mjs';
 
 export function validateConfiguration(value) {
@@ -33,9 +34,9 @@ export function deliveryLifecycleWorkflow() {
   const add = (name, type, parameters, position, version = 2) => nodes.push({ id: 'pt-lifecycle-' + nodes.length, name, type: 'n8n-nodes-base.' + type, typeVersion: version, position, parameters });
   const edge = (from, to, output = 0) => { const main = (connections[from] ||= { main: [] }).main; (main[output] ||= []).push({ node: to, type: 'main', index: 0 }); };
   add('Run delivery lifecycle', 'manualTrigger', {}, [0, 0], 1);
-  const defaults = { operation: 'prepare', spreadsheetId: 'REPLACE_SPREADSHEET_ID', sheetId: '0', slackChannelId: 'REPLACE_SLACK_CHANNEL_ID', reviewedTaskId: '', reviewedJobId: '', reviewedRequestId: '', submitConfirmed: false };
+  const defaults = { operation: 'prepare', spreadsheetId: 'REPLACE_SPREADSHEET_ID', sheetId: '0', slackChannelId: 'REPLACE_SLACK_CHANNEL_ID', reviewedTaskId: '', reviewedJobId: '', reviewedRequestId: '', submitConfirmed: false, exportSignedRecord: false };
   add('Configuration', 'set', { assignments: { assignments: Object.entries(defaults).map(([name, value]) => ({ id: 'config-' + name, name, value, type: typeof value })) }, options: {} }, [220, 0], 3.4);
-  nodes.at(-1).notes = 'Choose operation: prepare, submit or sync. spreadsheetId is the document ID; sheetId is the numeric tab ID. slackChannelId identifies the internal review channel. For submit only, copy the reviewed task_id, job_id and request_id into reviewedTaskId, reviewedJobId and reviewedRequestId; set submitConfirmed=true after reviewing the frozen request and actual originals. Reset it after running. No credentials belong here.';
+  nodes.at(-1).notes = 'Choose operation: prepare, submit or sync. spreadsheetId is the document ID; sheetId is the numeric tab ID. slackChannelId identifies the internal review channel. For submit only, copy the reviewed task_id, job_id and request_id into reviewedTaskId, reviewedJobId and reviewedRequestId; set submitConfirmed=true after reviewing the frozen request and actual originals. Reset it after running. Enable exportSignedRecord only for a manual sync that should return issued records.';
   nodes.at(-1).notesInFlow = true;
   add('Validate configuration', 'code', { jsCode: 'const validate=' + validateConfiguration.toString() + ';return [{json:validate($input.first().json)}];' }, [440, 0]);
   function condition(name, operation, position) {
@@ -86,13 +87,17 @@ For automation consultants managing client deliverables in Google Sheets. Choose
 ### Setup
 1. Import the [sample queue](https://github.com/cognitive-emergence/prooftask-integrations/blob/main/n8n/delivery-lifecycle-example.csv). Replace fictional data with actual material references, file metadata and agreed project criteria.
 2. Set spreadsheetId, numeric sheetId and slackChannelId in Configuration. Follow the [complete setup and recovery guide](https://github.com/cognitive-emergence/prooftask-integrations/blob/main/n8n/DELIVERY_LIFECYCLE.md).
-3. Use the same Google Sheets OAuth credential on every Sheet node, the original project-scoped Agent Header Auth on all five Prooftask HTTP nodes, and an internal Slack bot with chat:write.
+3. Use the same Google Sheets OAuth credential on every Sheet node, the original project-scoped Agent Header Auth on the five delivery HTTP nodes and, if enabled, Read signed result file, and an internal Slack bot with chat:write.
 4. Run operation=prepare. Review the frozen request and originals. For operation=submit, set reviewedTaskId, reviewedRequestId, reviewedJobId and submitConfirmed=true deliberately. Reset confirmation afterwards.
-5. After buyer action, run operation=sync; inspect review_next_action and review_accepted.
+5. After buyer action, run operation=sync; inspect review_next_action and review_accepted. For an issued JSON file, opt in with exportSignedRecord and open the Binary output of Sync · Status sync complete.
 
 One execution per queue at a time. Preserve IDs after failures; sync uncertain submissions before retrying. UNKNOWN is not acceptance. No automatic buyer decision, signing or payment. Prooftask availability and pricing apply. Uses standard nodes; no sub-workflows required.`, 1);
   note('Deliberately submit', [1000, 980], 1050, 470, '## Submit the reviewed job\nExplicit operator approval must match one saved task, request and job. Current permissions apply. Success refreshes queue status; timeout requires manual reconciliation.');
   note('Observe buyer decision', [1000, 1980], 1800, 650, '## 3 · Sync\nRead saved jobs, including already-notified deliveries. Update only review_* columns on original tasks. Pending, corrections, exact acceptance and UNKNOWN remain distinct. Buyer reviews in Prooftask between runs.');
+  // Replace the sync writeback's direct loop edge with the optional per-row export.
+  delete connections['Sync · Update original queue status'];
+  addSignedExport(add, edge);
+  nodes.find(n => n.name === 'Read signed result file').onError = 'continueRegularOutput';
   return { name: 'Manage client delivery reviews from Google Sheets with Prooftask and Slack', nodes, connections, active: false, settings: { executionOrder: 'v1', saveDataSuccessExecution: 'none', saveDataErrorExecution: 'none', saveManualExecutions: false }, pinData: {}, tags: [] };
 }
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

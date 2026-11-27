@@ -71,12 +71,18 @@
               "name": "submitConfirmed",
               "value": false,
               "type": "boolean"
+            },
+            {
+              "id": "config-exportSignedRecord",
+              "name": "exportSignedRecord",
+              "value": false,
+              "type": "boolean"
             }
           ]
         },
         "options": {}
       },
-      "notes": "Choose operation: prepare, submit or sync. spreadsheetId is the document ID; sheetId is the numeric tab ID. slackChannelId identifies the internal review channel. For submit only, copy the reviewed task_id, job_id and request_id into reviewedTaskId, reviewedJobId and reviewedRequestId; set submitConfirmed=true after reviewing the frozen request and actual originals. Reset it after running. No credentials belong here.",
+      "notes": "Choose operation: prepare, submit or sync. spreadsheetId is the document ID; sheetId is the numeric tab ID. slackChannelId identifies the internal review channel. For submit only, copy the reviewed task_id, job_id and request_id into reviewedTaskId, reviewedJobId and reviewedRequestId; set submitConfirmed=true after reviewing the frozen request and actual originals. Reset it after running. Enable exportSignedRecord only for a manual sync that should return issued records.",
       "notesInFlow": true
     },
     {
@@ -1399,7 +1405,7 @@
         -100
       ],
       "parameters": {
-        "content": "### How it works\nFor automation consultants managing client deliverables in Google Sheets. Choose one manual operation per run: prepare validated jobs and notify an internal Slack reviewer; deliberately submit one exact reviewed job; or sync buyer decisions to the original rows. Submission also refreshes queue status. Buyer review happens in Prooftask between runs. Corrections use a new task row, preserving delivery history.\n\n### Setup\n1. Import the [sample queue](https://github.com/cognitive-emergence/prooftask-integrations/blob/main/n8n/delivery-lifecycle-example.csv). Replace fictional data with actual material references, file metadata and agreed project criteria.\n2. Set spreadsheetId, numeric sheetId and slackChannelId in Configuration. Follow the [complete setup and recovery guide](https://github.com/cognitive-emergence/prooftask-integrations/blob/main/n8n/DELIVERY_LIFECYCLE.md).\n3. Use the same Google Sheets OAuth credential on every Sheet node, the original project-scoped Agent Header Auth on all five Prooftask HTTP nodes, and an internal Slack bot with chat:write.\n4. Run operation=prepare. Review the frozen request and originals. For operation=submit, set reviewedTaskId, reviewedRequestId, reviewedJobId and submitConfirmed=true deliberately. Reset confirmation afterwards.\n5. After buyer action, run operation=sync; inspect review_next_action and review_accepted.\n\nOne execution per queue at a time. Preserve IDs after failures; sync uncertain submissions before retrying. UNKNOWN is not acceptance. No automatic buyer decision, signing or payment. Prooftask availability and pricing apply. Uses standard nodes; no sub-workflows required.",
+        "content": "### How it works\nFor automation consultants managing client deliverables in Google Sheets. Choose one manual operation per run: prepare validated jobs and notify an internal Slack reviewer; deliberately submit one exact reviewed job; or sync buyer decisions to the original rows. Submission also refreshes queue status. Buyer review happens in Prooftask between runs. Corrections use a new task row, preserving delivery history.\n\n### Setup\n1. Import the [sample queue](https://github.com/cognitive-emergence/prooftask-integrations/blob/main/n8n/delivery-lifecycle-example.csv). Replace fictional data with actual material references, file metadata and agreed project criteria.\n2. Set spreadsheetId, numeric sheetId and slackChannelId in Configuration. Follow the [complete setup and recovery guide](https://github.com/cognitive-emergence/prooftask-integrations/blob/main/n8n/DELIVERY_LIFECYCLE.md).\n3. Use the same Google Sheets OAuth credential on every Sheet node, the original project-scoped Agent Header Auth on the five delivery HTTP nodes and, if enabled, Read signed result file, and an internal Slack bot with chat:write.\n4. Run operation=prepare. Review the frozen request and originals. For operation=submit, set reviewedTaskId, reviewedRequestId, reviewedJobId and submitConfirmed=true deliberately. Reset confirmation afterwards.\n5. After buyer action, run operation=sync; inspect review_next_action and review_accepted. For an issued JSON file, opt in with exportSignedRecord and open the Binary output of Sync · Status sync complete.\n\nOne execution per queue at a time. Preserve IDs after failures; sync uncertain submissions before retrying. UNKNOWN is not acceptance. No automatic buyer decision, signing or payment. Prooftask availability and pricing apply. Uses standard nodes; no sub-workflows required.",
         "width": 600,
         "height": 1100,
         "color": 1
@@ -1435,6 +1441,169 @@
         "width": 1800,
         "height": 650,
         "color": 7
+      }
+    },
+    {
+      "id": "pt-lifecycle-50",
+      "name": "Export this accepted revision",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2480,
+        2240
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "Export this accepted revision",
+              "leftValue": "={{ $('Configuration').first().json.exportSignedRecord === true && $('Configuration').first().json.operation === 'sync' && $('Sync · Map exact saved status').item.json.review_accepted === 'YES' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "pt-lifecycle-51",
+      "name": "Generate export nonce",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 2,
+      "position": [
+        2700,
+        2120
+      ],
+      "parameters": {
+        "action": "generate",
+        "encodingType": "uuid",
+        "dataPropertyName": "nonce"
+      }
+    },
+    {
+      "id": "pt-lifecycle-52",
+      "name": "Bind signed export to saved revision",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2920,
+        2120
+      ],
+      "parameters": {
+        "jsCode": "const job = $('Sync · Read current saved job').item.json.body;\nconst { projectId, agreementDigest, headEventHash, reviewId } = job.current;\nreturn [{ json: { projectId, agreementDigest, headEventHash, reviewId, jobId: job.id, nonce: $input.first().json.nonce }, pairedItem: { item: 0 } }];"
+      }
+    },
+    {
+      "id": "pt-lifecycle-53",
+      "name": "Read signed result file",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3140,
+        2120
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'https://prooftask.com/api/agents/v1/projects/' + encodeURIComponent($json.projectId) + '/exports/record' }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({expectedAgreementDigest:$json.agreementDigest,expectedEventHash:$json.headEventHash,nonce:$json.nonce}) }}",
+        "options": {
+          "timeout": 20000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false,
+              "maxRedirects": 0
+            }
+          },
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "text",
+              "outputPropertyName": "body"
+            }
+          }
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "pt-lifecycle-54",
+      "name": "Check export response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        2120
+      ],
+      "parameters": {
+        "jsCode": "const assess=function assessSignedExport(response, selection) {\n  const { projectId, agreementDigest, headEventHash, reviewId, jobId, nonce } = selection;\n  const result = state => ({ jobId, projectId, exportState: state });\n  if (response.statusCode !== 200) return result('EXPORT_FAILED');\n  let file;\n  try { file = JSON.parse(response.body); } catch { return result('INVALID_RESPONSE'); }\n  const status = file?.status?.body;\n  const issuance = file?.status?.record?.body?.resultRecord;\n  if (file?.schema !== 'prooftask.result-review/v1' || !Array.isArray(file.record?.files) ||\n      !file.record.files.some(entry => entry?.path === 'record.sd-jwt') || !file.status?.signature?.value ||\n      status?.state !== 'BUYER_CONFIRMED' || status.taskId !== projectId || status.agreementDigest !== agreementDigest ||\n      status.headEventHash !== headEventHash || status.nonce !== nonce) return result('INVALID_RESPONSE');\n  if (issuance?.state === 'NOT_ISSUED') return result('NOT_ISSUED');\n  if (issuance?.state !== 'ISSUED' || !reviewId || issuance.confirmationId !== reviewId) return result('INVALID_RESPONSE');\n  return { ...result('EXPORTED'), content: response.body };\n};return [{json:assess($input.first().json,$('Bind signed export to saved revision').item.json),pairedItem:{item:0}}];"
+      }
+    },
+    {
+      "id": "pt-lifecycle-55",
+      "name": "Issued file available",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3580,
+        2120
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "Issued file available",
+              "leftValue": "={{ $json.exportState === 'EXPORTED' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "pt-lifecycle-56",
+      "name": "Download signed record",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1,
+      "position": [
+        3800,
+        2010
+      ],
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "content",
+        "binaryPropertyName": "record",
+        "options": {
+          "dataIsBase64": false,
+          "encoding": "utf8",
+          "mimeType": "application/json",
+          "fileName": "={{ 'prooftask-record-' + $json.jobId + '.json' }}"
+        }
       }
     }
   ],
@@ -1862,17 +2031,6 @@
         ]
       ]
     },
-    "Sync · Update original queue status": {
-      "main": [
-        [
-          {
-            "node": "Sync · One saved job at a time",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Submit reviewed job": {
       "main": [
         [
@@ -1918,6 +2076,108 @@
         [
           {
             "node": "Sync · Read saved delivery queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sync · Update original queue status": {
+      "main": [
+        [
+          {
+            "node": "Export this accepted revision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Export this accepted revision": {
+      "main": [
+        [
+          {
+            "node": "Generate export nonce",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sync · One saved job at a time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate export nonce": {
+      "main": [
+        [
+          {
+            "node": "Bind signed export to saved revision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bind signed export to saved revision": {
+      "main": [
+        [
+          {
+            "node": "Read signed result file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read signed result file": {
+      "main": [
+        [
+          {
+            "node": "Check export response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check export response": {
+      "main": [
+        [
+          {
+            "node": "Issued file available",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Issued file available": {
+      "main": [
+        [
+          {
+            "node": "Download signed record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sync · One saved job at a time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download signed record": {
+      "main": [
+        [
+          {
+            "node": "Sync · One saved job at a time",
             "type": "main",
             "index": 0
           }
