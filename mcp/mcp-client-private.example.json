@@ -4,7 +4,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "prooftask-mcp@0.1.3"
+        "prooftask-mcp@0.1.4"
       ],
       "env": {
         "PROOFTASK_AGENT_TOKEN_FILE": "/absolute/path/to/private/agent-credential.json"

@@ -14,22 +14,22 @@ Omit the field or send `false` for baseline timestamps only. Send `true` only
 when the creator chooses an additional Bitcoin time proof for the issued record.
 A draft proposes the choice for review. Public registration is independent.
 
-## Version 0.1.3 and setup
+## Version 0.1.4 and setup
 
-Version 0.1.3 preserves the existing 45-tool catalog, 23 read-only tools and
+Version 0.1.4 preserves the existing 45-tool catalog, 23 read-only tools and
 `{httpStatus,data}` response wrapper. It remains separate from the website's
 independently versioned task-level tools. Version behavior in this document does
 not establish registry availability; check the exact version before installation:
 
 ```sh
-npm view prooftask-mcp@0.1.3 version --registry=https://registry.npmjs.org
+npm view prooftask-mcp@0.1.4 version --registry=https://registry.npmjs.org
 ```
 
 If that lookup succeeds, configure an MCP client to launch `npx` with arguments
-`["-y", "prooftask-mcp@0.1.3"]`, or install and launch the CLI:
+`["-y", "prooftask-mcp@0.1.4"]`, or install and launch the CLI:
 
 ```sh
-npm install prooftask-mcp@0.1.3
+npm install prooftask-mcp@0.1.4
 ./node_modules/.bin/prooftask-mcp
 ```
 
@@ -54,18 +54,17 @@ Review completion criteria and evidence with the user. Templates are editable ex
 
 ## Record exports and verification
 
-`exportResultPackage` preserves the API artifact without rewriting signed strings:
-current projects return a bare Conformity Package; pre-release projects return a
-`prooftask.result-review/v1` wrapper. `exportLegacyRecord` also returns the current
-bare Package for Conformity projects despite its historical tool name. A Package
-is a historical carrier, not fresh status or a second receipt.
+Use `exportResultPackage` with the scoped project ID, expected agreement digest,
+expected event hash and a fresh UUID v4 nonce. It calls `POST /projects/{id}/exports/record`.
+Save `structuredContent.data` intact, including the signed status and any registration proof.
+Use `verifyRecordOffline` from `@prooftask/sdk@0.1.4` with independently trusted issuer keys.
+Check the issuance state and the verification report before relying on the file.
+`exportLegacyRecord` and `getRecord` read the service's result file via `GET /projects/{id}/record`.
 
-Use `getStatus` with a fresh UUID nonce for a separate signed current observation.
-Conformity Status carries nonce and project details in
-`extensions["com.prooftask.status-details"]`; legacy status uses `body`. The old
-`{httpStatus,data}` MCP wrapper remains: save `structuredContent.data` as the artifact,
-not the surrounding transport metadata. These tools return data rather than writing
-local files; the caller controls private storage.
+On `createProject`, omit `jurisdictionProfile` to use the current generic rules or supply the exact
+ID, version and digest shown during agreement preparation. Include `relatedReferences` to cite other
+agreements or records. Set `publicRegistration` to true to register the record. Bitcoin time proof
+has a separate `bitcoinTimeProof` switch, which defaults to false.
 
 Successful structured responses containing the exact active configured credential are refused with a
 generic error before return. Arbitrary token-like labels or base64url strings are

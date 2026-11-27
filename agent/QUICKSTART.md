@@ -2,17 +2,17 @@
 
 Requires Node.js 24+. Start without an account or credential.
 
-The local MCP adapter supports an optional Bitcoin time proof in version 0.1.3.
+The local MCP adapter supports an optional Bitcoin time proof in version 0.1.4.
 
 ## MCP client (Claude Desktop, Cursor or another stdio client)
 
-Configure `command: "npx"` and `args: ["-y", "prooftask-mcp@0.1.3"]` in your existing `mcpServers` entry. Preserve other servers. Restart or reconnect the client, then ask:
+Configure `command: "npx"` and `args: ["-y", "prooftask-mcp@0.1.4"]` in your existing `mcpServers` entry. Preserve other servers. Restart or reconnect the client, then ask:
 
 > Use Prooftask getAgentCapabilities and summarize the supported connection and workflow options. Do not create or modify anything.
 
 Expected: the tool returns JSON with HTTP 200. A listed tool alone is not a successful server call. If `npx` is unavailable in the GUI client's PATH, use the absolute Node path and the checked-out adapter path as shown in the MCP README.
 
-Version 0.1.3 exposes 23 read-only tools by default. Call `searchPublicSpecifications` with `{"query":{"q":"automation"}}`, then `getPublicSpecification` with the returned slug and exact version. These two tools need no credential; compare the returned digest before reuse. `listUsableTemplates` remains authenticated. The HTTP example below is also available.
+Version 0.1.4 exposes 23 read-only tools by default. Call `searchPublicSpecifications` with `{"query":{"q":"automation"}}`, then `getPublicSpecification` with the returned slug and exact version. These two tools need no credential; compare the returned digest before reuse. `listUsableTemplates` remains authenticated. The HTTP example below is also available.
 
 ## Code Agent: anonymous template search
 
@@ -42,7 +42,7 @@ Expected: `mcpInitialization: PASS`, `publicCapabilities: HTTP_200`, `privateRea
 
 ## Continue with private reads
 
-Complete the [existing Agent connection flow](https://prooftask.com/developers?utm_source=partner&utm_campaign=github_integrations) outside model context. Use the exact credential file produced by the client; do not manually construct a token or paste one into chat. Use [the private configuration example](../mcp/mcp-client-private.example.json), replacing the absolute credential-file path locally and selecting the published `prooftask-mcp@0.1.3` version explicitly.
+Complete the [existing Agent connection flow](https://prooftask.com/developers?utm_source=partner&utm_campaign=github_integrations) outside model context. Use the exact credential file produced by the client; do not manually construct a token or paste one into chat. Use [the private configuration example](../mcp/mcp-client-private.example.json), replacing the absolute credential-file path locally and selecting the published `prooftask-mcp@0.1.4` version explicitly.
 
 Reconnect the MCP client. Call `getAgent` first and confirm the represented workspace and granted scope, then `getProject` with the exact authorized project ID. A successful login does not grant every project or action.
 
