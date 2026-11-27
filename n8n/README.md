@@ -8,7 +8,7 @@ These workflows use built-in n8n nodes and the existing Prooftask API. Import JS
 
 Import [discover-templates.json](discover-templates.json), edit the search phrase and run manually. The public catalog supplies versioned templates and completion criteria. No account or Agent grant is needed. This is a read-only starting workflow.
 
-To import the marketplace workflow from this repository, use [delivery-lifecycle.json](delivery-lifecycle.json). The [previous preparation export](../channels/n8n-prepare-client-delivery.json) is available for teams comparing their existing setup.
+Import [delivery-lifecycle.json](delivery-lifecycle.json) for optional signed record downloads during manual sync. The [download instructions](DELIVERY_LIFECYCLE.md#download-a-signed-record-during-sync) explain how to enable the default-off setting. The [previous preparation export](../channels/n8n-prepare-client-delivery.json) is available for teams comparing their existing setup.
 
 ## 2. Connect an existing delivery
 

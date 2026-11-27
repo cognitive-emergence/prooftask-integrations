@@ -30,7 +30,7 @@ Before enabling the workflow, complete the production acceptance checks below wi
 ## Configure once
 
 1. Import [delivery-lifecycle-example.csv](delivery-lifecycle-example.csv) into Google Sheets. It includes preparation and review columns. All sample IDs and file references are fictional; sample rows start with `ready_for_review=NO`.
-2. Use an existing, mutually agreed Prooftask project. Connect its supplier Agent with project-scoped `SUBMIT_MATERIALS`; retain the original grant for saved-job reads. In n8n, select the same Header Auth credential on **all five** Prooftask HTTP nodes. Store the token only in Credentials.
+2. Use an existing, mutually agreed Prooftask project. Connect its supplier Agent with project-scoped `SUBMIT_MATERIALS`; retain the original grant for saved-job reads. In n8n, select the same Header Auth credential on the five delivery HTTP nodes. If you enable signed record export, also select it on **Read signed result file**. Store the token only in Credentials.
 3. Select the same Google Sheets OAuth credential on every Sheet node. Set `spreadsheetId`, numeric `sheetId` and the authorized internal `slackChannelId` in **Configuration**. Select the internal bot credential on the Slack node (`chat:write`, bot added to the channel).
 4. Replace the sample materials with actual references, criterion mappings and file metadata. Existing [material preparation and failure recovery](DELIVERY_QUEUE.md) applies. Run `node agent/fingerprint-file.mjs /path/to/original https://your-original-reference` to compute metadata from the actual original file rather than inventing a digest. The helper only reads your local file; it does not upload it.
 5. Use at most 200 queue rows and operate only one execution per queue at a time. Automatic triggers and concurrent runs are not configured.
@@ -52,6 +52,14 @@ Do not leave submit mode and confirmation enabled as an unattended approval mech
 `review_accepted=YES` requires exact current acceptance for that saved submission. Pending or correction reads produce NO. Failed or mismatched reads produce UNKNOWN and replace an older acceptance observation. Read `review_next_action`; observation time is not signed acceptance time.
 
 If submission times out or fails, the workflow stops before automatic status sync. Set `operation: 'sync'` to reconcile the saved job before retrying the same identity. Never clear request/job IDs to work around an uncertain result. A later status-write failure does not undo a successful submission; sync again. The existing preparation recovery and Slack duplicate-notification limitations still apply.
+
+## Download a signed record during sync
+
+Import the [current workflow JSON](delivery-lifecycle.json). Signed record export defaults to off. For a run that needs a file, set the boolean `exportSignedRecord` to `true` in **Configuration**, select `operation = sync`, and execute. A row must have a fresh acceptance for its exact saved submission. The export uses that readback’s agreement digest, event hash and review ID, plus a new nonce. Preparing or submitting a delivery never requests a file.
+
+Open **Sync · Status sync complete** in the current execution. On an exported item, download the **record** binary as `prooftask-record-<job ID>.json`. The file contains the issuer’s signed record and status. Save it to an authorized destination during the run. The workflow sends only the usual review fields to Sheets and keeps the file out of Slack. Set the switch back to false for ordinary syncs.
+
+A completed buyer review can precede issuance. An accepted row with `NOT_ISSUED` has no file yet. `EXPORT_FAILED` means the request failed, and `INVALID_RESPONSE` means the returned file could not be matched to that reviewed version. The status writeback completes before export. Check the project or the scoped credential and repeat sync when ready. Export only reads the record. The SDK can verify the downloaded JSON offline using an independently trusted issuer key.
 
 ## Controlled three-row readiness case
 
@@ -95,12 +103,14 @@ node scripts/check.mjs
 
 The [full native inventory record](../evidence/n8n-full-native-readiness-inventory-20261104.json) includes the observed `N8N_CLI --version` result before workflow execution, the new three-row case and every prior engine scenario. That full run passed with 164 mocked provider requests, six saved jobs and six confirmed reminders overall; the readiness case remains separately scoped to two jobs/two reminders. Its runner hash differs from the preserved earlier targeted record.
 
-These checks have passed. The current export also passed import and execution in n8n 2.39.8 against an isolated actual Prooftask API while retaining the native Google Sheets and Slack nodes. Their API calls used fake credentials and local contract simulations. The [native-node evidence](../evidence/n8n-native-provider-engine-20261102.json) records 130 provider requests and the exact export digest. Browser execution and repeat-run results are in the [local lab evidence](../evidence/n8n-local-lab-20261102.json). Real OAuth, workspace permissions and vendor delivery remain unverified; complete the [production acceptance scenarios](DELIVERY_LOOP.md#production-acceptance) before operational use. The owner authorized simulated validation for this review revision. No live customer decision, signature or payment was performed.
+The earlier workflow revision passed import and execution in n8n 2.39.8 against an isolated actual Prooftask API while retaining the native Google Sheets and Slack nodes. Their API calls used fake credentials and local contract simulations. The [native-node evidence](../evidence/n8n-native-provider-engine-20261102.json) records 130 provider requests and the exact export digest. Browser execution and repeat-run results are in the [local lab evidence](../evidence/n8n-local-lab-20261102.json). Real OAuth, workspace permissions and vendor delivery remain unverified; complete the [production acceptance scenarios](DELIVERY_LOOP.md#production-acceptance) before operational use. The owner authorized simulated validation for this review revision. No live customer decision, signature or payment was performed.
 
 To run the combined canvas in an isolated real n8n engine (n8n 2.39.8), provide a local Prooftask source checkout and the installed CLI. Before importing credentials/workflows or executing a scenario, the runner invokes that exact `N8N_CLI --version`, requires the reported version to equal the pinned `2.39.8`, and records the observation in new evidence:
 
 ```sh
 N8N_PROVIDER_TRANSPORT=native PROOFTASK_SOURCE_ROOT=/path/to/prooftask N8N_CLI=/path/to/n8n/bin/n8n node scripts/test-n8n-delivery-lifecycle-engine.mjs
 ```
+
+To check the downloaded file with SDK 0.1.4 as part of the full run, install `@prooftask/sdk@0.1.4` in a test directory and set `N8N_EXPORT_SDK` to the absolute path of its `dist/index.js`. The runner sends the finished binary to a local test receiver and checks it against the fixture issuer key.
 
 That harness reads the exported JSON, replaces Google Sheets/Slack transport only in a disposable copy, imports it into an isolated n8n database and checks preparation, feedback, retries, approval blocking, saved-job submission/replay, automatic pending-status writeback, correction with a new saved delivery, exact acceptance and revoked readback against the actual isolated Prooftask API. It reports the original export digest. It cannot establish real Google/Slack OAuth or destination writes.

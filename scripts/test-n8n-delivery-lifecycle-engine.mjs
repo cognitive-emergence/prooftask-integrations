@@ -36,9 +36,14 @@ store.putSelfServiceRecord('supplier-recipient', project.taskId, { email: suppli
 service.linkSupplierWorkspace(supplier, capability.token, true);
 service.respond(capability.token, { requestId: randomUUID(), agreementDigest: project.agreement.digest, action: 'ACCEPT', actorId: supplier.actorId, actorRole: supplier.role, authorityAttested: true, reason: 'Accept the exact synthetic agreement.' }, supplier);
 const grant = agents.create(supplier, { requestId: randomUUID(), name: 'Synthetic delivery queue', projectIds: [project.taskId], actions: ['SUBMIT_MATERIALS'], expiresAt: new Date(Date.now() + 3600000).toISOString(), confirmed: true, completionConfirmed: false });
-const api = createPilotServer({ service: runtime });
+const api = createPilotServer({ service: runtime, issuer: { keyId: 'synthetic-n8n-queue', algorithm: 'Ed25519',
+  publicKeyPem: keys.publicKey.export({type:'spki',format:'pem'}).toString(),
+  fingerprintSha256: createHash('sha256').update(keys.publicKey.export({type:'spki',format:'der'})).digest('hex') } });
 await new Promise(r => api.listen(0, '127.0.0.1', r));
 const origin = 'http://127.0.0.1:' + api.address().port;
+let exportCalls = 0;
+const downloads = [];
+api.on('request', req => { if (req.method === 'POST' && req.url?.endsWith('/exports/record')) exportCalls++; });
 let preparationCalls = 0;
 api.on('request', (request) => { if (request.method === 'POST' && request.url === '/api/agents/v1/jobs') preparationCalls++; });
 let queue = [], reminders = [], failWrite = false, failReminder = false;
@@ -49,6 +54,12 @@ const fixture = createServer(async (req, res) => {
   try {
     if(nativeProviders && await providers.handler(req,res))return;
     if (req.url === '/queue' && req.method === 'GET') return send(200, queue);
+    if (req.url === '/download' && req.method === 'POST') {
+      const parts = [];
+      for await (const part of req) parts.push(part);
+      downloads.push(Buffer.concat(parts));
+      return send(200, { received: true });
+    }
     const value = await body(req);
     if (req.url === '/queue/read') return send(200, queue.filter(r => r.task_id === value.task_id));
     if (req.url === '/queue/update') {
@@ -108,6 +119,13 @@ for (const node of flow.nodes) {
     node.parameters.headerParameters = { parameters: [{ name: 'Authorization', value: 'Bearer ' + grant.token }] };
   }
 }
+// Read the binary delivered by the finished loop through a test-only local transport.
+flow.nodes.push({id:'test-files',name:'Test exported files',type:'n8n-nodes-base.code',typeVersion:2,position:[0,0],
+  parameters:{jsCode:"return $input.all().filter(item => item.binary?.record);"}});
+flow.nodes.push({id:'test-download',name:'Test download',type:'n8n-nodes-base.httpRequest',typeVersion:4.2,position:[0,0],
+  parameters:{method:'POST',url:fixtureOrigin+'/download',sendBody:true,contentType:'binaryData',inputDataFieldName:'record',options:{}}});
+flow.connections['Sync · Status sync complete']={main:[[{node:'Test exported files',type:'main',index:0}]]};
+flow.connections['Test exported files']={main:[[{node:'Test download',type:'main',index:0}]]};
 async function threeRowReadinessCase(){
   const initialRows=[row('readiness-yes-a'),row('readiness-yes-b'),{...row('readiness-no'),ready_for_review:'NO'}];
   queue=structuredClone(initialRows);
@@ -214,6 +232,30 @@ try {
   await executeMode('sync'); assert.equal(queue[1].review_accepted, 'YES'); assert.equal(queue[1].review_decision, 'ACCEPT'); assert.equal(queue[1].review_job_id, correctedJob);
   assert.equal(queue[0].review_accepted,'NO','The earlier job cannot inherit the corrected version acceptance.');
   assert.equal(queue[0].job_id, savedJob); assert.equal(queue.length, 2); assert.equal(preparationCalls, preparationCount+1); assert.equal(reminders.length, reminderCount+1);
+  assert.equal(exportCalls,0,'Default preparation, submission and sync must never request a file.');
+  assert.equal(downloads.length,0);
+  if (service.get(buyer,project.taskId).resultRecord.state !== 'ISSUED') service.issueResultRecord(buyer,project.taskId);
+  await executeMode('sync',false,{exportSignedRecord:true});
+  assert.equal(exportCalls,1,'Only the accepted corrected job may request the record.');
+  assert.equal(downloads.length,1,'The final loop output must contain one downloadable JSON file.');
+  const file=JSON.parse(downloads[0].toString('utf8'));
+  assert.equal(file.schema,'prooftask.result-review/v1');
+  assert.equal(file.status.record.body.resultRecord.state,'ISSUED');
+  assert.equal(file.status.body.taskId,project.taskId);
+  assert.equal(file.status.record.body.resultRecord.confirmationId,service.get(buyer,project.taskId).review.id);
+  assert.ok(queue.every(r=>!JSON.stringify(r).includes('record.sd-jwt')));
+  if(process.env.N8N_EXPORT_SDK) {
+    const {SDK_VERSION,verifyRecordOffline}=await import(pathToFileURL(resolve(process.env.N8N_EXPORT_SDK)).href);
+    assert.equal(SDK_VERSION,'0.1.4');
+    const verify=record=>verifyRecordOffline({record,trust:service.historyTrust()});
+    const verified=await verify(file);
+    assert.equal(verified.exitCode,0);assert.equal(verified.report.conformity.closure,'COMPLETE');
+    const altered=structuredClone(file);
+    altered.record.files.find(entry=>entry.path==='record.sd-jwt').data=Buffer.from('changed').toString('base64url');
+    assert.notEqual((await verify(altered)).exitCode,0);
+    console.log('PASS downloaded n8n binary: SDK '+SDK_VERSION+' '+verified.outcome+', closure COMPLETE; tampering rejected.');
+  }
+  console.log('PASS record export: default zero requests; enabled one issued file for the exact corrected job.');
   agents.revoke(supplier, grant.grant.id);
   await executeMode('sync'); assert.equal(queue[0].review_accepted, 'UNKNOWN'); assert.equal(queue[0].review_state, 'UNKNOWN'); assert.equal(queue[1].review_accepted, 'UNKNOWN');
   console.log('PASS unified actual engine: approval guard, deliberate submission/replay, automatic pending readback, correction/new delivery identity, exact acceptance and revoked readback.');
